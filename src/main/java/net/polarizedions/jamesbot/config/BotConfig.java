@@ -13,6 +13,7 @@ public class BotConfig {
     public String serverHost;
     public int serverPort;
     public List<String> channels;
+    public String commandPrefix;
 
     // Optionals
     public String saslUser;
@@ -29,6 +30,7 @@ public class BotConfig {
             config.serverPort = 6697;
             config.channels = new ArrayList<>();
             config.channels.add("##PolarizedSpam");
+            config.commandPrefix = "!";
 
             config.saslUser = "";
             config.saslPass = "";

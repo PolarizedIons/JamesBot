@@ -1,5 +1,6 @@
 package net.polarizedions.jamesbot.core;
 
+import net.polarizedions.jamesbot.config.BotConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -23,9 +24,13 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onGenericMessage(GenericMessageEvent event) {
-        //When someone says ?helloworld respond with "Hello World"
-        if (event.getMessage().startsWith("?helloworld"))
-            event.respondWith("Hello world!");
+        // TODO: more requirements
+        if (event.getMessage().startsWith(Bot.instance.getBotConfig().commandPrefix)) {
+            this.onCommandMessage(event);
+        }
     }
 
+    public void onCommandMessage(GenericMessageEvent event) {
+        Bot.instance.getCommandManager().dispatch(event);
+    }
 }
