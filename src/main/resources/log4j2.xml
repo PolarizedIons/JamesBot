@@ -9,5 +9,8 @@
         <Root level="debug">
             <AppenderRef ref="Console"/>
         </Root>
+        <Logger name="org.pircbotx" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
     </Loggers>
 </Configuration>
