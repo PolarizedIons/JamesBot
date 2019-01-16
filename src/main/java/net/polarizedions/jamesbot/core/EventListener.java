@@ -1,6 +1,5 @@
 package net.polarizedions.jamesbot.core;
 
-import net.polarizedions.jamesbot.config.BotConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -26,11 +25,19 @@ public class EventListener extends ListenerAdapter {
     public void onGenericMessage(GenericMessageEvent event) {
         // TODO: more requirements
         if (event.getMessage().startsWith(Bot.instance.getBotConfig().commandPrefix)) {
-            this.onCommandMessage(event);
+            if (this.runCommand(event)) {
+                return;
+            }
         }
+
+        this.reactToMessage(event);
     }
 
-    public void onCommandMessage(GenericMessageEvent event) {
-        Bot.instance.getCommandManager().dispatch(event);
+    public boolean runCommand(GenericMessageEvent event) {
+        return Bot.instance.getCommandManager().dispatch(event);
+    }
+
+    private void reactToMessage(GenericMessageEvent event) {
+        // TODO
     }
 }
