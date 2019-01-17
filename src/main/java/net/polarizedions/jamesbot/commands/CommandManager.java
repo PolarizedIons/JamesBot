@@ -3,7 +3,6 @@ package net.polarizedions.jamesbot.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
-import net.polarizedions.jamesbot.core.Bot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.types.GenericMessageEvent;
@@ -29,15 +28,13 @@ public class CommandManager {
         }
     }
 
-    public boolean dispatch(GenericMessageEvent msg) {
-        int prefixLen = Bot.instance.getBotConfig().commandPrefix.length();
-
+    public boolean dispatch(String message, GenericMessageEvent source) {
         try {
-            return ReturnConstants.SUCCESS == dispatcher.execute(msg.getMessage().substring(prefixLen), msg);
+            return ReturnConstants.SUCCESS == dispatcher.execute(message, source);
         }
         catch (CommandSyntaxException e) {
             if (e.getCursor() != 0) {
-                logger.error("Error handling command " + msg.getMessage(), ": {}", e);
+                logger.error("Error handling command " + source.getMessage(), ": {}", e);
             }
 
             return false;

@@ -44,6 +44,10 @@ public class Bot extends ListenerAdapter {
         return commandManager;
     }
 
+    public PircBotX getPircBot() {
+        return this.bot;
+    }
+
     public void saveBotConfig() {
         try {
             this.configLoader.save();

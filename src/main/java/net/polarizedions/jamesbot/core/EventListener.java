@@ -3,6 +3,7 @@ package net.polarizedions.jamesbot.core;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.ConnectAttemptFailedEvent;
 import org.pircbotx.hooks.events.ConnectEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
@@ -23,9 +24,26 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onGenericMessage(GenericMessageEvent event) {
-        // TODO: more requirements
-        if (event.getMessage().startsWith(Bot.instance.getBotConfig().commandPrefix)) {
-            if (this.runCommand(event)) {
+        String prefix = Bot.instance.getBotConfig().commandPrefix;
+        String nick = Bot.instance.getPircBot().getNick();
+
+        // Command Prefix
+        if (event.getMessage().startsWith(prefix)) {
+            String msg = event.getMessage().substring(prefix.length());
+            if (this.runCommand(msg, event)) {
+                return;
+            }
+        }
+
+        // Directed at us
+        if (event.getMessage().toLowerCase().startsWith(nick.toLowerCase())) {
+            String msg = event.getMessage().substring(nick.length()).trim();
+
+            if (msg.startsWith(":") || msg.startsWith(",")) {
+                msg = msg.substring(1).trim();
+            }
+
+            if (this.runCommand(msg, event)) {
                 return;
             }
         }
@@ -33,11 +51,20 @@ public class EventListener extends ListenerAdapter {
         this.reactToMessage(event);
     }
 
-    public boolean runCommand(GenericMessageEvent event) {
-        return Bot.instance.getCommandManager().dispatch(event);
+    @Override
+    public void onAction(ActionEvent event) throws Exception {
+        this.reactToMessage(event);
+    }
+
+    public boolean runCommand(String message, GenericMessageEvent event) {
+        return Bot.instance.getCommandManager().dispatch(message, event);
     }
 
     private void reactToMessage(GenericMessageEvent event) {
+        // TODO
+    }
+
+    private void reactToMessage(ActionEvent event) {
         // TODO
     }
 }
