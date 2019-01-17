@@ -12,7 +12,7 @@ public class ResponderManager {
     public ResponderManager() {
         this.responders = new ArrayList<>();
 
-        this.responders.add(new ResponderHug());
+        this.responders.add(new ResponderActions());
     }
 
     public void dispatch(MessageEvent msg) {

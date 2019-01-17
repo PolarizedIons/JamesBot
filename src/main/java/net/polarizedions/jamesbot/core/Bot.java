@@ -10,7 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.types.GenericChannelUserEvent;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -88,12 +90,16 @@ public class Bot extends ListenerAdapter {
         }
     }
 
-    public static void noticeReply(MessageEvent msg, String content) {
+    public static void noticeReply(GenericChannelUserEvent msg, String content) {
         Bot.notice(msg, msg.getUser().getNick() + ": " + content);
     }
 
-    public static void notice(@NotNull MessageEvent msg, String content) {
-        msg.getBot().sendIRC().notice(msg.getChannelSource(), content);
+    public static void notice(@NotNull GenericChannelUserEvent msg, String content) {
+        msg.getBot().sendIRC().notice(msg.getChannel().getName(), content);
+    }
+
+    public static void action(GenericChannelUserEvent msg, String content) {
+        msg.getBot().sendIRC().action(msg.getChannel().getName(), content);
     }
 
     public static void main(String[] args) {
