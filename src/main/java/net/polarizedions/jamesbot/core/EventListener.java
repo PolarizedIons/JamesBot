@@ -61,10 +61,10 @@ public class EventListener extends ListenerAdapter {
     }
 
     private void reactToMessage(MessageEvent event) {
-        // TODO
+        Bot.instance.getResponderManager().dispatch(event);
     }
 
     private void reactToMessage(ActionEvent event) {
-        // TODO
+        Bot.instance.getResponderManager().dispatch(event);
     }
 }

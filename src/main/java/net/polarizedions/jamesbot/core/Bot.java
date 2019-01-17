@@ -3,6 +3,7 @@ package net.polarizedions.jamesbot.core;
 import net.polarizedions.jamesbot.commands.CommandManager;
 import net.polarizedions.jamesbot.config.BotConfig;
 import net.polarizedions.jamesbot.config.ConfigurationLoader;
+import net.polarizedions.jamesbot.reponders.ResponderManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,7 @@ public class Bot extends ListenerAdapter {
 
     private PircBotX bot;
     private CommandManager commandManager;
+    private ResponderManager responderManager;
     private ConfigurationLoader configLoader;
 
     public Bot() {
@@ -34,6 +36,7 @@ public class Bot extends ListenerAdapter {
         }
 
         this.commandManager = new CommandManager();
+        this.responderManager = new ResponderManager();
 
         this.bot = new PircBotX(configLoader.build());
     }
@@ -44,6 +47,10 @@ public class Bot extends ListenerAdapter {
 
     public CommandManager getCommandManager() {
         return commandManager;
+    }
+
+    public ResponderManager getResponderManager() {
+        return responderManager;
     }
 
     public PircBotX getPircBot() {
