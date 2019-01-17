@@ -21,6 +21,7 @@ public class CommandManager {
         this.commands = new ArrayList<>();
 
         this.commands.add(new CommandPing());
+        this.commands.add(new CommandTemp());
 
 
         for (ICommand cmd : this.commands) {
