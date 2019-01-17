@@ -6,7 +6,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.ConnectAttemptFailedEvent;
 import org.pircbotx.hooks.events.ConnectEvent;
-import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.pircbotx.hooks.events.MessageEvent;
 
 public class EventListener extends ListenerAdapter {
     private static Logger logger = LogManager.getLogger("EventListener");
@@ -23,7 +23,7 @@ public class EventListener extends ListenerAdapter {
 
 
     @Override
-    public void onGenericMessage(GenericMessageEvent event) {
+    public void onMessage(MessageEvent event) {
         String prefix = Bot.instance.getBotConfig().commandPrefix;
         String nick = Bot.instance.getPircBot().getNick();
 
@@ -56,11 +56,11 @@ public class EventListener extends ListenerAdapter {
         this.reactToMessage(event);
     }
 
-    public boolean runCommand(String message, GenericMessageEvent event) {
+    public boolean runCommand(String message, MessageEvent event) {
         return Bot.instance.getCommandManager().dispatch(message, event);
     }
 
-    private void reactToMessage(GenericMessageEvent event) {
+    private void reactToMessage(MessageEvent event) {
         // TODO
     }
 

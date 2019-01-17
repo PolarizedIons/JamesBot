@@ -3,24 +3,22 @@ package net.polarizedions.jamesbot.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
-import org.jetbrains.annotations.NotNull;
-import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.pircbotx.hooks.events.MessageEvent;
 
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
 public class CommandPing implements ICommand {
     @Override
-    public void register(CommandDispatcher<GenericMessageEvent> dispatcher) {
+    public void register(CommandDispatcher<MessageEvent> dispatcher) {
         dispatcher.register(
                 literal("ping")
                         .executes(this::ping)
         );
     }
 
-    private int ping(@NotNull CommandContext<GenericMessageEvent> context) {
-        GenericMessageEvent msg = context.getSource();
-
-        msg.respondWith("Pong!");
+    private int ping(CommandContext<MessageEvent> context) {
+        MessageEvent msg = context.getSource();
+        msg.getBot().sendIRC().notice(msg.getChannelSource(), msg.getUser().getNick() + ": pong!");
 
         return ReturnConstants.SUCCESS;
     }

@@ -5,14 +5,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommandManager {
     private static final Logger logger = LogManager.getLogger("CommandManager");
-    private CommandDispatcher<GenericMessageEvent> dispatcher;
+    private CommandDispatcher<MessageEvent> dispatcher;
 
     private List<ICommand> commands;
 
@@ -28,7 +28,7 @@ public class CommandManager {
         }
     }
 
-    public boolean dispatch(String message, GenericMessageEvent source) {
+    public boolean dispatch(String message, MessageEvent source) {
         try {
             return ReturnConstants.SUCCESS == dispatcher.execute(message, source);
         }
