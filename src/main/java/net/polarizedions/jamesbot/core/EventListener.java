@@ -24,6 +24,9 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onMessage(MessageEvent event) {
+        Bot.instance.getMessageMemory().add(event);
+        System.out.println(Bot.instance.getMessageMemory());
+
         String prefix = Bot.instance.getBotConfig().commandPrefix;
         String nick = Bot.instance.getPircBot().getNick();
 

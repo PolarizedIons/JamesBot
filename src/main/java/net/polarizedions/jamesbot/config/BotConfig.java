@@ -15,6 +15,8 @@ public class BotConfig {
     public List<String> channels;
     public String commandPrefix;
 
+    public int memorySize;
+
     // Optionals
     public String saslUser;
     public String saslPass;
@@ -31,6 +33,8 @@ public class BotConfig {
             config.channels = new ArrayList<>();
             config.channels.add("##PolarizedSpam");
             config.commandPrefix = "!";
+
+            config.memorySize = 250;
 
             config.saslUser = "";
             config.saslPass = "";

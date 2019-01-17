@@ -23,6 +23,8 @@ public class Bot extends ListenerAdapter {
     private ResponderManager responderManager;
     private ConfigurationLoader configLoader;
 
+    private FixedSizeQueue<MessageEvent> messageMemory;
+
     public Bot() {
         instance = this;
 
@@ -37,6 +39,8 @@ public class Bot extends ListenerAdapter {
 
         this.commandManager = new CommandManager();
         this.responderManager = new ResponderManager();
+
+        this.messageMemory = new FixedSizeQueue<>(this.getBotConfig().memorySize);
 
         this.bot = new PircBotX(configLoader.build());
     }
@@ -55,6 +59,10 @@ public class Bot extends ListenerAdapter {
 
     public PircBotX getPircBot() {
         return this.bot;
+    }
+
+    public FixedSizeQueue<MessageEvent> getMessageMemory() {
+        return messageMemory;
     }
 
     public void saveBotConfig() {
