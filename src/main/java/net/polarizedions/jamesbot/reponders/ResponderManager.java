@@ -13,6 +13,7 @@ public class ResponderManager {
         this.responders = new ArrayList<>();
 
         this.responders.add(new ResponderActions());
+        this.responders.add(new ResponderWhatIsLove());
     }
 
     public void dispatch(MessageEvent msg) {

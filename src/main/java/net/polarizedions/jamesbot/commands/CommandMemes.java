@@ -1,17 +1,12 @@
 package net.polarizedions.jamesbot.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
 import org.jetbrains.annotations.NotNull;
 import org.pircbotx.hooks.events.MessageEvent;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
@@ -44,8 +39,6 @@ public class CommandMemes implements ICommand {
                     argument("target", string()).executes(c -> this.gooby(c.getSource(), getString(c, "target")))
             )
         );
-
-//        dispatcher.register(literal("what").then(literal("is")).then(literal("love?").executes(c -> this.haddaway(c.getSource()))));
     }
 
     @Override
@@ -87,11 +80,6 @@ public class CommandMemes implements ICommand {
 
     private int gooby(MessageEvent source, String target) {
         Bot.notice(source, this.memify(target) + " pls");
-        return ReturnConstants.SUCCESS;
-    }
-
-    private int haddaway(MessageEvent source) {
-        Bot.noticeReply(source, "Baby don't hurt me. Don't hurt me. No more.");
         return ReturnConstants.SUCCESS;
     }
 
