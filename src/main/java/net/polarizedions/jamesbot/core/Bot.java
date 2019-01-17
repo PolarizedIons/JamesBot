@@ -5,9 +5,11 @@ import net.polarizedions.jamesbot.config.BotConfig;
 import net.polarizedions.jamesbot.config.ConfigurationLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.MessageEvent;
 
 import java.io.IOException;
 
@@ -64,6 +66,14 @@ public class Bot extends ListenerAdapter {
         catch (IOException | IrcException e) {
             logger.error("Exception running bot: {}", e);
         }
+    }
+
+    public static void noticeReply(MessageEvent msg, String content) {
+        Bot.notice(msg, msg.getUser().getNick() + ": " + content);
+    }
+
+    public static void notice(@NotNull MessageEvent msg, String content) {
+        msg.getBot().sendIRC().notice(msg.getChannelSource(), content);
     }
 
     public static void main(String[] args) {
