@@ -36,7 +36,10 @@ public class CommandManager {
             return ReturnConstants.SUCCESS == dispatcher.execute(msg.getMessage().substring(prefixLen), msg);
         }
         catch (CommandSyntaxException e) {
-            logger.error("Error handling command " + msg.getMessage(), ": {}", e);
+            if (e.getCursor() != 0) {
+                logger.error("Error handling command " + msg.getMessage(), ": {}", e);
+            }
+
             return false;
         }
     }
