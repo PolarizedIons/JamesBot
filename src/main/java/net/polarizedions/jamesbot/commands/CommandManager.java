@@ -23,6 +23,7 @@ public class CommandManager {
         this.commands.add(new CommandPing());
         this.commands.add(new CommandTemp());
         this.commands.add(new CommandMemes());
+        this.commands.add(new CommandEightball());
 
 
         for (ICommand cmd : this.commands) {
