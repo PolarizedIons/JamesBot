@@ -13,6 +13,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class Bot extends ListenerAdapter {
     public static Bot instance;
@@ -23,7 +24,7 @@ public class Bot extends ListenerAdapter {
     private ResponderManager responderManager;
     private ConfigurationLoader configLoader;
 
-    private FixedSizeQueue<MessageEvent> messageMemory;
+    private HashMap<String, FixedSizeQueue<MessageEvent>> messageMemory;
 
     public Bot() {
         instance = this;
@@ -40,7 +41,7 @@ public class Bot extends ListenerAdapter {
         this.commandManager = new CommandManager();
         this.responderManager = new ResponderManager();
 
-        this.messageMemory = new FixedSizeQueue<>(this.getBotConfig().memorySize);
+        this.messageMemory = new HashMap<>();
 
         this.bot = new PircBotX(configLoader.build());
     }
@@ -61,8 +62,12 @@ public class Bot extends ListenerAdapter {
         return this.bot;
     }
 
-    public FixedSizeQueue<MessageEvent> getMessageMemory() {
-        return messageMemory;
+    public FixedSizeQueue<MessageEvent> getMessageMemory(String channel) {
+        if (! this.messageMemory.containsKey(channel)) {
+            this.messageMemory.put(channel, new FixedSizeQueue<>(this.getBotConfig().memorySize));
+        }
+
+        return messageMemory.get(channel);
     }
 
     public void saveBotConfig() {
