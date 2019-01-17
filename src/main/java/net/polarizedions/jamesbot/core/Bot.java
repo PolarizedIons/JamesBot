@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericChannelUserEvent;
 
@@ -79,6 +78,22 @@ public class Bot extends ListenerAdapter {
         catch (IOException ex) {
             logger.error("Could not save config file! {}", ex);
         }
+    }
+
+    public void debug(Object... content) {
+        String channel = this.getBotConfig().debugChannel;
+
+        if (channel.isEmpty()) {
+            return;
+        }
+
+        String[] strContent = new String[content.length];
+        for (int i = 0; i < content.length; i++) {
+            strContent[i] = String.valueOf(content[i]);
+        }
+
+        String msg = "[DEBUG]: " + String.join(" ", strContent);
+        this.getPircBot().sendIRC().message(channel, msg);
     }
 
     public void run() {

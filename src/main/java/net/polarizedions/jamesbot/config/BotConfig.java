@@ -13,6 +13,7 @@ public class BotConfig {
     public String serverHost;
     public int serverPort;
     public List<String> channels;
+    public String debugChannel;
     public String commandPrefix;
 
     public int memorySize;
@@ -31,7 +32,8 @@ public class BotConfig {
             config.serverHost = "irc.freenode.net";
             config.serverPort = 6697;
             config.channels = new ArrayList<>();
-            config.channels.add("##PolarizedSpam");
+            config.channels.add("##PolarizedIons");
+            config.debugChannel = "##PolarizedSpam";
             config.commandPrefix = "!";
 
             config.memorySize = 250;

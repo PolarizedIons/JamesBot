@@ -2,11 +2,9 @@ package net.polarizedions.jamesbot.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
 import net.polarizedions.jamesbot.core.EventListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
 import org.pircbotx.Configuration;
 import org.pircbotx.cap.SASLCapHandler;
 
@@ -17,11 +15,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ConfigurationLoader {
     private static final Path configDir = Paths.get(".");
@@ -53,6 +48,10 @@ public class ConfigurationLoader {
         else if (! this.botConfig.nickServPass.isEmpty()) {
             config.setNickservNick(this.botConfig.nick);
             config.setNickservPassword(this.botConfig.nickServPass);
+        }
+
+        if (! this.botConfig.debugChannel.isEmpty()) {
+            config.addAutoJoinChannel(this.botConfig.debugChannel);
         }
 
 
