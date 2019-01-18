@@ -18,6 +18,8 @@ public class BotConfig {
 
     public int memorySize;
 
+    public ConfigAPIKeys apiKeys;
+
     // Optionals
     public String saslUser;
     public String saslPass;
@@ -37,6 +39,8 @@ public class BotConfig {
             config.commandPrefix = "!";
 
             config.memorySize = 250;
+
+            config.apiKeys = new ConfigAPIKeys.Default();
 
             config.saslUser = "";
             config.saslPass = "";

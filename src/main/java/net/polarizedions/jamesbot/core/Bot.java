@@ -1,5 +1,6 @@
 package net.polarizedions.jamesbot.core;
 
+import net.polarizedions.jamesbot.apis.Youtube;
 import net.polarizedions.jamesbot.commands.CommandManager;
 import net.polarizedions.jamesbot.config.BotConfig;
 import net.polarizedions.jamesbot.config.ConfigurationLoader;
@@ -25,6 +26,8 @@ public class Bot extends ListenerAdapter {
     private ResponderManager responderManager;
     private ConfigurationLoader configLoader;
 
+    private Youtube youtubeAPI;
+
     private HashMap<String, FixedSizeQueue<MessageEvent>> messageMemory;
 
     public Bot() {
@@ -44,6 +47,10 @@ public class Bot extends ListenerAdapter {
 
         this.messageMemory = new HashMap<>();
 
+        if (! this.getBotConfig().apiKeys.youtube.isEmpty()) {
+            this.youtubeAPI = new Youtube(this.getBotConfig().apiKeys.youtube);
+        }
+
         this.bot = new PircBotX(configLoader.build());
     }
 
@@ -61,6 +68,10 @@ public class Bot extends ListenerAdapter {
 
     public PircBotX getPircBot() {
         return this.bot;
+    }
+
+    public Youtube getYoutubeAPI() {
+        return youtubeAPI;
     }
 
     public FixedSizeQueue<MessageEvent> getMessageMemory(String channel) {
