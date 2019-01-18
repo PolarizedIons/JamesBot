@@ -1,4 +1,4 @@
-package net.polarizedions.jamesbot.core;
+package net.polarizedions.jamesbot.utils;
 
 import java.util.ArrayList;
 
