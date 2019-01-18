@@ -1,10 +1,10 @@
 package net.polarizedions.jamesbot.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import org.pircbotx.hooks.events.MessageEvent;
+import net.polarizedions.jamesbot.utils.CommandMessage;
 
 public interface ICommand {
-    void register(CommandDispatcher<MessageEvent> dispatcher);
+    void register(CommandDispatcher<CommandMessage> dispatcher);
 
     String getHelp();
 

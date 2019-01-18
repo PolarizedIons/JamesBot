@@ -2,9 +2,8 @@ package net.polarizedions.jamesbot.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
-import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.jetbrains.annotations.NotNull;
-import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -17,7 +16,7 @@ import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
 public class CommandMemes implements ICommand {
     @Override
-    public void register(CommandDispatcher<MessageEvent> dispatcher) {
+    public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(literal("ausmerica").executes(c -> this.ausmerica(c.getSource())));
         dispatcher.register(literal("nikon").executes(c -> this.nikon(c.getSource())));
         dispatcher.register(literal("bep").executes(c -> this.bep(c.getSource())));
@@ -51,35 +50,35 @@ public class CommandMemes implements ICommand {
         return "(todo)";
     }
 
-    private int ausmerica(MessageEvent source) {
-        Bot.noticeReply(source, "Lemon lemon lemon lemon lemon lemon lemon lemon. http://i.imgur.com/5C4Gi.png");
+    private int ausmerica(CommandMessage source) {
+        source.respondWith("Lemon lemon lemon lemon lemon lemon lemon lemon. http://i.imgur.com/5C4Gi.png");
         return ReturnConstants.SUCCESS;
     }
 
-    private int nikon(MessageEvent source) {
-        Bot.noticeReply(source, "http://i.imgur.com/nikon.png");
+    private int nikon(CommandMessage source) {
+        source.respondWith("http://i.imgur.com/nikon.png");
         return ReturnConstants.SUCCESS;
     }
 
-    private int bep(MessageEvent source) {
-        Bot.noticeReply(source, "ADD &BEP COMMAND NAO it go here http://i.imgur.com/BEPSY.png");
+    private int bep(CommandMessage source) {
+        source.respondWith("ADD &BEP COMMAND NAO it go here http://i.imgur.com/BEPSY.png");
         return ReturnConstants.SUCCESS;
     }
 
-    private int yuno(MessageEvent source, String msg) {
-        msg = msg.replace("\\bme\\b", source.getUser().getNick());
+    private int yuno(CommandMessage source, String msg) {
+        msg = msg.replace("\\bme\\b", source.getNick());
 
-        Bot.notice(source, "ლ(ಠ益ಠლ) Y U NO " + msg + "?");
+        source.respondWith("ლ(ಠ益ಠლ) Y U NO " + msg + "?");
         return ReturnConstants.SUCCESS;
     }
 
-    private int dolan(MessageEvent source, String target) {
-        Bot.notice(source, "fak u " + this.memify(target));
+    private int dolan(CommandMessage source, String target) {
+        source.respondWith("fak u " + this.memify(target));
         return ReturnConstants.SUCCESS;
     }
 
-    private int gooby(MessageEvent source, String target) {
-        Bot.notice(source, this.memify(target) + " pls");
+    private int gooby(CommandMessage source, String target) {
+        source.respondWith(this.memify(target) + " pls");
         return ReturnConstants.SUCCESS;
     }
 

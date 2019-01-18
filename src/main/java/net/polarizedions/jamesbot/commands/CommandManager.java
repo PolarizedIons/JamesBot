@@ -3,16 +3,16 @@ package net.polarizedions.jamesbot.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommandManager {
     private static final Logger logger = LogManager.getLogger("CommandManager");
-    private CommandDispatcher<MessageEvent> dispatcher;
+    private CommandDispatcher<CommandMessage> dispatcher;
 
     private List<ICommand> commands;
 
@@ -33,7 +33,7 @@ public class CommandManager {
         }
     }
 
-    public boolean dispatch(String message, MessageEvent source) {
+    public boolean dispatch(String message, CommandMessage source) {
         try {
             return ReturnConstants.SUCCESS == dispatcher.execute(message, source);
         }

@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.polarizedions.jamesbot.apis.Youtube;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
-import org.pircbotx.hooks.events.MessageEvent;
+import net.polarizedions.jamesbot.utils.CommandMessage;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
@@ -22,7 +22,7 @@ import static net.polarizedions.jamesbot.utils.IRCColors.RESET;
 public class CommandYoutube implements ICommand {
 
     @Override
-    public void register(CommandDispatcher<MessageEvent> dispatcher) {
+    public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(
             literal("youtube").then(
                     argument("link", greedyString()).executes(c -> this.youtube(c.getSource(), getString(c, "link")))
@@ -30,7 +30,7 @@ public class CommandYoutube implements ICommand {
         );
     }
 
-    private int youtube(MessageEvent source, String link) {
+    private int youtube(CommandMessage source, String link) {
         link = link.split("\\s")[0];
 
         System.out.println("running " + link);

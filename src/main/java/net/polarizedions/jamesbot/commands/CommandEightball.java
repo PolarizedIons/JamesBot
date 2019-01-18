@@ -1,11 +1,8 @@
 package net.polarizedions.jamesbot.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
-import net.polarizedions.jamesbot.core.Bot;
-import org.pircbotx.hooks.events.MessageEvent;
+import net.polarizedions.jamesbot.utils.CommandMessage;
 
 import java.util.Random;
 
@@ -39,13 +36,13 @@ public class CommandEightball implements ICommand {
     };
     
     @Override
-    public void register(CommandDispatcher<MessageEvent> dispatcher) {
+    public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(literal("8ball").then(argument("q", greedyString()).executes(c -> this.eightball(c.getSource()))));
         dispatcher.register(literal("eightball").then(argument("q", greedyString()).executes(c -> this.eightball(c.getSource()))));
     }
 
-    private int eightball(MessageEvent source) {
-        Bot.noticeReply(source, RESPONSES[RAND.nextInt(RESPONSES.length)]);
+    private int eightball(CommandMessage source) {
+        source.respondWith(RESPONSES[RAND.nextInt(RESPONSES.length)]);
         return ReturnConstants.SUCCESS;
     }
 

@@ -1,28 +1,25 @@
 package net.polarizedions.jamesbot.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mongodb.async.client.MongoCollection;
-import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.bson.Document;
 import org.pircbotx.hooks.events.MessageEvent;
-
-import java.util.Collection;
 
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
 
 public class CommandQuote implements ICommand {
     @Override
-    public void register(CommandDispatcher<MessageEvent> dispatcher) {
+    public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(literal("quote").executes(this::quote));
         dispatcher.register(literal("remember").executes(this::remember));
     }
 
-    private int remember(CommandContext<MessageEvent> messageEventCommandContext) {
-        String channel = messageEventCommandContext.getSource().getChannelSource();
+    private int remember(CommandContext<CommandMessage> messageEventCommandContext) {
+        String channel = messageEventCommandContext.getSource().getChannel();
         MessageEvent msg = Bot.instance.getMessageMemory(channel).get(1);
 
         Document doc = new Document("user", msg.getUser().getNick())
@@ -35,19 +32,19 @@ public class CommandQuote implements ICommand {
         return 1;
     }
 
-    private int quote(CommandContext<MessageEvent> objectCommandContext) {
+    private int quote(CommandContext<CommandMessage> objectCommandContext) {
         MongoCollection<Document> col = Bot.instance.getDatabase().getCollection("quotes");
         col.find().first((document, throwable) -> {
             if (throwable != null) {
                 System.out.println("ERROR!!!");
-                Bot.noticeReply(objectCommandContext.getSource(), "error");
+                objectCommandContext.getSource().respondWith("error");
             }
 
             String user = document.getString("user");
             String message = document.getString("message");
             String channel = document.getString("channel");
 
-            Bot.noticeReply(objectCommandContext.getSource(), channel +" - " + user + ": " + message);
+            objectCommandContext.getSource().respondWith(channel +" - " + user + ": " + message);
         });
         return 1;
     }

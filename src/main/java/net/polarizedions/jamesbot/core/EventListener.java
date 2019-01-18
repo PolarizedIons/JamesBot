@@ -1,6 +1,6 @@
 package net.polarizedions.jamesbot.core;
 
-import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -62,7 +62,7 @@ public class EventListener extends ListenerAdapter {
     }
 
     public boolean runCommand(String message, MessageEvent event) {
-        return Bot.instance.getCommandManager().dispatch(message, event);
+        return Bot.instance.getCommandManager().dispatch(message, new CommandMessage(event));
     }
 
     private boolean reactToMessage(MessageEvent event) {

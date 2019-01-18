@@ -12,7 +12,7 @@ public class ResponderWhatIsLove implements IResponder {
         Pattern pattern = Pattern.compile("^" + nick + "[:,]?\\s?What is love\\??", Pattern.CASE_INSENSITIVE);
 
         if (pattern.matcher(msg.getMessage()).matches()) {
-            Bot.noticeReply(msg, "Baby don't hurt me. Don't hurt me. No more.");
+            Bot.notice(msg, "Baby don't hurt me. Don't hurt me. No more.");
             return true;
         }
 

@@ -123,11 +123,11 @@ public class Bot {
         }
     }
 
-    public static void noticeReply(GenericChannelUserEvent msg, String content) {
-        Bot.notice(msg, msg.getUser().getNick() + ": " + content);
+    public static void notice(GenericChannelUserEvent msg, String content) {
+        Bot.noticeWith(msg, msg.getUser().getNick() + ": " + content);
     }
 
-    public static void notice(@NotNull GenericChannelUserEvent msg, String content) {
+    public static void noticeWith(@NotNull GenericChannelUserEvent msg, String content) {
         msg.getBot().sendIRC().notice(msg.getChannel().getName(), content);
     }
 
