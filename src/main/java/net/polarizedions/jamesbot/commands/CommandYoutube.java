@@ -38,22 +38,14 @@ public class CommandYoutube implements ICommand {
         if (api == null) {
             source.respond("Youtube API is unavailable :(");
             return ReturnConstants.FAIL_SILENT;
-        }Youtube.YoutubeVideo video = null;
-        try {
-        video = api.getVideo(link);
-    }catch (Exception e) {
-        e.printStackTrace();
-    }
+        }
+
+        Youtube.YoutubeVideo video = api.getVideo(link);
+
         if (video == null) {
             source.respond("Can't get that video, sorry :(");
             return ReturnConstants.FAIL_SILENT;
         }
-//\x02\"${title}\"\x02 \x0306[${hours}:${minutes}:${seconds}]\x0F (by \x0303${author}\x0F) \x0314${views}\x0F views, \x0303${likes}\x0F likes, \x0304${dislikes}\x0F dislikes https://youtu.be/${video} ${restrictions}"
-//{BOLD}{TITLE}{BOLD} {MAGENTA}[{HOURS}:{MINUTES}:{SECONDS}]{RESET} (by {GREEN}{CHANNEL}{RESET}) {GREY}{VIEWS}{RESET} views, {GREEN}{LIKES}{RESET} likes, {RED}{DISLIKES}{RESET} dislikes https://youtu.be/{ID} {RESTRICTED_MSG}
-
-// \x0314no region restrictions\x0F  {GREY}no region restrictions{RESET}
-// \x0307unavailable in some regions\x0F)   {ORANGE}unabaliable in some regopms{RESET}
-//        source.respond("Title: " + video.title + " by:" + video.channel);
 
         String restrictionStr = GREY + "no region restrictions" + RESET;
         if (video.isRegionRestricted) {
