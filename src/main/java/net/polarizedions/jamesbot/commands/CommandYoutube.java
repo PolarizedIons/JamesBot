@@ -10,7 +10,14 @@ import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
-import static net.polarizedions.jamesbot.utils.IRCColors.*;
+import static net.polarizedions.jamesbot.utils.IRCColors.BOLD;
+import static net.polarizedions.jamesbot.utils.IRCColors.CYAN;
+import static net.polarizedions.jamesbot.utils.IRCColors.GREEN;
+import static net.polarizedions.jamesbot.utils.IRCColors.GREY;
+import static net.polarizedions.jamesbot.utils.IRCColors.MAGENTA;
+import static net.polarizedions.jamesbot.utils.IRCColors.ORANGE;
+import static net.polarizedions.jamesbot.utils.IRCColors.RED;
+import static net.polarizedions.jamesbot.utils.IRCColors.RESET;
 
 public class CommandYoutube implements ICommand {
 
@@ -53,7 +60,7 @@ public class CommandYoutube implements ICommand {
             restrictionStr = ORANGE + "unavailable in some regions" + RESET;
         }
 
-        source.respondWith(BOLD + video.title + MAGENTA + " [" + video.duration + "]" + RESET + " (by " + GREEN + video.channel + ") " + CYAN + video.viewCount + RESET + " views, " + GREEN + video.likeCount + RESET + " likes, " + RED + video.dislikeCount + RESET + " dislikes. https://youtu.be/" + video.id + "(" + restrictionStr + ")");
+        source.respondWith(BOLD + video.title + MAGENTA + " [" + video.duration + "]" + RESET + " (by " + GREEN + video.channel + RESET + ") " + CYAN + video.viewCount + RESET + " views, " + GREEN + video.likeCount + RESET + " likes, " + RED + video.dislikeCount + RESET + " dislikes. https://youtu.be/" + video.id + "(" + restrictionStr + ")");
 
         return ReturnConstants.SUCCESS;
     }

@@ -34,6 +34,8 @@ public class ResponderDice implements IResponder {
             else {
                 msg.respondWith("Rolled " + number + " d" + size + " dice and got " + roll(size, number) + ".");
             }
+
+            return true;
         }
 
         return false;
