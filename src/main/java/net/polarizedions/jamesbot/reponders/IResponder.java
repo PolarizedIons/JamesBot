@@ -4,11 +4,11 @@ import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 
 public interface IResponder {
-    default void run(MessageEvent msg) {
-
+    default boolean run(MessageEvent msg) {
+        return false;
     }
 
-    default void run(ActionEvent msg) {
-
+    default boolean run(ActionEvent msg) {
+        return false;
     }
 }

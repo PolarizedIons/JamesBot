@@ -19,6 +19,7 @@ public class BotConfig {
     public int memorySize;
 
     public ConfigAPIKeys apiKeys;
+    public DatabaseConfig databaseConfig;
 
     // Optionals
     public String saslUser;
@@ -41,6 +42,7 @@ public class BotConfig {
             config.memorySize = 250;
 
             config.apiKeys = new ConfigAPIKeys.Default();
+            config.databaseConfig = new DatabaseConfig.Default();
 
             config.saslUser = "";
             config.saslPass = "";

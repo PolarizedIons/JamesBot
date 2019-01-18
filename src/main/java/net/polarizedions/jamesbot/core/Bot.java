@@ -4,6 +4,7 @@ import net.polarizedions.jamesbot.apis.Youtube;
 import net.polarizedions.jamesbot.commands.CommandManager;
 import net.polarizedions.jamesbot.config.BotConfig;
 import net.polarizedions.jamesbot.config.ConfigurationLoader;
+import net.polarizedions.jamesbot.database.Database;
 import net.polarizedions.jamesbot.reponders.ResponderManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +18,7 @@ import org.pircbotx.hooks.types.GenericChannelUserEvent;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class Bot extends ListenerAdapter {
+public class Bot {
     public static Bot instance;
     public static Logger logger = LogManager.getLogger("Jamesbot Core");
 
@@ -25,6 +26,7 @@ public class Bot extends ListenerAdapter {
     private CommandManager commandManager;
     private ResponderManager responderManager;
     private ConfigurationLoader configLoader;
+    private Database database;
 
     private Youtube youtubeAPI;
 
@@ -46,6 +48,7 @@ public class Bot extends ListenerAdapter {
         this.responderManager = new ResponderManager();
 
         this.messageMemory = new HashMap<>();
+        this.database = new Database(this.getBotConfig().databaseConfig);
 
         if (! this.getBotConfig().apiKeys.youtube.isEmpty()) {
             this.youtubeAPI = new Youtube(this.getBotConfig().apiKeys.youtube);
@@ -72,6 +75,10 @@ public class Bot extends ListenerAdapter {
 
     public Youtube getYoutubeAPI() {
         return youtubeAPI;
+    }
+
+    public Database getDatabase() {
+        return database;
     }
 
     public FixedSizeQueue<MessageEvent> getMessageMemory(String channel) {

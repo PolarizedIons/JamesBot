@@ -5,7 +5,7 @@ import org.pircbotx.hooks.events.ActionEvent;
 
 public class ResponderActions implements IResponder {
     @Override
-    public void run(ActionEvent msg) {
+    public boolean run(ActionEvent msg) {
         String action = msg.getAction().toLowerCase().trim();
         String nick = Bot.instance.getPircBot().getNick().toLowerCase();
 
@@ -27,6 +27,11 @@ public class ResponderActions implements IResponder {
         else if (action.endsWith("licks " + nick) || action.endsWith("kisses " + nick)) {
             this.actPolice(msg);
         }
+        else {
+            return false;
+        }
+
+        return true;
     }
 
 

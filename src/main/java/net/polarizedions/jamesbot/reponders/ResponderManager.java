@@ -16,15 +16,23 @@ public class ResponderManager {
         this.responders.add(new ResponderWhatIsLove());
     }
 
-    public void dispatch(MessageEvent msg) {
+    public boolean  dispatch(MessageEvent msg) {
         for (IResponder responder : this.responders) {
-            responder.run(msg);
+            if (responder.run(msg)) {
+                return true;
+            }
         }
+
+        return false;
     }
 
-    public void dispatch(ActionEvent msg) {
+    public boolean dispatch(ActionEvent msg) {
         for (IResponder responder : this.responders) {
-            responder.run(msg);
+            if (responder.run(msg)) {
+                return true;
+            }
         }
+
+        return false;
     }
 }

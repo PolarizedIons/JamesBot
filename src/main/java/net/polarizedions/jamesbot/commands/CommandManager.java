@@ -25,6 +25,7 @@ public class CommandManager {
         this.commands.add(new CommandMemes());
         this.commands.add(new CommandEightball());
         this.commands.add(new CommandYoutube());
+        this.commands.add(new CommandQuote());
 
 
         for (ICommand cmd : this.commands) {

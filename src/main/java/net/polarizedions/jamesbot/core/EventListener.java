@@ -1,5 +1,6 @@
 package net.polarizedions.jamesbot.core;
 
+import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -24,8 +25,6 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onMessage(MessageEvent event) {
-        Bot.instance.getMessageMemory(event.getChannelSource()).add(event);
-
         String prefix = Bot.instance.getBotConfig().commandPrefix;
         String nick = Bot.instance.getPircBot().getNick();
 
@@ -50,7 +49,11 @@ public class EventListener extends ListenerAdapter {
             }
         }
 
-        this.reactToMessage(event);
+        if (this.reactToMessage(event)) {
+            return;
+        }
+
+        Bot.instance.getMessageMemory(event.getChannelSource()).add(event);
     }
 
     @Override
@@ -62,11 +65,11 @@ public class EventListener extends ListenerAdapter {
         return Bot.instance.getCommandManager().dispatch(message, event);
     }
 
-    private void reactToMessage(MessageEvent event) {
-        Bot.instance.getResponderManager().dispatch(event);
+    private boolean reactToMessage(MessageEvent event) {
+        return Bot.instance.getResponderManager().dispatch(event);
     }
 
-    private void reactToMessage(ActionEvent event) {
-        Bot.instance.getResponderManager().dispatch(event);
+    private boolean reactToMessage(ActionEvent event) {
+        return Bot.instance.getResponderManager().dispatch(event);
     }
 }

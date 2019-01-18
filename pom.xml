@@ -70,5 +70,13 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- DATABASE -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-async</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+
     </dependencies>
 </project>
