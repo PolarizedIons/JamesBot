@@ -33,14 +33,17 @@ public class CommandManager {
         }
     }
 
-    public boolean dispatch(String message, CommandMessage source) {
+    public boolean dispatch(CommandMessage source) {
         try {
-            return ReturnConstants.SUCCESS == dispatcher.execute(message, source);
+            System.out.println("doing dispatch nau");
+            return ReturnConstants.SUCCESS == dispatcher.execute(source.getMessage(), source);
         }
         catch (CommandSyntaxException e) {
             if (e.getCursor() != 0) {
                 logger.error("Error handling command " + source.getMessage(), ": {}", e);
             }
+
+            e.printStackTrace();
 
             return false;
         }

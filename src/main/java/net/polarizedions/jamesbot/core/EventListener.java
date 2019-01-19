@@ -31,7 +31,7 @@ public class EventListener extends ListenerAdapter {
         // Command Prefix
         if (event.getMessage().startsWith(prefix)) {
             String msg = event.getMessage().substring(prefix.length());
-            if (this.runCommand(msg, event)) {
+            if (this.runCommand(new CommandMessage(event, msg))) {
                 return;
             }
         }
@@ -44,7 +44,7 @@ public class EventListener extends ListenerAdapter {
                 msg = msg.substring(1).trim();
             }
 
-            if (this.runCommand(msg, event)) {
+            if (this.runCommand(new CommandMessage(event, msg))) {
                 return;
             }
         }
@@ -61,12 +61,26 @@ public class EventListener extends ListenerAdapter {
         this.reactToMessage(event);
     }
 
-    public boolean runCommand(String message, MessageEvent event) {
-        return Bot.instance.getCommandManager().dispatch(message, new CommandMessage(event));
+    public boolean runCommand(CommandMessage msg) {
+        try {
+            return Bot.instance.getCommandManager().dispatch(msg);
+        }
+        catch(Exception e) {
+            System.err.println("Error dispatching command");
+            e.printStackTrace(System.err);
+            return false;
+        }
     }
 
     private boolean reactToMessage(MessageEvent event) {
-        return Bot.instance.getResponderManager().dispatch(event);
+        try {
+            return Bot.instance.getResponderManager().dispatch(event);
+        }
+        catch(Exception e) {
+            System.err.println("Error reacting to message");
+            e.printStackTrace(System.err);
+            return false;
+        }
     }
 
     private boolean reactToMessage(ActionEvent event) {

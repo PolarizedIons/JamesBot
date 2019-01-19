@@ -18,7 +18,7 @@ public class CommandPing implements ICommand {
 
     private int ping(CommandContext<CommandMessage> context) {
         CommandMessage msg = context.getSource();
-        msg.respondWith("pong!");
+        msg.respond("pong!");
         return ReturnConstants.SUCCESS;
     }
 
