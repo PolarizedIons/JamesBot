@@ -56,14 +56,14 @@
             <version>2.8.5</version>
         </dependency>
 
-        <!-- Command parsing/dispatching -->
+        <!-- COMMAND PARSING -->
         <dependency>
             <groupId>com.mojang</groupId>
             <artifactId>brigadier</artifactId>
             <version>1.0.15</version>
         </dependency>
 
-        <!-- IDEA Annotations -->
+        <!-- IDEA ANNOTATIONS -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
@@ -74,7 +74,7 @@
         <!-- DATABASE -->
         <dependency>
             <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-async</artifactId>
+            <artifactId>mongodb-driver</artifactId>
             <version>3.9.1</version>
         </dependency>
 

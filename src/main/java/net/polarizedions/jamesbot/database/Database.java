@@ -1,17 +1,14 @@
 package net.polarizedions.jamesbot.database;
 
 import com.mongodb.ConnectionString;
-import com.mongodb.async.client.MongoClient;
-import com.mongodb.async.client.MongoClients;
-import com.mongodb.async.client.MongoCollection;
-import com.mongodb.async.client.MongoDatabase;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import net.polarizedions.jamesbot.config.DatabaseConfig;
-import net.polarizedions.jamesbot.utils.Callback;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.jetbrains.annotations.NotNull;
-
-import static com.mongodb.client.model.Filters.eq;
 
 public class Database {
     MongoClient client;
@@ -25,23 +22,16 @@ public class Database {
         return this.database.getCollection(collectionName);
     }
 
-    public void insert(String collectionName, Document document, Callback<Boolean> callback) {
-        this.getCollection(collectionName).insertOne(document, (aVoid, throwable) -> {
-            System.out.println("inserted!");
-
-            callback.callback(throwable == null);
-        });
+    public void insert(String collectionName, Document document) {
+        this.getCollection(collectionName).insertOne(document);
     }
 
-    public void findOne(String collectionName, Bson query, Callback<Document> callback) {
-        this.getCollection(collectionName).find(query).first((document, throwable) -> {
-            callback.callback(document);
-        });
-
+    public Document findOne(String collectionName, Bson query) {
+        return this.getCollection(collectionName).find(query).first();
     }
 
     @NotNull
-    private String buildConnectionString(DatabaseConfig config) {
+    private String buildConnectionString(@NotNull DatabaseConfig config) {
         String connectionString = "mongodb://";
         if (! config.username.isEmpty()) {
             connectionString += config.username;
