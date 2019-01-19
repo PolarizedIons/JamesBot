@@ -9,7 +9,7 @@ public class ResponderActions implements IResponder {
         String action = msg.getAction().toLowerCase().trim();
         String nick = Bot.instance.getPircBot().getNick().toLowerCase();
 
-        if (action.endsWith("hugs " + nick)) {
+        if (action.startsWith("hugs " + nick)) {
             this.actHug(msg);
         }
         else if (action.contains("slaps " + nick + " around a bit")) {
