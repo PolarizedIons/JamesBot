@@ -84,40 +84,28 @@ public class CommandQuote implements ICommand {
     }
 
     private int getRandomQuote(CommandMessage source, String person, String thing) {
-        System.out.println("I must get a random quote for master");
         Bson filter = null;
-//        if (person.isEmpty() && thing.isEmpty()) {
-//            System.out.println("ALL IS A GO");
-//            filter = all("nick"); // All docs that have this field... so all docs
-//        }
         if (person.equals("*") && !thing.isEmpty()) {
-            System.out.println("THE PERSON IS A ANY");
             filter = regex("message", ".*\\b" + thing + "\\b.*", "i");
         }
         else if (!person.isEmpty() && !thing.isEmpty()) {
-            System.out.println("BOTH MUST BE OKAY");
             filter = and(regex("nick", person, "i"), regex("message", ".*\\b" + thing + "\\b.*", "i"));
         }
         else if (!person.isEmpty()) {
-            System.out.println("ONLY THE PERSON IS A MUST");
             filter = regex("nick", person, "i");
         }
         else if (!thing.isEmpty()){
-            System.out.println("ONLY THE MESSAGE IS A MUST");
             filter = regex("message", ".*\\b" + thing + "\\b.*", "i");
         }
 
         Database db = Bot.instance.getDatabase();
         MongoCollection<Document> coll = db.getCollection("quotes");
 
-        System.out.println("about to go find it...");
 
         // TODO: find better solution
         List<Document> docs = new ArrayList<>();
         FindIterable<Document> quotes = filter == null ? coll.find() : coll.find(filter);
         quotes.iterator().forEachRemaining(docs::add);
-        System.out.println("I DID A FIND!" + docs.size());
-
 
         if (docs.size() == 0) {
             source.respond("Sorry, I couldn't find a quote matching that :(");
@@ -130,13 +118,10 @@ public class CommandQuote implements ICommand {
     }
 
     private int getSpecificQuote(CommandMessage source, int number, String person) {
-        System.out.println("I must get a spesific quote for master");
         Database db = Bot.instance.getDatabase();
         MongoCollection<Document> coll = db.getCollection("quotes");
 
-        System.out.println("aalllmost have ...." + number + " " + person);
         Document quote = coll.find(and(regex("nick", person, "i"), eq("quoteNum", number))).first();
-        System.out.println("got it!!");
         if (quote == null) {
             source.respond("Can't find that quote :(");
             return ReturnConstants.FAIL_SILENT;
@@ -147,10 +132,10 @@ public class CommandQuote implements ICommand {
     }
 
     private int remember(CommandMessage source, String nick, String search) {
-//        if (source.getNick().equalsIgnoreCase(nick)) {
-//            source.respond("You're not that memorable to me.");
-//            return ReturnConstants.FAIL_SILENT;
-//        }
+        if (source.getNick().equalsIgnoreCase(nick)) {
+            source.respond("You're not that memorable to me.");
+            return ReturnConstants.FAIL_SILENT;
+        }
 
         MessageEvent found = this.searchMemory(source.getChannel(), nick, search);
 
@@ -213,38 +198,6 @@ public class CommandQuote implements ICommand {
             e.printStackTrace();
             return "";
         }
-    }
-
-    private int remember(CommandContext<CommandMessage> messageEventCommandContext) {
-        String channel = messageEventCommandContext.getSource().getChannel();
-        MessageEvent msg = Bot.instance.getMessageMemory(channel).get(1);
-
-        Document doc = new Document("user", msg.getUser().getNick())
-                .append("message", msg.getMessage())
-                .append("channel", msg.getChannelSource());
-
-//        Bot.instance.getDatabase().insert("quotes", doc, callback -> {
-//            System.out.println("success??? " + callback);
-//        });
-        return 1;
-    }
-
-    private int quote(CommandContext<CommandMessage> objectCommandContext) {
-        MongoCollection<Document> col = Bot.instance.getDatabase().getCollection("quotes");
-//        col.find().first((document, throwable) -> {
-//            if (throwable != null) {
-//                System.out.println("ERROR!!!");
-//                objectCommandContext.getSource().respondWith("error");
-//            }
-//
-////            String user = document.getString("user");
-////            String message = document.getString("message");
-////            String channel = document.getString("channel");
-//
-//
-//            objectCommandContext.getSource().respondWith(channel +" - " + user + ": " + message);
-//        });
-        return 1;
     }
 
     @Override
