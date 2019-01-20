@@ -2,6 +2,7 @@ package net.polarizedions.jamesbot.apis;
 
 import com.mongodb.client.MongoCollection;
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.database.ButtcoinAccount;
 import net.polarizedions.jamesbot.database.Database;
 import org.bson.Document;
 
@@ -13,22 +14,21 @@ public class Buttcoin {
     private Buttcoin() {}
 
     public void mine(String nick, boolean bruteforced) {
-        Database db = Bot.instance.getDatabase();
-        MongoCollection<Document> coll = db.getCollection("buttcoins");
+        MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
 
-        Document mined = this.getAccount(nick);
+        ButtcoinAccount mined = this.getAccount(nick);
 
-        Document newMined = new Document("balance", mined.getInteger("balance") + 1)
-                .append("mined", mined.getInteger("mined") + 1)
-                .append("bruteforced", mined.getInteger("bruteforced") + (bruteforced ? 1 : 0));
+        Document newMined = new Document("balance", mined.balance + 1)
+                .append("mined", mined.mined + 1)
+                .append("bruteforced", mined.bruteforced + (bruteforced ? 1 : 0));
 
         coll.updateOne(regex("name", nick, "i"), new Document("$set", newMined));
     }
 
-    public Document getAccount(String nick) {
-        MongoCollection<Document> coll = Bot.instance.getDatabase().getCollection("buttcoins");
+    public ButtcoinAccount getAccount(String nick) {
+        MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
 
-        Document account = coll.find(regex("name", nick, "i")).first();
+        ButtcoinAccount account = coll.find(regex("name", nick, "i")).first();
         if (account == null) {
             account = this.createAccount(nick);
         }
@@ -36,45 +36,39 @@ public class Buttcoin {
         return account;
     }
 
-    public Document createAccount(String nick) {
-        MongoCollection<Document> coll = Bot.instance.getDatabase().getCollection("buttcoins");
+    public ButtcoinAccount createAccount(String nick) {
+        MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
 
-        Document account = new org.bson.Document("name", nick)
-                .append("active", false)
-                .append("balance", 0)
-                .append("mined", 0)
-                .append("bruteforced", 0)
-                .append("gifted", 0)
-                .append("given", 0);
-
+        ButtcoinAccount account = new ButtcoinAccount(nick);
         coll.insertOne(account);
+
         return account;
     }
 
     public boolean isAccountActive (String nick) {
-        return this.getAccount(nick).getBoolean("active");
+        return this.getAccount(nick).active;
     }
 
     public void activateAccount(String nick) {
-        MongoCollection<Document> coll = Bot.instance.getDatabase().getCollection("buttcoins");
+        MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
         coll.updateOne(regex("name", nick, "i"), new Document("$set", new Document("active", true)));
     }
 
     public boolean transfer(String from, String to, int amount) {
-        MongoCollection<Document> coll = Bot.instance.getDatabase().getCollection("buttcoins");
+        MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
 
-        Document fromAccount = this.getAccount(from);
-        Document toAccount = this.getAccount(to);
+        ButtcoinAccount fromAccount = this.getAccount(from);
+        ButtcoinAccount toAccount = this.getAccount(to);
 
-        if (fromAccount.getInteger("mined") < amount) {
+        if (fromAccount.mined < amount) {
             return false;
         }
 
-        Document updateFrom = new Document("balance", fromAccount.getInteger("balance") - amount)
-                .append("gifted", fromAccount.getInteger("gifted") + amount);
+        Document updateFrom = new Document("balance", fromAccount.balance - amount)
+                .append("gifted", fromAccount.gifted + amount);
 
-        Document updateTo = new Document("balance", toAccount.getInteger("balance") + amount)
-                .append("given", toAccount.getInteger("given") + amount);
+        Document updateTo = new Document("balance", toAccount.balance + amount)
+                .append("given", toAccount.given + amount);
 
         coll.updateOne(regex("name", from, "i"), new Document("$set", updateFrom));
         coll.updateOne(regex("name", to, "i"), new Document("$set", updateTo));

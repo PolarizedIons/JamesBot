@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.polarizedions.jamesbot.apis.Buttcoin;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.database.ButtcoinAccount;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.bson.Document;
 
@@ -63,15 +64,9 @@ public class CommandButtcoins implements ICommand {
     }
 
     private int getStats(CommandMessage source, String nick) {
-        Document account = Buttcoin.instance.getAccount(nick);
-        boolean active = account.getBoolean("active");
-        int balance = account.getInteger("balance");
-        int mined = account.getInteger("mined");
-        int bruteforced = account.getInteger("bruteforced");
-        int gifted = account.getInteger("gifted");
-        int given = account.getInteger("given");
+        ButtcoinAccount account = Buttcoin.instance.getAccount(nick);
 
-        source.notice(nick + " has an " + (active ? "active" : "inactive") + " account, with " + balance + " buttcoins (" + mined + " mined, and " + bruteforced + " of which was bruteforced.) They've gifted " + gifted + " and received " + given + " buttcoins");
+        source.notice(nick + " has an " + (account.active ? "active" : "inactive") + " account, with " + account.balance + " buttcoins (" + account.mined + " mined, and " + account.bruteforced + " of which was bruteforced.) They've gifted " + account.gifted + " and received " + account.given + " buttcoins");
         return ReturnConstants.SUCCESS;
     }
 

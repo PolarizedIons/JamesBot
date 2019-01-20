@@ -7,6 +7,7 @@ import com.mongodb.client.MongoCollection;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.database.Database;
+import net.polarizedions.jamesbot.database.Quote;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import net.polarizedions.jamesbot.utils.FixedSizeQueue;
 import org.bson.Document;
@@ -99,13 +100,11 @@ public class CommandQuote implements ICommand {
             filter = regex("message", ".*\\b" + thing + "\\b.*", "i");
         }
 
-        Database db = Bot.instance.getDatabase();
-        MongoCollection<Document> coll = db.getCollection("quotes");
-
+        MongoCollection<Quote> coll = Bot.instance.getDatabase().getQuoteCollection();
 
         // TODO: find better solution
-        List<Document> docs = new ArrayList<>();
-        FindIterable<Document> quotes = filter == null ? coll.find() : coll.find(filter);
+        List<Quote> docs = new ArrayList<>();
+        FindIterable<Quote> quotes = filter == null ? coll.find() : coll.find(filter);
         quotes.iterator().forEachRemaining(docs::add);
 
         if (docs.size() == 0) {
@@ -113,16 +112,15 @@ public class CommandQuote implements ICommand {
             return ReturnConstants.FAIL_SILENT;
         }
 
-        Document quote = docs.get(RANDOM.nextInt(docs.size()));
+        Quote quote = docs.get(RANDOM.nextInt(docs.size()));
         source.respond(this.formatQuote(quote));
         return ReturnConstants.SUCCESS;
     }
 
     private int getSpecificQuote(CommandMessage source, int number, String person) {
-        Database db = Bot.instance.getDatabase();
-        MongoCollection<Document> coll = db.getCollection("quotes");
+        MongoCollection<Quote> coll = Bot.instance.getDatabase().getQuoteCollection();
 
-        Document quote = coll.find(and(regex("nick", person, "i"), eq("quoteNum", number))).first();
+        Quote quote = coll.find(and(regex("nick", person, "i"), eq("quoteNum", number))).first();
         if (quote == null) {
             source.respond("Can't find that quote :(");
             return ReturnConstants.FAIL_SILENT;
@@ -145,7 +143,7 @@ public class CommandQuote implements ICommand {
             return FAIL_SILENT;
         }
         try {
-            Document quote = this.saveQuote(found);
+            Quote quote = this.saveQuote(found);
             source.respond("Remembered: " + this.formatQuote(quote));
         } catch (Exception e) {
             e.printStackTrace();
@@ -170,30 +168,24 @@ public class CommandQuote implements ICommand {
         return null;
     }
 
-    private Document saveQuote(@NotNull MessageEvent message) {
-        Database db = Bot.instance.getDatabase();
-        MongoCollection<Document> col = db.getCollection("quotes");
+    private Quote saveQuote(@NotNull MessageEvent message) {
+        MongoCollection<Quote> col = Bot.instance.getDatabase().getQuoteCollection();
 
-        Document lastQuote = col.find(regex("nick", message.getUser().getNick(), "i")).sort(descending("quoteNum")).first();
-        int nextQuote = lastQuote == null ? 1 : lastQuote.getInteger("quoteNum") + 1;
+        Quote lastQuote = col.find(regex("nick", message.getUser().getNick(), "i")).sort(descending("quoteNum")).first();
+        int nextQuote = lastQuote == null ? 1 : lastQuote.quoteNum + 1;
 
-        Document quote = new Document("nick", message.getUser().getNick())
-                .append("quoteNum", nextQuote)
-                .append("message", message.getMessage())
-                .append("date", Date.from(Instant.now()));
+        Quote quote = new Quote(message.getUser().getNick(), nextQuote, message.getMessage(), Date.from(Instant.now()));
 
         col.insertOne(quote);
         return quote;
     }
 
-    private String formatQuote(Document quote) {
+    private String formatQuote(Quote quote) {
         try {
-            String formatted = quote.getString("message") + " - " + quote.getString("nick") + " #" + quote.getLong("quoteNum");
+            String formatted = quote.message + " - " + quote.nick + " #" + quote.quoteNum;
 
-            if (quote.get("date") != null) {
-                Instant date = quote.getDate("date").toInstant();
-
-                formatted += " (" + DATE_FORMAT.format(date) + ")";
+            if (quote.date != null) {
+                formatted += " (" + DATE_FORMAT.format(quote.date.toInstant()) + ")";
             }
             return formatted;
 
