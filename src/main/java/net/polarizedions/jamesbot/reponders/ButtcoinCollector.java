@@ -25,17 +25,21 @@ public class ButtcoinCollector implements IResponder {
 
     @Override
     public boolean run(MessageEvent msg) {
-        if (! nextWord.matcher(msg.getMessage()).matches()) {
+        System.out.println("running buttcoin collector");
+        if (! nextWord.matcher(msg.getMessage()).find()) {
+            System.out.println("doesn't match " + nextWord);
             return false;
         }
 
         boolean bruteforced = true;
         for (Pattern pattern : BUTTCOIN_SECRIT_WORDS) {
-            if (! pattern.matcher(msg.getMessage()).matches()) {
+            if (! pattern.matcher(msg.getMessage()).find()) {
                 bruteforced = false;
                 break;
             }
         }
+
+        System.out.println("bruteforced? " + bruteforced);
 
         Bot.instance.debug("[BUTTCOIN] " + msg.getUser().getNick() + " mined 1 buttcoin from " + this.nextWord + " (bruteforced? " + bruteforced + ")");
         this.mine(msg.getUser().getNick(), bruteforced);
@@ -65,13 +69,9 @@ public class ButtcoinCollector implements IResponder {
             coll.insertOne(mined);
         }
 
-        // TODO: check if there's a better way?
-        Document newMined = new Document("name", nick)
-                .append("mined", mined.getInteger("mined") + 1)
-                .append("bruteforced", mined.getInteger("bruteforced") + (bruteforced ? 1 : 0))
-                .append("gifted", mined.getInteger("gifted"))
-                .append("given", mined.getInteger("given"));
+        Document newMined = new Document("mined", mined.getInteger("mined") + 1)
+                .append("bruteforced", mined.getInteger("bruteforced") + (bruteforced ? 1 : 0));
 
-        coll.updateOne(regex("name", nick, "i"), newMined);
+        coll.updateOne(regex("name", nick, "i"), new Document("$set", newMined));
     }
 }
