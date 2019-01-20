@@ -4,7 +4,9 @@ import com.google.gson.InstanceCreator;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BotConfig {
 
@@ -12,9 +14,10 @@ public class BotConfig {
     public String realname;
     public String serverHost;
     public int serverPort;
-    public List<String> channels;
+    public Set<String> channels;
     public String debugChannel;
     public String commandPrefix;
+    public List<StaffEntry> staff;
 
     public int memorySize;
 
@@ -34,10 +37,12 @@ public class BotConfig {
             config.realname = "Jamesbot by PolarizedIons";
             config.serverHost = "irc.freenode.net";
             config.serverPort = 6697;
-            config.channels = new ArrayList<>();
+            config.channels = new HashSet<>();
             config.channels.add("##PolarizedIons");
             config.debugChannel = "##PolarizedSpam";
             config.commandPrefix = "!";
+            config.staff = new ArrayList<>();
+            config.staff.add(new StaffEntry("", "", "unaffiliated/polarizedions"));
 
             config.memorySize = 250;
 
