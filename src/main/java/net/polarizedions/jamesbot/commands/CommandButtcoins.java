@@ -76,6 +76,11 @@ public class CommandButtcoins implements ICommand {
     }
 
     private int transfer(CommandMessage source, int amount, String toNick, String reason) {
+        if (!Buttcoin.instance.isAccountActive(toNick)) {
+            source.noticePM("Sorry, " + toNick + " does not have an active account");
+            return ReturnConstants.FAIL_SILENT;
+        }
+
         if (!Buttcoin.instance.transfer(source.getNick(), toNick, amount)) {
             source.noticePM("I couldn't do that. Do you have enough buttcoins?");
             return ReturnConstants.FAIL_SILENT;
