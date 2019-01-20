@@ -46,7 +46,7 @@ public class CommandMessage {
     }
 
     public String getChannel() {
-        return this.wrapped.getChannelSource();
+        return this.wrapped.getChannel().getName();
     }
 
     public void respond(String response) {

@@ -60,7 +60,7 @@ public class EventListener extends ListenerAdapter {
             return;
         }
 
-        Bot.instance.getMessageMemory(event.getChannelSource()).add(event);
+        Bot.instance.getMessageMemory(event.getChannel().getName()).add(event);
     }
 
     @Override
