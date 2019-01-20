@@ -3,6 +3,7 @@ package net.polarizedions.jamesbot.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,7 +37,13 @@ public class CommandManager {
     public boolean dispatch(CommandMessage source) {
         try {
             System.out.println("doing dispatch nau");
-            return ReturnConstants.SUCCESS == dispatcher.execute(source.getMessage(), source);
+            int result = dispatcher.execute(source.getMessage(), source);
+
+            if (result == ReturnConstants.FAIL_LOG) {
+                Bot.instance.debug("[Command Failed] " + source.getChannel() + "/" + source.getNick() + ": " + source.getMessage());
+            }
+
+            return result == ReturnConstants.SUCCESS;
         }
         catch (CommandSyntaxException e) {
             if (e.getCursor() != 0) {
