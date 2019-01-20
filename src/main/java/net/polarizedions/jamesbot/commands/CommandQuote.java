@@ -33,6 +33,7 @@ import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.in;
 import static com.mongodb.client.model.Filters.regex;
+import static com.mongodb.client.model.Sorts.descending;
 import static net.polarizedions.jamesbot.commands.brigadier.ReturnConstants.FAIL_SILENT;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
@@ -172,10 +173,12 @@ public class CommandQuote implements ICommand {
     private Document saveQuote(@NotNull MessageEvent message) {
         Database db = Bot.instance.getDatabase();
         MongoCollection<Document> col = db.getCollection("quotes");
-        long numQuotes = col.countDocuments(regex("nick", message.getUser().getNick(), "i")); // Case insensitive\
+
+        Document lastQuote = col.find(regex("nick", message.getUser().getNick(), "i")).sort(descending("quoteNum")).first();
+        int nextQuote = lastQuote == null ? 1 : lastQuote.getInteger("quoteNum") + 1;
 
         Document quote = new Document("nick", message.getUser().getNick())
-                .append("quoteNum", numQuotes + 1)
+                .append("quoteNum", nextQuote)
                 .append("message", message.getMessage())
                 .append("date", Date.from(Instant.now()));
 
