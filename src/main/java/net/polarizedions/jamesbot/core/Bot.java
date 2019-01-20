@@ -57,6 +57,7 @@ public class Bot {
         this.bot = new PircBotX(configLoader.build());
     }
 
+
     public BotConfig getBotConfig() {
         return this.configLoader.getBotConfig();
     }
@@ -129,6 +130,14 @@ public class Bot {
 
     public static void noticeWith(@NotNull GenericChannelUserEvent msg, String content) {
         msg.getBot().sendIRC().notice(msg.getChannel().getName(), content);
+    }
+
+    public static void noticePM(@NotNull GenericChannelUserEvent msg, String content) {
+        msg.getBot().sendIRC().notice(msg.getUser().getNick(), content);
+    }
+
+    public static void noticePM(String to, String content) {
+        Bot.instance.getPircBot().sendIRC().notice(to, content);
     }
 
     public static void action(GenericChannelUserEvent msg, String content) {

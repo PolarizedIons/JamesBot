@@ -16,6 +16,7 @@ public class ResponderManager {
         this.responders.add(new ResponderWhatIsLove());
         this.responders.add(new ResponderDice());
         this.responders.add(new ButtcoinCollector());
+        this.responders.add(new ButtcoinPlusPlus());
     }
 
     public boolean  dispatch(MessageEvent msg) {

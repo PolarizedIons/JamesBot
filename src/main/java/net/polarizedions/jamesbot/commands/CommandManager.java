@@ -26,7 +26,7 @@ public class CommandManager {
         this.commands.add(new CommandEightball());
         this.commands.add(new CommandYoutube());
         this.commands.add(new CommandQuote());
-
+        this.commands.add(new CommandButtcoins());
 
         for (ICommand cmd : this.commands) {
             cmd.register(this.dispatcher);
@@ -42,9 +42,9 @@ public class CommandManager {
             if (e.getCursor() != 0) {
                 logger.error("Error handling command " + source.getMessage(), ": {}", e);
             }
-
-            e.printStackTrace();
-
+            else {
+                logger.debug("unknown command");
+            }
             return false;
         }
     }
