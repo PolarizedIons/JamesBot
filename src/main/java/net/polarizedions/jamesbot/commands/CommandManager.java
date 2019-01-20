@@ -29,6 +29,7 @@ public class CommandManager {
         this.commands.add(new CommandQuote());
         this.commands.add(new CommandButtcoins());
         this.commands.add(new CommandJoin());
+        this.commands.add(new CommandSay());
 
         for (ICommand cmd : this.commands) {
             cmd.register(this.dispatcher);
