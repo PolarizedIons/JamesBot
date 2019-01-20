@@ -59,30 +59,30 @@ public class CommandButtcoins implements ICommand {
     }
 
     private int activate(CommandMessage source) {
-        Buttcoin.instance.activateAccount(source.getNick());
+        Bot.instance.getButtcoinAPI().activateAccount(source.getNick());
         return 0;
     }
 
     private int getStats(CommandMessage source, String nick) {
-        ButtcoinAccount account = Buttcoin.instance.getAccount(nick);
+        ButtcoinAccount account = Bot.instance.getButtcoinAPI().getAccount(nick);
 
         source.notice(nick + " has an " + (account.active ? "active" : "inactive") + " account, with " + account.balance + " buttcoins (" + account.mined + " mined, and " + account.bruteforced + " of which was bruteforced.) They've gifted " + account.gifted + " and received " + account.given + " buttcoins");
         return ReturnConstants.SUCCESS;
     }
 
     private int transfer(CommandMessage source, int amount, String toNick, String reason) {
-        if (!Buttcoin.instance.isAccountActive(toNick)) {
+        if (!Bot.instance.getButtcoinAPI().isAccountActive(toNick)) {
             source.noticePM("Sorry, " + toNick + " does not have an active account");
             return ReturnConstants.FAIL_SILENT;
         }
 
-        if (!Buttcoin.instance.transfer(source.getNick(), toNick, amount)) {
+        if (!Bot.instance.getButtcoinAPI().transfer(source.getNick(), toNick, amount)) {
             source.noticePM("I couldn't do that. Do you have enough buttcoins?");
             return ReturnConstants.FAIL_SILENT;
         }
 
         source.noticePM("You transferred " + amount + " buttcoins to " + toNick + " with the message \"" + reason + "\"");
-        if (Buttcoin.instance.isAccountActive(toNick)) {
+        if (Bot.instance.getButtcoinAPI().isAccountActive(toNick)) {
             Bot.noticePM(toNick, source.getNick() + " has gifted you " + amount + " buttcoins [" + reason + "]");
         }
 

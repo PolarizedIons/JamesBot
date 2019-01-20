@@ -1,5 +1,6 @@
 package net.polarizedions.jamesbot.core;
 
+import net.polarizedions.jamesbot.apis.Buttcoin;
 import net.polarizedions.jamesbot.apis.Youtube;
 import net.polarizedions.jamesbot.commands.CommandManager;
 import net.polarizedions.jamesbot.config.BotConfig;
@@ -29,6 +30,7 @@ public class Bot {
     private Database database;
 
     private Youtube youtubeAPI;
+    private Buttcoin buttcoinAPI;
 
     private HashMap<String, FixedSizeQueue<MessageEvent>> messageMemory;
 
@@ -53,6 +55,7 @@ public class Bot {
         if (! this.getBotConfig().apiKeys.youtube.isEmpty()) {
             this.youtubeAPI = new Youtube(this.getBotConfig().apiKeys.youtube);
         }
+        this.buttcoinAPI = new Buttcoin();
 
         this.bot = new PircBotX(configLoader.build());
     }
@@ -76,6 +79,10 @@ public class Bot {
 
     public Youtube getYoutubeAPI() {
         return youtubeAPI;
+    }
+
+    public Buttcoin getButtcoinAPI() {
+        return buttcoinAPI;
     }
 
     public Database getDatabase() {

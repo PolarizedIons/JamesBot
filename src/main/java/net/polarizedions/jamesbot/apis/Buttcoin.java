@@ -9,9 +9,6 @@ import org.bson.Document;
 import static com.mongodb.client.model.Filters.regex;
 
 public class Buttcoin {
-    public static final Buttcoin instance = new Buttcoin();
-
-    private Buttcoin() {}
 
     public void mine(String nick, boolean bruteforced) {
         MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();

@@ -39,7 +39,7 @@ public class ButtcoinCollector implements IResponder {
         }
 
         Bot.instance.debug("[BUTTCOIN] " + msg.getUser().getNick().substring(0, 1) + "\u200B" + msg.getUser().getNick().substring(1) + " mined 1 buttcoin from " + this.nextWord + " (bruteforced? " + bruteforced + ")");
-        Buttcoin.instance.mine(msg.getUser().getNick(), bruteforced);
+        Bot.instance.getButtcoinAPI().mine(msg.getUser().getNick(), bruteforced);
         this.chooseNewWord();
         Bot.instance.debug("[BUTTCOIN] New Word: " + this.nextWord);
 

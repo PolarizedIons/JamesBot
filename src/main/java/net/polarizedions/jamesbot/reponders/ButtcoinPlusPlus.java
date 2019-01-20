@@ -30,14 +30,14 @@ public class ButtcoinPlusPlus implements IResponder {
         String from = msg.getUser().getNick();
         String to = matcher.group(1);
         System.out.println("from " + from + " to " + to);
-        boolean result = Buttcoin.instance.transfer(from, to, 1);
+        boolean result = Bot.instance.getButtcoinAPI().transfer(from, to, 1);
         if (! result) {
             Bot.noticePM(msg, "Sorry, I couldn't do that. Do you have enough buttcoins?");
         }
         else {
             Bot.noticePM(msg, "You gave " + to + " 1 buttcoin.");
 
-            if (Buttcoin.instance.isAccountActive(to)) {
+            if (Bot.instance.getButtcoinAPI().isAccountActive(to)) {
                 Bot.noticePM(to, from + " has given you 1 buttcoin.");
             }
         }
