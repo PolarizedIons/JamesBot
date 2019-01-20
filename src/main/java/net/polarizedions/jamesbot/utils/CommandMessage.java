@@ -15,7 +15,7 @@ public class CommandMessage {
     String message;
 
     public CommandMessage(MessageEvent msg) {
-        this(msg, msg.getMessage().substring(Bot.instance.getBotConfig().commandPrefix.length()));
+        this(msg, msg.getMessage().startsWith(Bot.instance.getBotConfig().commandPrefix) ? msg.getMessage().substring(Bot.instance.getBotConfig().commandPrefix.length()) : msg.getMessage());
     }
 
     public CommandMessage(MessageEvent msg, String message) {

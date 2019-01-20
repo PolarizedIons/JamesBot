@@ -49,6 +49,13 @@ public class EventListener extends ListenerAdapter {
             }
         }
 
+        // PM
+        if (event.getChannel().getName().equalsIgnoreCase(nick)) {
+            if (this.runCommand(new CommandMessage(event))) {
+                return;
+            }
+        }
+
         if (this.reactToMessage(event)) {
             return;
         }
