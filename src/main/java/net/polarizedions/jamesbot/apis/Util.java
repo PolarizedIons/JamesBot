@@ -2,6 +2,7 @@ package net.polarizedions.jamesbot.apis;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.polarizedions.jamesbot.core.BuildInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -17,19 +18,21 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.List;
 
 public class Util {
-    public static final String USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0";
+    public static final String USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0 Jamesbot/" + BuildInfo.version;
     private static final Logger logger = LogManager.getLogger("WebHelper");
-    private static final JsonParser parser = new JsonParser();
+    static final JsonParser parser = new JsonParser();
 
     public static JsonObject post(String uri, JsonObject data) {
-        InputStream is = request(uri, true, data == null ? "" : data.toString());
+        InputStream is = request(uri, true, Collections.emptyList(), data == null ? "" : data.toString());
         return is == null ? null : parser.parse(new InputStreamReader(is)).getAsJsonObject();
     }
 
     @Nullable
-    public static InputStream request(String uri, boolean isPost, String body) {
+    public static InputStream request(String uri, boolean isPost, List<String[]> headers, String body) {
         logger.debug("Fetching url: " + uri);
         URL url;
         try {
@@ -47,6 +50,15 @@ public class Util {
             return null;
         }
         httpConn.addRequestProperty("User-Agent", USER_AGENT);
+
+        boolean contentTypeSet = false;
+        for (String[] header : headers) {
+            httpConn.addRequestProperty(header[0], header[1]);
+            if (header[0].equalsIgnoreCase("Content-Type")) {
+                contentTypeSet = true;
+            }
+        }
+
         if (isPost) {
             try {
                 httpConn.setRequestMethod("POST");
@@ -56,7 +68,11 @@ public class Util {
             }
 
             if (!body.isEmpty()) {
-                httpConn.setRequestProperty("Content-Type", "application/json");
+                if (! contentTypeSet) {
+                    httpConn.setRequestProperty("Content-Type", "application/json");
+                }
+
+                httpConn.setDoOutput(true);
 
                 DataOutputStream dataOutputStream = null;
                 try {
@@ -80,7 +96,7 @@ public class Util {
     }
 
     public static String postString(String uri, JsonObject data) {
-        InputStream is = request(uri, true, data == null ? "" : data.toString());
+        InputStream is = request(uri, true, Collections.emptyList(), data == null ? "" : data.toString());
 
         if (is == null) {
             return null;
@@ -106,7 +122,7 @@ public class Util {
     }
 
     public static InputStream get(String uri) {
-        return request(uri, false, null);
+        return request(uri, false, Collections.emptyList(), null);
     }
 
     // From: https://stackoverflow.com/a/14424783
