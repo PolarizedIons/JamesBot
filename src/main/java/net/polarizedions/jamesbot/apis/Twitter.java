@@ -3,6 +3,8 @@ package net.polarizedions.jamesbot.apis;
 import com.google.gson.JsonObject;
 import net.polarizedions.jamesbot.config.BotConfig;
 import net.polarizedions.jamesbot.core.BuildInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,9 +13,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.Objects;
 
 public class Twitter {
+    private static final Logger logger = LogManager.getLogger("TwitterAPI");
     private static final String AUTHENTICATION_URL = "https://api.twitter.com/oauth2/token";
     private static final String SHOW_TWEET_URL = "https://api.twitter.com/1.1/statuses/show.json?id=";
 
@@ -36,9 +38,15 @@ public class Twitter {
         headers.add(new String[] {"Content-Type", "application/x-www-form-urlencoded;charset=UTF-8"});
         headers.add(new String[] {"User-Agent", "Jamesbot v" + BuildInfo.version});
 
-        JsonObject response = Util.parser.parse(new InputStreamReader(Objects.requireNonNull(Util.request(AUTHENTICATION_URL, true, headers, "grant_type=client_credentials")))).getAsJsonObject();
+        InputStream is = Util.request(AUTHENTICATION_URL, true, headers, "grant_type=client_credentials");
+        if (is == null) {
+            logger.error("Error getting twitter bearer token! Please check your consumer key & secret!");
+            throw new IllegalStateException("Unable to get bearer token.");
+        }
+        JsonObject response = Util.parser.parse(new InputStreamReader(is)).getAsJsonObject();
 
         if (! response.get("token_type").getAsString().equalsIgnoreCase("bearer")) {
+            logger.error("Twitter gave me " + response.get("token_type").getAsString() + " but I expected a bearer token!");
             throw new IllegalStateException("Didn't get a bearer token!");
         }
 
@@ -46,7 +54,7 @@ public class Twitter {
         this.bearerHeader = new ArrayList<>();
         this.bearerHeader.add(new String[] {"Authorization", "Bearer " + this.bearerCode});
 
-        System.out.println("Successfully authenticated! ");
+        logger.debug("Successfully authenticated!");
     }
 
     public Tweet getTweet(long id) {
