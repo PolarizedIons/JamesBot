@@ -24,9 +24,9 @@ public class CommandYoutube implements ICommand {
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(
-            literal("youtube").then(
-                    argument("link", greedyString()).executes(c -> this.youtube(c.getSource(), getString(c, "link")))
-            )
+                literal("youtube").then(
+                        argument("link", greedyString()).executes(c -> this.youtube(c.getSource(), getString(c, "link")))
+                )
         );
     }
 

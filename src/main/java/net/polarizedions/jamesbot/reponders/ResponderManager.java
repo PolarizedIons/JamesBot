@@ -22,7 +22,7 @@ public class ResponderManager {
         this.responders.add(new QmarkAPI());
     }
 
-    public boolean  dispatch(MessageEvent msg) {
+    public boolean dispatch(MessageEvent msg) {
         for (IResponder responder : this.responders) {
             if (responder.run(msg)) {
                 return true;

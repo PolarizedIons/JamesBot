@@ -1,21 +1,17 @@
 package net.polarizedions.jamesbot.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.context.CommandContext;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
-import net.polarizedions.jamesbot.database.Database;
 import net.polarizedions.jamesbot.database.Quote;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import net.polarizedions.jamesbot.utils.FixedSizeQueue;
-import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.jetbrains.annotations.NotNull;
 import org.pircbotx.hooks.events.MessageEvent;
 
-import javax.xml.crypto.Data;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -29,10 +25,8 @@ import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
-import static com.mongodb.client.model.Filters.all;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.in;
 import static com.mongodb.client.model.Filters.regex;
 import static com.mongodb.client.model.Sorts.descending;
 import static net.polarizedions.jamesbot.commands.brigadier.ReturnConstants.FAIL_SILENT;
@@ -85,51 +79,6 @@ public class CommandQuote implements ICommand {
         );
     }
 
-    private int getRandomQuote(CommandMessage source, String person, String thing) {
-        Bson filter = null;
-        if (person.equals("*") && !thing.isEmpty()) {
-            filter = regex("message", ".*\\b" + thing + "\\b.*", "i");
-        }
-        else if (!person.isEmpty() && !thing.isEmpty()) {
-            filter = and(regex("nick", person, "i"), regex("message", ".*\\b" + thing + "\\b.*", "i"));
-        }
-        else if (!person.isEmpty()) {
-            filter = regex("nick", person, "i");
-        }
-        else if (!thing.isEmpty()){
-            filter = regex("message", ".*\\b" + thing + "\\b.*", "i");
-        }
-
-        MongoCollection<Quote> coll = Bot.instance.getDatabase().getQuoteCollection();
-
-        // TODO: find better solution
-        List<Quote> docs = new ArrayList<>();
-        FindIterable<Quote> quotes = filter == null ? coll.find() : coll.find(filter);
-        quotes.iterator().forEachRemaining(docs::add);
-
-        if (docs.size() == 0) {
-            source.respond("Sorry, I couldn't find a quote matching that :(");
-            return ReturnConstants.FAIL_SILENT;
-        }
-
-        Quote quote = docs.get(RANDOM.nextInt(docs.size()));
-        source.respond(this.formatQuote(quote));
-        return ReturnConstants.SUCCESS;
-    }
-
-    private int getSpecificQuote(CommandMessage source, int number, String person) {
-        MongoCollection<Quote> coll = Bot.instance.getDatabase().getQuoteCollection();
-
-        Quote quote = coll.find(and(regex("nick", person, "i"), eq("quoteNum", number))).first();
-        if (quote == null) {
-            source.respond("Can't find that quote :(");
-            return ReturnConstants.FAIL_SILENT;
-        }
-
-        source.respond(this.formatQuote(quote));
-        return ReturnConstants.SUCCESS;
-    }
-
     private int remember(CommandMessage source, String nick, String search) {
         if (source.getNick().equalsIgnoreCase(nick)) {
             source.respond("You're not that memorable to me.");
@@ -148,6 +97,48 @@ public class CommandQuote implements ICommand {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return ReturnConstants.SUCCESS;
+    }
+
+    private int getSpecificQuote(CommandMessage source, int number, String person) {
+        MongoCollection<Quote> coll = Bot.instance.getDatabase().getQuoteCollection();
+
+        Quote quote = coll.find(and(regex("nick", person, "i"), eq("quoteNum", number))).first();
+        if (quote == null) {
+            source.respond("Can't find that quote :(");
+            return ReturnConstants.FAIL_SILENT;
+        }
+
+        source.respond(this.formatQuote(quote));
+        return ReturnConstants.SUCCESS;
+    }
+
+    private int getRandomQuote(CommandMessage source, String person, String thing) {
+        Bson filter = null;
+        if (person.equals("*") && !thing.isEmpty()) {
+            filter = regex("message", ".*\\b" + thing + "\\b.*", "i");
+        } else if (!person.isEmpty() && !thing.isEmpty()) {
+            filter = and(regex("nick", person, "i"), regex("message", ".*\\b" + thing + "\\b.*", "i"));
+        } else if (!person.isEmpty()) {
+            filter = regex("nick", person, "i");
+        } else if (!thing.isEmpty()) {
+            filter = regex("message", ".*\\b" + thing + "\\b.*", "i");
+        }
+
+        MongoCollection<Quote> coll = Bot.instance.getDatabase().getQuoteCollection();
+
+        // TODO: find better solution
+        List<Quote> docs = new ArrayList<>();
+        FindIterable<Quote> quotes = filter == null ? coll.find() : coll.find(filter);
+        quotes.iterator().forEachRemaining(docs::add);
+
+        if (docs.size() == 0) {
+            source.respond("Sorry, I couldn't find a quote matching that :(");
+            return ReturnConstants.FAIL_SILENT;
+        }
+
+        Quote quote = docs.get(RANDOM.nextInt(docs.size()));
+        source.respond(this.formatQuote(quote));
         return ReturnConstants.SUCCESS;
     }
 
@@ -189,7 +180,7 @@ public class CommandQuote implements ICommand {
             }
             return formatted;
 
-        } catch (Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "";
         }

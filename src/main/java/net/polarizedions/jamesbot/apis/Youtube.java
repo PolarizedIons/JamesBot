@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Youtube {
-//    private static final String VIDEO_INFO_URL = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=%s&fields=items(ageGating%%2CcontentDetails(countryRestriction%%2Cduration)%%2Cid%%2Ckind%%2CliveStreamingDetails%%2FconcurrentViewers%%2CmonetizationDetails%%2Csnippet(channelTitle%%2Cdescription%%2Ctitle)%%2Cstatistics%%2Cstatus(privacyStatus%%2CpublishAt))&key=%s";
+    //    private static final String VIDEO_INFO_URL = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=%s&fields=items(ageGating%%2CcontentDetails(countryRestriction%%2Cduration)%%2Cid%%2Ckind%%2CliveStreamingDetails%%2FconcurrentViewers%%2CmonetizationDetails%%2Csnippet(channelTitle%%2Cdescription%%2Ctitle)%%2Cstatistics%%2Cstatus(privacyStatus%%2CpublishAt))&key=%s";
     private static final String VIDEO_INFO_URL = "https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=%s&key=%s";
     private static final Pattern youtubeFullLinkPattern = Pattern.compile("youtube\\.com\\/watch?.*&?v=(.+)&?.*?", Pattern.CASE_INSENSITIVE);
     private static final Pattern youtubeShortinkPattern = Pattern.compile("youtu\\.be\\/(.+)", Pattern.CASE_INSENSITIVE);
@@ -37,7 +37,7 @@ public class Youtube {
             boolean found1 = matcher1.find();
             boolean found2 = matcher2.find();
 
-            if (! found1 && ! found2) {
+            if (!found1 && !found2) {
                 System.out.println("doesn't match" + found1 + found2);
                 return null;
             }
@@ -83,6 +83,7 @@ public class Youtube {
         VIDEO("youtube#video");
 
         String typeStr;
+
         Kind(String typeStr) {
             this.typeStr = typeStr;
         }

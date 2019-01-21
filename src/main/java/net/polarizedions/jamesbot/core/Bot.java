@@ -43,8 +43,7 @@ public class Bot {
         try {
             this.configLoader = new ConfigurationLoader();
             this.configLoader.load();
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             logger.error("Could not load config file! {}", ex);
             System.exit(1);
         }
@@ -55,7 +54,7 @@ public class Bot {
         this.messageMemory = new HashMap<>();
         this.database = new Database(this.getBotConfig().databaseConfig);
 
-        if (! this.getBotConfig().apiKeys.youtube.isEmpty()) {
+        if (!this.getBotConfig().apiKeys.youtube.isEmpty()) {
             this.youtubeAPI = new Youtube(this.getBotConfig().apiKeys.youtube);
         }
         this.buttcoinAPI = new Buttcoin();
@@ -66,72 +65,6 @@ public class Bot {
 
     public BotConfig getBotConfig() {
         return this.configLoader.getBotConfig();
-    }
-
-    public CommandManager getCommandManager() {
-        return commandManager;
-    }
-
-    public ResponderManager getResponderManager() {
-        return responderManager;
-    }
-
-    public PircBotX getPircBot() {
-        return this.bot;
-    }
-
-    public Youtube getYoutubeAPI() {
-        return youtubeAPI;
-    }
-
-    public Buttcoin getButtcoinAPI() {
-        return buttcoinAPI;
-    }
-
-    public Database getDatabase() {
-        return database;
-    }
-
-    public FixedSizeQueue<MessageEvent> getMessageMemory(String channel) {
-        if (! this.messageMemory.containsKey(channel)) {
-            this.messageMemory.put(channel, new FixedSizeQueue<>(this.getBotConfig().memorySize));
-        }
-
-        return messageMemory.get(channel);
-    }
-
-    public void saveBotConfig() {
-        try {
-            this.configLoader.save();
-        }
-        catch (IOException ex) {
-            logger.error("Could not save config file! {}", ex);
-        }
-    }
-
-    public void debug(Object... content) {
-        String channel = this.getBotConfig().debugChannel;
-
-        if (channel.isEmpty()) {
-            return;
-        }
-
-        String[] strContent = new String[content.length];
-        for (int i = 0; i < content.length; i++) {
-            strContent[i] = String.valueOf(content[i]);
-        }
-
-        String msg = "[DEBUG]: " + String.join(" ", strContent);
-        this.getPircBot().sendIRC().message(channel, msg);
-    }
-
-    public void run() {
-        try {
-            this.bot.startBot();
-        }
-        catch (IOException | IrcException e) {
-            logger.error("Exception running bot: {}", e);
-        }
     }
 
     public static void notice(GenericChannelUserEvent msg, String content) {
@@ -167,5 +100,69 @@ public class Bot {
 
     public static void main(String[] args) {
         new Bot().run();
+    }
+
+    public void run() {
+        try {
+            this.bot.startBot();
+        } catch (IOException | IrcException e) {
+            logger.error("Exception running bot: {}", e);
+        }
+    }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    public ResponderManager getResponderManager() {
+        return responderManager;
+    }
+
+    public Youtube getYoutubeAPI() {
+        return youtubeAPI;
+    }
+
+    public Buttcoin getButtcoinAPI() {
+        return buttcoinAPI;
+    }
+
+    public Database getDatabase() {
+        return database;
+    }
+
+    public FixedSizeQueue<MessageEvent> getMessageMemory(String channel) {
+        if (!this.messageMemory.containsKey(channel)) {
+            this.messageMemory.put(channel, new FixedSizeQueue<>(this.getBotConfig().memorySize));
+        }
+
+        return messageMemory.get(channel);
+    }
+
+    public void saveBotConfig() {
+        try {
+            this.configLoader.save();
+        } catch (IOException ex) {
+            logger.error("Could not save config file! {}", ex);
+        }
+    }
+
+    public void debug(Object... content) {
+        String channel = this.getBotConfig().debugChannel;
+
+        if (channel.isEmpty()) {
+            return;
+        }
+
+        String[] strContent = new String[content.length];
+        for (int i = 0; i < content.length; i++) {
+            strContent[i] = String.valueOf(content[i]);
+        }
+
+        String msg = "[DEBUG]: " + String.join(" ", strContent);
+        this.getPircBot().sendIRC().message(channel, msg);
+    }
+
+    public PircBotX getPircBot() {
+        return this.bot;
     }
 }

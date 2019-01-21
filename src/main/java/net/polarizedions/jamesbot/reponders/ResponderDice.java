@@ -16,7 +16,7 @@ public class ResponderDice implements IResponder {
         String message = msg.getMessage();
         String prefix = Bot.instance.getBotConfig().commandPrefix;
 
-        if (! message.startsWith(prefix)) {
+        if (!message.startsWith(prefix)) {
             return false;
         }
 
@@ -25,13 +25,16 @@ public class ResponderDice implements IResponder {
         if (matcher.matches()) {
             int number = 1;
 
-            try { number = Integer.parseInt(matcher.group(1)); } catch (Exception e) { e.printStackTrace();/* NOOP */}
+            try {
+                number = Integer.parseInt(matcher.group(1));
+            } catch (Exception e) {
+                e.printStackTrace();/* NOOP */
+            }
             int size = Integer.parseInt(matcher.group(2));
 
             if (size <= 0 || number <= 0) {
                 msg.respondWith("And what do you expect to happen???");
-            }
-            else {
+            } else {
                 msg.respondWith("Rolled " + number + " d" + size + " dice and got " + roll(size, number) + ".");
             }
 

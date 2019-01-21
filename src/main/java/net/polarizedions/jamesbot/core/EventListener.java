@@ -63,16 +63,10 @@ public class EventListener extends ListenerAdapter {
         Bot.instance.getMessageMemory(event.getChannel().getName()).add(event);
     }
 
-    @Override
-    public void onAction(ActionEvent event) throws Exception {
-        this.reactToMessage(event);
-    }
-
     public boolean runCommand(CommandMessage msg) {
         try {
             return Bot.instance.getCommandManager().dispatch(msg);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Error dispatching command");
             e.printStackTrace(System.err);
             return false;
@@ -82,12 +76,16 @@ public class EventListener extends ListenerAdapter {
     private boolean reactToMessage(MessageEvent event) {
         try {
             return Bot.instance.getResponderManager().dispatch(event);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Error reacting to message");
             e.printStackTrace(System.err);
             return false;
         }
+    }
+
+    @Override
+    public void onAction(ActionEvent event) throws Exception {
+        this.reactToMessage(event);
     }
 
     private boolean reactToMessage(ActionEvent event) {

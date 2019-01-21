@@ -42,37 +42,35 @@ public class ConfigurationLoader {
                 .addAutoJoinChannels(this.botConfig.channels);
 
         // Optional stuff
-        if (! this.botConfig.saslUser.isEmpty() && ! this.botConfig.saslPass.isEmpty()) {
+        if (!this.botConfig.saslUser.isEmpty() && !this.botConfig.saslPass.isEmpty()) {
             config.addCapHandler(new SASLCapHandler(this.botConfig.saslUser, this.botConfig.saslPass));
-        }
-        else if (! this.botConfig.nickServPass.isEmpty()) {
+        } else if (!this.botConfig.nickServPass.isEmpty()) {
             config.setNickservNick(this.botConfig.nick);
             config.setNickservPassword(this.botConfig.nickServPass);
         }
 
-        if (! this.botConfig.debugChannel.isEmpty()) {
+        if (!this.botConfig.debugChannel.isEmpty()) {
             config.addAutoJoinChannel(this.botConfig.debugChannel);
         }
 
 
         // Our finishing touches
         return config.setSocketFactory(SSLSocketFactory.getDefault())
-                .setAutoNickChange(true)
-                .addListener(new EventListener())
-                .buildConfiguration();
+                     .setAutoNickChange(true)
+                     .addListener(new EventListener())
+                     .buildConfiguration();
     }
 
     public void load() throws IOException {
         File configFile = Paths.get(configDir.toString(), "config.json").toFile();
         if (configFile.createNewFile()) {
             logger.info("Creating new config file {}", configFile.toString());
-        }
-        else {
+        } else {
             logger.info("Loading config file from {}", configFile.toString());
         }
 
         Reader reader = new FileReader(configFile);
-         this.botConfig = GSON.fromJson(reader, BotConfig.class);
+        this.botConfig = GSON.fromJson(reader, BotConfig.class);
 
         if (this.botConfig == null) {
             this.botConfig = GSON.fromJson("{}", BotConfig.class);

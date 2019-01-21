@@ -27,29 +27,19 @@ public class CommandSay implements ICommand {
 
         dispatcher.register(
                 literal("notice")
-                .requires(Bot::staffCommandRequirement)
-                .then(
-                        argument("message", greedyString()).executes(c -> this.notice(c.getSource(), getString(c, "message")))
-                )
+                        .requires(Bot::staffCommandRequirement)
+                        .then(
+                                argument("message", greedyString()).executes(c -> this.notice(c.getSource(), getString(c, "message")))
+                        )
         );
 
         dispatcher.register(
-            literal("act")
-            .requires(Bot::staffCommandRequirement)
-            .then(
-                    argument("message", greedyString()).executes(c -> this.act(c.getSource(), getString(c, "message")))
-            )
+                literal("act")
+                        .requires(Bot::staffCommandRequirement)
+                        .then(
+                                argument("message", greedyString()).executes(c -> this.act(c.getSource(), getString(c, "message")))
+                        )
         );
-    }
-
-    @NotNull
-    @Contract("_, _ -> new")
-    private String[] splitChannelMessage(@NotNull CommandMessage source, @NotNull String message) {
-        String[] splitMessage = message.split("\\s");
-        String channel = splitMessage[0];
-        message = String.join(" ", Arrays.copyOfRange(splitMessage, 1, splitMessage.length));
-
-        return new String[] {channel, message};
     }
 
     private int say(CommandMessage source, String message) {
@@ -77,6 +67,16 @@ public class CommandSay implements ICommand {
 
         Bot.instance.getPircBot().sendIRC().action(channel, message);
         return ReturnConstants.SUCCESS;
+    }
+
+    @NotNull
+    @Contract("_, _ -> new")
+    private String[] splitChannelMessage(@NotNull CommandMessage source, @NotNull String message) {
+        String[] splitMessage = message.split("\\s");
+        String channel = splitMessage[0];
+        message = String.join(" ", Arrays.copyOfRange(splitMessage, 1, splitMessage.length));
+
+        return new String[]{channel, message};
     }
 
     @Override

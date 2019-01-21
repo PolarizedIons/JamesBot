@@ -46,12 +46,10 @@ public class CommandManager {
             }
 
             return result == ReturnConstants.SUCCESS;
-        }
-        catch (CommandSyntaxException e) {
+        } catch (CommandSyntaxException e) {
             if (e.getCursor() != 0) {
                 logger.error("Error handling command " + source.getMessage(), ": {}", e);
-            }
-            else {
+            } else {
                 logger.debug("unknown command");
             }
             return false;

@@ -1,6 +1,5 @@
 package net.polarizedions.jamesbot.reponders;
 
-import net.polarizedions.jamesbot.apis.Buttcoin;
 import net.polarizedions.jamesbot.core.Bot;
 import org.pircbotx.hooks.events.MessageEvent;
 
@@ -13,14 +12,14 @@ public class ButtcoinPlusPlus implements IResponder {
     @Override
     public boolean run(MessageEvent msg) {
         String message = msg.getMessage();
-        if (! message.startsWith(Bot.instance.getBotConfig().commandPrefix)) {
+        if (!message.startsWith(Bot.instance.getBotConfig().commandPrefix)) {
             return false;
         }
         message = message.substring(Bot.instance.getBotConfig().commandPrefix.length());
 
         Matcher matcher = PLUS_PLUS_PATTERN.matcher(message);
 
-        if (! matcher.matches()) {
+        if (!matcher.matches()) {
             System.out.println("plus plus didn't match");
             return false;
         }
@@ -31,10 +30,9 @@ public class ButtcoinPlusPlus implements IResponder {
         String to = matcher.group(1);
         System.out.println("from " + from + " to " + to);
         boolean result = Bot.instance.getButtcoinAPI().transfer(from, to, 1);
-        if (! result) {
+        if (!result) {
             Bot.noticePM(msg, "Sorry, I couldn't do that. Do you have enough buttcoins?");
-        }
-        else {
+        } else {
             Bot.noticePM(msg, "You gave " + to + " 1 buttcoin.");
 
             if (Bot.instance.getButtcoinAPI().isAccountActive(to)) {

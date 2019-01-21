@@ -1,16 +1,10 @@
 package net.polarizedions.jamesbot.reponders;
 
-import com.mongodb.client.MongoCollection;
-import net.polarizedions.jamesbot.apis.Buttcoin;
 import net.polarizedions.jamesbot.core.Bot;
-import net.polarizedions.jamesbot.database.Database;
-import org.bson.Document;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.Random;
 import java.util.regex.Pattern;
-
-import static com.mongodb.client.model.Filters.regex;
 
 public class ButtcoinCollector implements IResponder {
     private static final Pattern[] BUTTCOIN_SECRIT_WORDS = new Pattern[]{
@@ -26,13 +20,13 @@ public class ButtcoinCollector implements IResponder {
 
     @Override
     public boolean run(MessageEvent msg) {
-        if (! nextWord.matcher(msg.getMessage()).find()) {
+        if (!nextWord.matcher(msg.getMessage()).find()) {
             return false;
         }
 
         boolean bruteforced = true;
         for (Pattern pattern : BUTTCOIN_SECRIT_WORDS) {
-            if (! pattern.matcher(msg.getMessage()).find()) {
+            if (!pattern.matcher(msg.getMessage()).find()) {
                 bruteforced = false;
                 break;
             }

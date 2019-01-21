@@ -1,10 +1,7 @@
 package net.polarizedions.jamesbot.config;
 
-import net.polarizedions.jamesbot.core.Bot;
-import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.pircbotx.User;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class StaffEntry {
@@ -23,7 +20,7 @@ public class StaffEntry {
         String ident = this.ident.isEmpty() ? ".*" : this.ident;
         String host = this.host.isEmpty() ? ".*" : this.host;
 
-        Pattern thisEntry = Pattern.compile("^"  + nick + "!" + ident + "@" + host + "$", Pattern.CASE_INSENSITIVE);
+        Pattern thisEntry = Pattern.compile("^" + nick + "!" + ident + "@" + host + "$", Pattern.CASE_INSENSITIVE);
         String matchEntry = user.getNick() + "!" + user.getIdent() + "@" + user.getHostname();
 
         return thisEntry.matcher(matchEntry).find();

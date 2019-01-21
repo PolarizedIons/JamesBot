@@ -12,7 +12,7 @@ import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
 public class CommandEightball implements ICommand {
     private static final Random RAND = new Random();
-    private static final String[] RESPONSES = new String[] {
+    private static final String[] RESPONSES = new String[]{
             "As I see it, yes.",
             "It is certain.",
             "It is decidedly so.",
@@ -34,7 +34,7 @@ public class CommandEightball implements ICommand {
             "Outlook not so good.",
             "Very doubtful.",
     };
-    
+
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(literal("8ball").then(argument("q", greedyString()).executes(c -> this.eightball(c.getSource()))));

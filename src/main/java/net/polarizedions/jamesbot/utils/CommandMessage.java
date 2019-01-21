@@ -37,12 +37,21 @@ public class CommandMessage {
         }
     }
 
-    public MessageEvent getWrapped() {
-        return this.wrapped;
-    }
-
     public String getMessage() {
         return this.message;
+    }
+
+    public String getNick() {
+        User user = this.getUser();
+        return user == null ? null : user.getNick();
+    }
+
+    public User getUser() {
+        return this.wrapped.getUser();
+    }
+
+    public MessageEvent getWrapped() {
+        return this.wrapped;
     }
 
     public String getChannel() {
@@ -55,15 +64,6 @@ public class CommandMessage {
 
     public void respondWith(String response) {
         this.wrapped.respondWith(response);
-    }
-
-    public User getUser() {
-        return this.wrapped.getUser();
-    }
-
-    public String getNick() {
-        User user = this.getUser();
-        return user == null ? null : user.getNick();
     }
 
     public String getTarget() {

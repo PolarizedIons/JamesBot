@@ -3,7 +3,6 @@ package net.polarizedions.jamesbot.apis;
 import com.mongodb.client.MongoCollection;
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.database.ButtcoinAccount;
-import net.polarizedions.jamesbot.database.Database;
 import org.bson.Document;
 
 import static com.mongodb.client.model.Filters.regex;
@@ -42,7 +41,7 @@ public class Buttcoin {
         return account;
     }
 
-    public boolean isAccountActive (String nick) {
+    public boolean isAccountActive(String nick) {
         return this.getAccount(nick).active;
     }
 

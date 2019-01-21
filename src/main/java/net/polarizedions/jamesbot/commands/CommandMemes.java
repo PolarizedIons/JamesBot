@@ -22,9 +22,9 @@ public class CommandMemes implements ICommand {
         dispatcher.register(literal("bep").executes(c -> this.bep(c.getSource())));
 
         dispatcher.register(
-            literal("yuno").then(
-                    argument("msg", greedyString()).executes(c -> this.yuno(c.getSource(), getString(c, "msg")))
-            )
+                literal("yuno").then(
+                        argument("msg", greedyString()).executes(c -> this.yuno(c.getSource(), getString(c, "msg")))
+                )
         );
 
         dispatcher.register(
@@ -34,20 +34,10 @@ public class CommandMemes implements ICommand {
         );
 
         dispatcher.register(
-            literal("gooby").then(
-                    argument("target", string()).executes(c -> this.gooby(c.getSource(), getString(c, "target")))
-            )
+                literal("gooby").then(
+                        argument("target", string()).executes(c -> this.gooby(c.getSource(), getString(c, "target")))
+                )
         );
-    }
-
-    @Override
-    public String getHelp() {
-        return "Various meme commands";
-    }
-
-    @Override
-    public String getUsage() {
-        return "(todo)";
     }
 
     private int ausmerica(CommandMessage source) {
@@ -108,5 +98,15 @@ public class CommandMemes implements ICommand {
         }
 
         return result.toString();
+    }
+
+    @Override
+    public String getHelp() {
+        return "Various meme commands";
+    }
+
+    @Override
+    public String getUsage() {
+        return "(todo)";
     }
 }

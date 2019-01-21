@@ -1,6 +1,5 @@
 package net.polarizedions.jamesbot.database;
 
-import net.polarizedions.jamesbot.apis.Buttcoin;
 import org.bson.types.ObjectId;
 
 public class ButtcoinAccount {
