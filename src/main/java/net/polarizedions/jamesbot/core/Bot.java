@@ -5,8 +5,10 @@ import net.polarizedions.jamesbot.apis.Youtube;
 import net.polarizedions.jamesbot.commands.CommandManager;
 import net.polarizedions.jamesbot.config.BotConfig;
 import net.polarizedions.jamesbot.config.ConfigurationLoader;
+import net.polarizedions.jamesbot.config.StaffEntry;
 import net.polarizedions.jamesbot.database.Database;
 import net.polarizedions.jamesbot.reponders.ResponderManager;
+import net.polarizedions.jamesbot.utils.CommandMessage;
 import net.polarizedions.jamesbot.utils.FixedSizeQueue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +20,7 @@ import org.pircbotx.hooks.types.GenericChannelUserEvent;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 public class Bot {
     public static Bot instance;
@@ -149,6 +152,17 @@ public class Bot {
 
     public static void action(GenericChannelUserEvent msg, String content) {
         msg.getBot().sendIRC().action(msg.getChannel().getName(), content);
+    }
+
+    public static boolean staffCommandRequirement(CommandMessage commandMessage) {
+        List<StaffEntry> staff = Bot.instance.getBotConfig().staff;
+        for (StaffEntry staffMember : staff) {
+            if (staffMember.matches(commandMessage.getUser())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static void main(String[] args) {

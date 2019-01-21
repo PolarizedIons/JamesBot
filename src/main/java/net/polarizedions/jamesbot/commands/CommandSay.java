@@ -1,7 +1,6 @@
 package net.polarizedions.jamesbot.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.utils.CommandMessage;
@@ -17,7 +16,9 @@ public class CommandSay implements ICommand {
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(
-                literal("say").then(
+                literal("say")
+                        .requires(Bot::staffCommandRequirement)
+                        .then(
                         argument("message", greedyString()).executes(c -> this.say(c.getSource(), getString(c, "message")))
                 )
         );

@@ -29,14 +29,4 @@ public class StaffEntry {
         return thisEntry.matcher(matchEntry).find();
     }
 
-    public static boolean commandRequirement(CommandMessage commandMessage) {
-        List<StaffEntry> staff = Bot.instance.getBotConfig().staff;
-        for (StaffEntry staffMember : staff) {
-            if (staffMember.matches(commandMessage.getUser())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

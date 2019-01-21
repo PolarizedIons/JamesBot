@@ -2,7 +2,6 @@ package net.polarizedions.jamesbot.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
-import net.polarizedions.jamesbot.config.StaffEntry;
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 
@@ -16,7 +15,7 @@ public class CommandJoin implements ICommand {
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(
                 literal("join")
-                        .requires(StaffEntry::commandRequirement)
+                        .requires(Bot::staffCommandRequirement)
                         .then(
                                 argument("channel", greedyString()).executes(c -> this.join(getString(c, "channel")))
                         )
@@ -24,7 +23,7 @@ public class CommandJoin implements ICommand {
 
         dispatcher.register(
                 literal("part")
-                        .requires(StaffEntry::commandRequirement)
+                        .requires(Bot::staffCommandRequirement)
                         .then(
                                 argument("channel", greedyString()).executes(c -> this.part(getString(c, "channel")))
                         )
