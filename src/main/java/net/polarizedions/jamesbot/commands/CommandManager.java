@@ -32,6 +32,7 @@ public class CommandManager {
         this.commands.add(new CommandSay());
         this.commands.add(new CommandTime());
         this.commands.add(new CommandAbout());
+        this.commands.add(new CommandTwitter());
 
         for (ICommand cmd : this.commands) {
             cmd.register(this.dispatcher);
