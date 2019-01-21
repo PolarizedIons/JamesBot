@@ -33,7 +33,6 @@ public class CommandYoutube implements ICommand {
     private int youtube(CommandMessage source, String link) {
         link = link.split("\\s")[0];
 
-        System.out.println("running " + link);
         Youtube api = Bot.instance.getYoutubeAPI();
         if (api == null) {
             source.respond("Youtube API is unavailable :(");

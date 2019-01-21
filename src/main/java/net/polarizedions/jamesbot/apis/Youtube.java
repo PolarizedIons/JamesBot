@@ -27,7 +27,6 @@ public class Youtube {
     }
 
     public YoutubeVideo getVideo(String link) {
-        System.out.println("getvideo ");
         String id = link;
         if (link.startsWith("http")) {
             Matcher matcher1 = youtubeFullLinkPattern.matcher(link);
@@ -38,7 +37,6 @@ public class Youtube {
             boolean found2 = matcher2.find();
 
             if (!found1 && !found2) {
-                System.out.println("doesn't match" + found1 + found2);
                 return null;
             }
 

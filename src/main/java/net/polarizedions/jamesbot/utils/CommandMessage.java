@@ -23,7 +23,6 @@ public class CommandMessage {
         this.message = message;
 
         this.determineTarget();
-        System.out.println("I AM A NEW MESSAGE" + this.message + " with target " + this.target);
     }
 
     private void determineTarget() {

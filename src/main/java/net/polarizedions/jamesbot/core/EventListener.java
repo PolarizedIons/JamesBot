@@ -66,8 +66,7 @@ public class EventListener extends ListenerAdapter {
         try {
             return Bot.instance.getCommandManager().dispatch(msg);
         } catch (Exception e) {
-            System.err.println("Error dispatching command");
-            e.printStackTrace(System.err);
+            logger.error("Error dispatching command: {}", e);
             return false;
         }
     }
@@ -81,13 +80,17 @@ public class EventListener extends ListenerAdapter {
         try {
             return Bot.instance.getResponderManager().dispatch(event);
         } catch (Exception e) {
-            System.err.println("Error reacting to message");
-            e.printStackTrace(System.err);
+            logger.error("Error reacting to command: {}", e);
             return false;
         }
     }
 
     private boolean reactToMessage(ActionEvent event) {
-        return Bot.instance.getResponderManager().dispatch(event);
+        try {
+            return Bot.instance.getResponderManager().dispatch(event);
+        } catch (Exception e) {
+            logger.error("Error reacting to command: {}", e);
+            return false;
+        }
     }
 }

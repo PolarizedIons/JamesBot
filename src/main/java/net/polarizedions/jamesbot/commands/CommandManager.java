@@ -41,7 +41,6 @@ public class CommandManager {
 
     public boolean dispatch(CommandMessage source) {
         try {
-            System.out.println("doing dispatch nau");
             int result = dispatcher.execute(source.getMessage(), source);
 
             if (result == ReturnConstants.FAIL_LOG) {

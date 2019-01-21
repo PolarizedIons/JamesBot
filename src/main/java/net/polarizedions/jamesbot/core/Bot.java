@@ -119,7 +119,7 @@ public class Bot {
             try {
                 Thread.sleep(30000);
             } catch (InterruptedException e) { /* NOOP */ }
-            System.err.println("CHECKING NICK: " + this.getPircBot().getNick().equalsIgnoreCase(this.getBotConfig().nick));
+
             while (!this.getPircBot().getNick().equalsIgnoreCase(this.getBotConfig().nick)) {
                 try {
                     Thread.sleep(30000);

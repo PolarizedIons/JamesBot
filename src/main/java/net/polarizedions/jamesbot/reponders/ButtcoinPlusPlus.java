@@ -20,15 +20,12 @@ public class ButtcoinPlusPlus implements IResponder {
         Matcher matcher = PLUS_PLUS_PATTERN.matcher(message);
 
         if (!matcher.matches()) {
-            System.out.println("plus plus didn't match");
             return false;
         }
-        System.out.println("plus plus matched");
-
 
         String from = msg.getUser().getNick();
         String to = matcher.group(1);
-        System.out.println("from " + from + " to " + to);
+
         boolean result = Bot.instance.getButtcoinAPI().transfer(from, to, 1);
         if (!result) {
             Bot.noticePM(msg, "Sorry, I couldn't do that. Do you have enough buttcoins?");
