@@ -62,7 +62,6 @@ public class Bot {
         this.bot = new PircBotX(configLoader.build());
     }
 
-
     public BotConfig getBotConfig() {
         return this.configLoader.getBotConfig();
     }
@@ -104,10 +103,32 @@ public class Bot {
 
     public void run() {
         try {
+            this.getMainNick();
             this.bot.startBot();
         } catch (IOException | IrcException e) {
             logger.error("Exception running bot: {}", e);
         }
+    }
+
+    private void getMainNick() {
+        new Thread(() -> {
+            try {
+                Thread.sleep(30000);
+            } catch (InterruptedException e) { /* NOOP */ }
+            System.err.println("CHECKING NICK: " + this.getPircBot().getNick().equalsIgnoreCase(this.getBotConfig().nick));
+            while (!this.getPircBot().getNick().equalsIgnoreCase(this.getBotConfig().nick)) {
+                try {
+                    Thread.sleep(30000);
+                } catch (InterruptedException e) { /* NOOP */ }
+                logger.debug("Trying to get main nick...");
+                this.getPircBot().sendIRC().changeNick(this.getBotConfig().nick);
+            }
+            logger.debug("Got main nick!");
+        }).start();
+    }
+
+    public PircBotX getPircBot() {
+        return this.bot;
     }
 
     public CommandManager getCommandManager() {
@@ -160,9 +181,5 @@ public class Bot {
 
         String msg = "[DEBUG]: " + String.join(" ", strContent);
         this.getPircBot().sendIRC().message(channel, msg);
-    }
-
-    public PircBotX getPircBot() {
-        return this.bot;
     }
 }
