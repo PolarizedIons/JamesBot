@@ -22,7 +22,6 @@ public class EventListener extends ListenerAdapter {
         logger.error("Failed to connect! Remaining attempts: {}, Exception: {}", event.getRemainingAttempts(), event.getConnectExceptions());
     }
 
-
     @Override
     public void onMessage(MessageEvent event) {
         String prefix = Bot.instance.getBotConfig().commandPrefix;
@@ -73,6 +72,11 @@ public class EventListener extends ListenerAdapter {
         }
     }
 
+    @Override
+    public void onAction(ActionEvent event) throws Exception {
+        this.reactToMessage(event);
+    }
+
     private boolean reactToMessage(MessageEvent event) {
         try {
             return Bot.instance.getResponderManager().dispatch(event);
@@ -81,11 +85,6 @@ public class EventListener extends ListenerAdapter {
             e.printStackTrace(System.err);
             return false;
         }
-    }
-
-    @Override
-    public void onAction(ActionEvent event) throws Exception {
-        this.reactToMessage(event);
     }
 
     private boolean reactToMessage(ActionEvent event) {
