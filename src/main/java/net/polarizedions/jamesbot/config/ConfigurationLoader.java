@@ -2,6 +2,7 @@ package net.polarizedions.jamesbot.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.polarizedions.jamesbot.core.BuildInfo;
 import net.polarizedions.jamesbot.core.EventListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,6 +59,7 @@ public class ConfigurationLoader {
         return config.setSocketFactory(SSLSocketFactory.getDefault())
                      .setAutoNickChange(true)
                      .addListener(new EventListener())
+                     .setVersion("Jamesbot v" + BuildInfo.version)
                      .buildConfiguration();
     }
 

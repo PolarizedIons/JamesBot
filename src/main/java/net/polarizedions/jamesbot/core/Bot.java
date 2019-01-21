@@ -24,7 +24,7 @@ import java.util.List;
 
 public class Bot {
     public static Bot instance;
-    public static Logger logger = LogManager.getLogger("Jamesbot Core");
+    public static Logger logger = LogManager.getLogger("Jamesbot Core" );
 
     private PircBotX bot;
     private CommandManager commandManager;
@@ -38,6 +38,7 @@ public class Bot {
     private HashMap<String, FixedSizeQueue<MessageEvent>> messageMemory;
 
     public Bot() {
+        logger.info("Starting Jamesbot v" + BuildInfo.version + " built: " + BuildInfo.buildtime);
         instance = this;
 
         try {
