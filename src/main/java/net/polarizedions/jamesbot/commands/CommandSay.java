@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.utils.CommandMessage;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -19,21 +21,61 @@ public class CommandSay implements ICommand {
                 literal("say")
                         .requires(Bot::staffCommandRequirement)
                         .then(
-                        argument("message", greedyString()).executes(c -> this.say(c.getSource(), getString(c, "message")))
+                                argument("message", greedyString()).executes(c -> this.say(c.getSource(), getString(c, "message")))
+                        )
+        );
+
+        dispatcher.register(
+                literal("notice")
+                .requires(Bot::staffCommandRequirement)
+                .then(
+                        argument("message", greedyString()).executes(c -> this.notice(c.getSource(), getString(c, "message")))
                 )
+        );
+
+        dispatcher.register(
+            literal("act")
+            .requires(Bot::staffCommandRequirement)
+            .then(
+                    argument("message", greedyString()).executes(c -> this.act(c.getSource(), getString(c, "message")))
+            )
         );
     }
 
+    @NotNull
+    @Contract("_, _ -> new")
+    private String[] splitChannelMessage(@NotNull CommandMessage source, @NotNull String message) {
+        String[] splitMessage = message.split("\\s");
+        String channel = splitMessage[0];
+        message = String.join(" ", Arrays.copyOfRange(splitMessage, 1, splitMessage.length));
+
+        return new String[] {channel, message};
+    }
+
     private int say(CommandMessage source, String message) {
-        String channel = source.getChannel();
-        if (! Character.isAlphabetic(message.charAt(0))) {
-            String[] splitMessage = message.split("\\s");
-            channel = splitMessage[0];
-            message = String.join(" ", Arrays.copyOfRange(splitMessage, 1, splitMessage.length));
-        }
+        String[] channelMessage = this.splitChannelMessage(source, message);
+        String channel = channelMessage[0];
+        message = channelMessage[1];
 
         Bot.instance.getPircBot().sendIRC().message(channel, message);
+        return ReturnConstants.SUCCESS;
+    }
 
+    private int notice(CommandMessage source, String message) {
+        String[] channelMessage = this.splitChannelMessage(source, message);
+        String channel = channelMessage[0];
+        message = channelMessage[1];
+
+        Bot.instance.getPircBot().sendIRC().notice(channel, message);
+        return ReturnConstants.SUCCESS;
+    }
+
+    private int act(CommandMessage source, String message) {
+        String[] channelMessage = this.splitChannelMessage(source, message);
+        String channel = channelMessage[0];
+        message = channelMessage[1];
+
+        Bot.instance.getPircBot().sendIRC().action(channel, message);
         return ReturnConstants.SUCCESS;
     }
 
@@ -44,6 +86,6 @@ public class CommandSay implements ICommand {
 
     @Override
     public String getUsage() {
-        return "say [channel] (message)";
+        return "[say,notice,act] [channel] (message)";
     }
 }
