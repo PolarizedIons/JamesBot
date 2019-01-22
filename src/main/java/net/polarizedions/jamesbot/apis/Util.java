@@ -170,9 +170,6 @@ public class Util {
             return null;
         }
 
-        System.out.println("part!");
-        System.out.println(output.toString());
-        System.out.println("done");
         return output.toString();
     }
 

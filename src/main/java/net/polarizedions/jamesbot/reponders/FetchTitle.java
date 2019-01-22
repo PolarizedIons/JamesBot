@@ -32,7 +32,6 @@ public class FetchTitle implements IResponder {
         String title = "";
         for (String line : html.split("[\r\n]")) {
             Matcher matcher = TITLE_PATTERN.matcher(line);
-            System.out.println("testing " + line);
             if (matcher.find()) {
                 title = matcher.group(1).replaceAll("[\\r\\n]", "");
                 break;
