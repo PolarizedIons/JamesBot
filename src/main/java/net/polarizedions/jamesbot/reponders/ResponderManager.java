@@ -17,6 +17,7 @@ public class ResponderManager {
         this.responders.add(new ResponderDice());
         this.responders.add(new ButtcoinCollector());
         this.responders.add(new ButtcoinPlusPlus());
+        this.responders.add(new FetchTitle());
 
         // Make sure this runs last
         this.responders.add(new QmarkAPI());

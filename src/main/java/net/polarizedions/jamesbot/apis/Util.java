@@ -124,6 +124,58 @@ public class Util {
         return request(uri, false, Collections.emptyList(), null);
     }
 
+    @Nullable
+    public static String fetchPart(String uri, int size) {
+        URL url;
+        try {
+            url = new URL(uri);
+        } catch (MalformedURLException e) {
+            logger.error("Error fetching url part: Malformed url!", e);
+            return null;
+        }
+
+        HttpURLConnection httpConn;
+        try {
+            httpConn = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            logger.error("Error fetching url part: IOException while opening connection!", e);
+            return null;
+        }
+        httpConn.addRequestProperty("User-Agent", USER_AGENT);
+        InputStream is;
+        try {
+            is =  httpConn.getInputStream();
+        } catch (IOException e) {
+            logger.error("Error fetching url part: Can't open stream!", e);
+            return null;
+        }
+
+        StringBuilder output = new StringBuilder();
+        InputStreamReader reader = new InputStreamReader(is);
+        int read = 0;
+        try {
+            while (read < size) {
+                char[] buffer = new char[512];
+                int readNow = reader.read(buffer, 0, 512);
+                System.out.println("reading " + readNow);
+                if (readNow == -1) {
+                    break;
+                }
+                read += readNow;
+                output.append(buffer);
+            }
+        }
+        catch(IOException e) {
+            logger.error("Error fetching url part: Stream Reader not ready!", e);
+            return null;
+        }
+
+        System.out.println("part!");
+        System.out.println(output.toString());
+        System.out.println("done");
+        return output.toString();
+    }
+
     // From: https://stackoverflow.com/a/14424783
     public static String encodeURIComponent(String s) {
         String result;
