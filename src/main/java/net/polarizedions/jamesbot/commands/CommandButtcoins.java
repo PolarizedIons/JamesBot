@@ -69,6 +69,16 @@ public class CommandButtcoins implements ICommand {
     }
 
     private int transfer(CommandMessage source, int amount, String toNick, String reason) {
+        if (source.getNick().equalsIgnoreCase(toNick)) {
+            source.noticePM("You are " + toNick + "!");
+            return ReturnConstants.FAIL_SILENT;
+        }
+
+        if (amount <= 0) {
+            source.noticePM("You must send at least 1 buttcoin!");
+            return ReturnConstants.FAIL_SILENT;
+        }
+
         if (!Bot.instance.getButtcoinAPI().isAccountActive(toNick)) {
             source.noticePM("Sorry, " + toNick + " does not have an active account");
             return ReturnConstants.FAIL_SILENT;
@@ -79,10 +89,10 @@ public class CommandButtcoins implements ICommand {
             return ReturnConstants.FAIL_SILENT;
         }
 
-        source.noticePM("You transferred " + amount + " buttcoins to " + toNick + " with the message \"" + reason + "\"");
-        if (Bot.instance.getButtcoinAPI().isAccountActive(toNick)) {
-            Bot.noticePM(toNick, source.getNick() + " has gifted you " + amount + " buttcoins [" + reason + "]");
-        }
+        ButtcoinAccount fromAccount = Bot.instance.getButtcoinAPI().getAccount(source.getNick());
+        ButtcoinAccount toAccount = Bot.instance.getButtcoinAPI().getAccount(toNick);
+        source.noticePM(String.format("[TRANSFER] You (%d) have sent %d buttcoins to %s (%d )", fromAccount.balance, amount, toNick, toAccount.balance));
+        Bot.noticePM(toNick, String.format("You (%d) have received %d buttcoins from %s (%d) [%s]", toAccount.balance, amount, source.getNick(), fromAccount.balance, reason));
 
         return ReturnConstants.SUCCESS;
     }
