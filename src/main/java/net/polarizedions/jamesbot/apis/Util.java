@@ -2,7 +2,6 @@ package net.polarizedions.jamesbot.apis;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.polarizedions.jamesbot.core.BuildInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Util {
-    public static final String USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0 Jamesbot/" + BuildInfo.version;
+    public static final String USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64; rv:64.0) Gecko/20100101 Firefox/64.0";
     private static final Logger logger = LogManager.getLogger("WebHelper");
     static final JsonParser parser = new JsonParser();
 
