@@ -69,14 +69,6 @@ public class CommandMessage {
         return target;
     }
 
-    public void notice(String content) {
-        this.noticeWith(this.getTarget() + ": " + content);
-    }
-
-    public void noticeWith(String content) {
-        this.wrapped.getBot().sendIRC().notice(this.wrapped.getChannel().getName(), content);
-    }
-
     public void noticePM(String content) {
         this.wrapped.getBot().sendIRC().notice(this.getTarget(), content);
     }

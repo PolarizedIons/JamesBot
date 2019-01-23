@@ -34,15 +34,15 @@ public class ResponderActions implements IResponder {
     }
 
     private void actNineties(ActionEvent msg) {
-        Bot.notice(msg, "The 90s called. They want their IRC client back.");
+        Bot.respond(msg, "The 90s called. They want their IRC client back.");
     }
 
     private void actLove(ActionEvent msg) {
-        Bot.notice(msg, "♥");
+        Bot.respond(msg, "♥");
     }
 
     private void actSlapped(ActionEvent msg) {
-        Bot.notice(msg, "I may have deserved that.");
+        Bot.respond(msg, "I may have deserved that.");
     }
 
     private void actKilled(ActionEvent msg) {

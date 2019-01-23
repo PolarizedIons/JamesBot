@@ -70,12 +70,16 @@ public class Bot {
         return this.configLoader.getBotConfig();
     }
 
-    public static void notice(GenericChannelUserEvent msg, String content) {
-        Bot.noticeWith(msg, msg.getUser().getNick() + ": " + content);
+    public static void respond(GenericChannelUserEvent msg, String content) {
+        respondWith(msg, msg.getUser().getNick() + ": " + content);
     }
 
-    public static void noticeWith(@NotNull GenericChannelUserEvent msg, String content) {
-        msg.getBot().sendIRC().notice(msg.getChannel().getName(), content);
+    public static void respondWith(@NotNull GenericChannelUserEvent msg, String content) {
+        msg.getBot().sendIRC().message(msg.getChannel().getName(), content);
+    }
+
+    public static void respondPM(@NotNull GenericChannelUserEvent msg, String content) {
+        msg.getBot().sendIRC().message(msg.getUser().getNick(), content);
     }
 
     public static void noticePM(@NotNull GenericChannelUserEvent msg, String content) {
