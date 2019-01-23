@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CommandMessage {
-    private static final Pattern TARGETED_PATTERN = Pattern.compile(".*@([,\\sA-Za-z0-9.+!#&[]`_^{}|-]]+)$", Pattern.MULTILINE);
+    private static final Pattern TARGETED_PATTERN = Pattern.compile(".*@([,\\sA-Za-z0-9.+!'\"#&[]`_^{}|-]]+)$", Pattern.MULTILINE);
 
     MessageEvent wrapped;
     String target;
