@@ -1,3 +1,3 @@
 mvn clean
 mvn package
-docker build --tag jamesbot:latest .
+docker build --tag polarizedions/jamesbot:latest .
