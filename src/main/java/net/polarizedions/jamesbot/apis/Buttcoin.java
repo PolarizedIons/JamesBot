@@ -18,13 +18,13 @@ public class Buttcoin {
                 .append("mined", mined.mined + 1)
                 .append("bruteforced", mined.bruteforced + (bruteforced ? 1 : 0));
 
-        coll.updateOne(regex("name", nick, "i"), new Document("$set", newMined));
+        coll.updateOne(regex("name", "^" + nick + "$", "i"), new Document("$set", newMined));
     }
 
     public ButtcoinAccount getAccount(String nick) {
         MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
 
-        ButtcoinAccount account = coll.find(regex("name", nick, "i")).first();
+        ButtcoinAccount account = coll.find(regex("name", "^" + nick + "$", "i")).first();
         if (account == null) {
             account = this.createAccount(nick);
         }
@@ -47,7 +47,7 @@ public class Buttcoin {
 
     public void activateAccount(String nick) {
         MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
-        coll.updateOne(regex("name", nick, "i"), new Document("$set", new Document("active", true)));
+        coll.updateOne(regex("name", "^" + nick + "$", "i"), new Document("$set", new Document("active", true)));
     }
 
     public boolean transfer(String from, String to, int amount) {
@@ -66,8 +66,8 @@ public class Buttcoin {
         Document updateTo = new Document("balance", toAccount.balance + amount)
                 .append("given", toAccount.given + amount);
 
-        coll.updateOne(regex("name", from, "i"), new Document("$set", updateFrom));
-        coll.updateOne(regex("name", to, "i"), new Document("$set", updateTo));
+        coll.updateOne(regex("name", "^" + from + "$", "i"), new Document("$set", updateFrom));
+        coll.updateOne(regex("name", "^" + to + "$", "i"), new Document("$set", updateTo));
 
         return true;
     }
