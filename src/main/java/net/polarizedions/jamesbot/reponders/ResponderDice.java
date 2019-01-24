@@ -34,7 +34,8 @@ public class ResponderDice implements IResponder {
 
             if (size <= 0 || number <= 0) {
                 msg.respondWith("And what do you expect to happen???");
-            } else {
+            }
+            else {
                 msg.respondWith("Rolled " + number + " d" + size + " dice and got " + roll(size, number) + ".");
             }
 
@@ -48,7 +49,7 @@ public class ResponderDice implements IResponder {
         int total = 0;
 
         for (int i = 0; i < number; i++) {
-            total += RANDOM.nextInt(size);
+            total += RANDOM.nextInt(size) + 1;
         }
 
         return total;
