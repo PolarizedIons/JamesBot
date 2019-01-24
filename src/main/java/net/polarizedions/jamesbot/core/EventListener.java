@@ -65,7 +65,8 @@ public class EventListener extends ListenerAdapter {
     public boolean runCommand(CommandMessage msg) {
         try {
             return Bot.instance.getCommandManager().dispatch(msg);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             logger.error("Error dispatching command: {}", e);
             return false;
         }
@@ -79,7 +80,8 @@ public class EventListener extends ListenerAdapter {
     private boolean reactToMessage(MessageEvent event) {
         try {
             return Bot.instance.getResponderManager().dispatch(event);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             logger.error("Error reacting to command: {}", e);
             return false;
         }
@@ -88,7 +90,8 @@ public class EventListener extends ListenerAdapter {
     private boolean reactToMessage(ActionEvent event) {
         try {
             return Bot.instance.getResponderManager().dispatch(event);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             logger.error("Error reacting to command: {}", e);
             return false;
         }

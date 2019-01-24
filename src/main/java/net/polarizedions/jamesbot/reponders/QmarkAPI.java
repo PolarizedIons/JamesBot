@@ -16,7 +16,8 @@ public class QmarkAPI implements IResponder {
             if (message.startsWith(":") || message.startsWith(",")) {
                 message = message.substring(1).trim();
             }
-        } else if (!msg.getChannel().getName().equalsIgnoreCase(myNick)) {
+        }
+        else if (!msg.getChannel().getName().equalsIgnoreCase(myNick)) {
             return false;
         }
 

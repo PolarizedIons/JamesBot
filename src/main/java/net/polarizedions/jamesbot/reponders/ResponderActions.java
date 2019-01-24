@@ -11,17 +11,23 @@ public class ResponderActions implements IResponder {
 
         if (action.startsWith("hugs " + nick)) {
             this.actHug(msg);
-        } else if (action.contains("slaps " + nick + " around a bit")) {
+        }
+        else if (action.contains("slaps " + nick + " around a bit")) {
             this.actNineties(msg);
-        } else if (action.endsWith("pats " + nick) || action.endsWith("loves " + nick) || action.endsWith("pets " + nick)) {
+        }
+        else if (action.endsWith("pats " + nick) || action.endsWith("loves " + nick) || action.endsWith("pets " + nick)) {
             this.actLove(msg);
-        } else if (action.endsWith("slaps " + nick)) {
+        }
+        else if (action.endsWith("slaps " + nick)) {
             this.actSlapped(msg);
-        } else if (action.endsWith("murders " + nick) || action.endsWith("kills " + nick) || action.endsWith("stabs " + nick)) {
+        }
+        else if (action.endsWith("murders " + nick) || action.endsWith("kills " + nick) || action.endsWith("stabs " + nick)) {
             this.actKilled(msg);
-        } else if (action.endsWith("licks " + nick) || action.endsWith("kisses " + nick)) {
+        }
+        else if (action.endsWith("licks " + nick) || action.endsWith("kisses " + nick)) {
             this.actPolice(msg);
-        } else {
+        }
+        else {
             return false;
         }
 

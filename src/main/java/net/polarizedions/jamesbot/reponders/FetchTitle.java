@@ -14,12 +14,12 @@ public class FetchTitle implements IResponder {
     public boolean run(MessageEvent msg) {
         String prefix = Bot.instance.getBotConfig().commandPrefix;
         String message = msg.getMessage();
-        if (! message.startsWith(prefix)) {
+        if (!message.startsWith(prefix)) {
             return false;
         }
         message = message.substring(prefix.length());
 
-        if (! message.startsWith("http")) {
+        if (!message.startsWith("http")) {
             return false;
         }
 

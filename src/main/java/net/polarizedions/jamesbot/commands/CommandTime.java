@@ -8,7 +8,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
@@ -19,6 +18,7 @@ import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 public class CommandTime implements ICommand {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
+
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(
@@ -49,7 +49,7 @@ public class CommandTime implements ICommand {
     public int timeIn(CommandMessage source, Double offset) {
         String offsetStr = ( offset >= 0 ? "+" : "" ) + DECIMAL_FORMAT.format(offset);
         ZoneOffset currentOffset = ZoneOffset.systemDefault().getRules().getOffset(Instant.now());
-        Date offsetTime = Date.from(Instant.ofEpochSecond((long) (Instant.now().getEpochSecond() + (offset * 3600) - currentOffset.getTotalSeconds())));
+        Date offsetTime = Date.from(Instant.ofEpochSecond((long)( Instant.now().getEpochSecond() + ( offset * 3600 ) - currentOffset.getTotalSeconds() )));
 
         source.respond(DATE_FORMAT.format(offsetTime) + " (UTC" + offsetStr + ")");
         return ReturnConstants.SUCCESS;

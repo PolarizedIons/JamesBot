@@ -12,7 +12,7 @@ import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
 public class CommandEightball implements ICommand {
     private static final Random RAND = new Random();
-    private static final String[] RESPONSES = new String[]{
+    private static final String[] RESPONSES = new String[] {
             "As I see it, yes.",
             "It is certain.",
             "It is decidedly so.",

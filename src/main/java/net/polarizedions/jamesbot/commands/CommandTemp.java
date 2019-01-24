@@ -32,13 +32,13 @@ public class CommandTemp implements ICommand {
     }
 
     private int ctf(CommandMessage source, double temp) {
-        source.respondWith(NUMBER_FORMATTER.format(temp) + "°C = " + NUMBER_FORMATTER.format((9.0 / 5.0) * temp + 32) + "°F");
+        source.respondWith(NUMBER_FORMATTER.format(temp) + "°C = " + NUMBER_FORMATTER.format(( 9.0 / 5.0 ) * temp + 32) + "°F");
         return ReturnConstants.SUCCESS;
     }
 
 
     private int ftc(CommandMessage source, double temp) {
-        source.respondWith(NUMBER_FORMATTER.format(temp) + "°F = " + NUMBER_FORMATTER.format((5.0 / 9.0) * (temp - 32)) + "°C");
+        source.respondWith(NUMBER_FORMATTER.format(temp) + "°F = " + NUMBER_FORMATTER.format(( 5.0 / 9.0 ) * ( temp - 32 )) + "°C");
         return ReturnConstants.SUCCESS;
     }
 

@@ -27,7 +27,8 @@ public class ResponderDice implements IResponder {
 
             try {
                 number = Integer.parseInt(matcher.group(1));
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();/* NOOP */
             }
             int size = Integer.parseInt(matcher.group(2));

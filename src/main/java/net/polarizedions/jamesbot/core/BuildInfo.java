@@ -14,6 +14,8 @@ public class BuildInfo {
         load();
     }
 
+    private BuildInfo() {}
+
     static void load() {
         Properties buildInfo = new Properties();
         try {
@@ -38,6 +40,4 @@ public class BuildInfo {
             }
         }
     }
-
-    private BuildInfo() {}
 }

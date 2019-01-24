@@ -48,17 +48,19 @@ public class CommandSteam implements ICommand {
         if (app.avaliableWindows && !app.avaliableMac && !app.avaliableLinux) {
             platformStr = ORANGE + "Windows only :(" + RESET;
         }
-        else if (! app.avaliableWindows && app.avaliableMac && ! app.avaliableLinux) {
+        else if (!app.avaliableWindows && app.avaliableMac && !app.avaliableLinux) {
             platformStr = ORANGE + "Mac only :(" + RESET;
         }
-        else if (! app.avaliableWindows && ! app.avaliableMac && app.avaliableLinux) {
+        else if (!app.avaliableWindows && !app.avaliableMac && app.avaliableLinux) {
             platformStr = ORANGE + "Linux only :(" + RESET;
         }
         else if (app.avaliableWindows && app.avaliableMac && !app.avaliableLinux) {
             platformStr = "Windows and Mac";
-        } else if (app.avaliableWindows && !app.avaliableMac && app.avaliableLinux) {
+        }
+        else if (app.avaliableWindows && !app.avaliableMac && app.avaliableLinux) {
             platformStr = "Windows and Linux";
-        } else if (!app.avaliableWindows && app.avaliableMac && app.avaliableLinux) {
+        }
+        else if (!app.avaliableWindows && app.avaliableMac && app.avaliableLinux) {
             platformStr = "Mac and Linux";
         }
 
@@ -67,7 +69,7 @@ public class CommandSteam implements ICommand {
 
         String discountStr = app.discountPercent == 0 ? "no discount" : app.discountPercent + "% discount";
 
-        source.respond(BOLD + app.name + RESET + ": " + GREEN + app.finalPriceFormatted + RESET + " (" + discountStr + "), available for " + platformStr + " http://store.steampowered.com/app/" + app.appId +  LIGHT_GREY + " [" + RESET + String.join(LIGHT_GREY + "] [" + RESET , app.genres) + LIGHT_GREY + "]" + RESET);
+        source.respond(BOLD + app.name + RESET + ": " + GREEN + app.finalPriceFormatted + RESET + " (" + discountStr + "), available for " + platformStr + " http://store.steampowered.com/app/" + app.appId + LIGHT_GREY + " [" + RESET + String.join(LIGHT_GREY + "] [" + RESET, app.genres) + LIGHT_GREY + "]" + RESET);
 
         return ReturnConstants.SUCCESS;
     }

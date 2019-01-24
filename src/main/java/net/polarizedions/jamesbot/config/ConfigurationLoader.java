@@ -45,7 +45,8 @@ public class ConfigurationLoader {
         // Optional stuff
         if (!this.botConfig.saslUser.isEmpty() && !this.botConfig.saslPass.isEmpty()) {
             config.addCapHandler(new SASLCapHandler(this.botConfig.saslUser, this.botConfig.saslPass));
-        } else if (!this.botConfig.nickServPass.isEmpty()) {
+        }
+        else if (!this.botConfig.nickServPass.isEmpty()) {
             config.setNickservNick(this.botConfig.nick);
             config.setNickservPassword(this.botConfig.nickServPass);
         }
@@ -57,17 +58,18 @@ public class ConfigurationLoader {
 
         // Our finishing touches
         return config.setSocketFactory(SSLSocketFactory.getDefault())
-                     .setAutoNickChange(true)
-                     .addListener(new EventListener())
-                     .setVersion("Jamesbot v" + BuildInfo.version)
-                     .buildConfiguration();
+                .setAutoNickChange(true)
+                .addListener(new EventListener())
+                .setVersion("Jamesbot v" + BuildInfo.version)
+                .buildConfiguration();
     }
 
     public void load() throws IOException {
         File configFile = Paths.get(configDir.toString(), "config.json").toFile();
         if (configFile.createNewFile()) {
             logger.info("Creating new config file {}", configFile.toString());
-        } else {
+        }
+        else {
             logger.info("Loading config file from {}", configFile.toString());
         }
 

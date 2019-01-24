@@ -19,7 +19,7 @@ public class Steam {
         }
 
         json = json.getAsJsonObject(id + "");
-        if (! json.get("success").getAsBoolean()) {
+        if (!json.get("success").getAsBoolean()) {
             return null;
         }
         json = json.getAsJsonObject("data");

@@ -25,7 +25,7 @@ import java.util.List;
 
 public class Bot {
     public static Bot instance;
-    public static Logger logger = LogManager.getLogger("Jamesbot Core" );
+    public static Logger logger = LogManager.getLogger("Jamesbot Core");
 
     private PircBotX bot;
     private CommandManager commandManager;
@@ -46,7 +46,8 @@ public class Bot {
         try {
             this.configLoader = new ConfigurationLoader();
             this.configLoader.load();
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             logger.error("Could not load config file! {}", ex);
             System.exit(1);
         }
@@ -64,10 +65,6 @@ public class Bot {
         this.buttcoinAPI = new Buttcoin();
 
         this.bot = new PircBotX(configLoader.build());
-    }
-
-    public BotConfig getBotConfig() {
-        return this.configLoader.getBotConfig();
     }
 
     public static void respond(GenericChannelUserEvent msg, String content) {
@@ -109,11 +106,16 @@ public class Bot {
         new Bot().run();
     }
 
+    public BotConfig getBotConfig() {
+        return this.configLoader.getBotConfig();
+    }
+
     public void run() {
         try {
             this.getMainNick();
             this.bot.startBot();
-        } catch (IOException | IrcException e) {
+        }
+        catch (IOException | IrcException e) {
             logger.error("Exception running bot: {}", e);
         }
     }
@@ -122,12 +124,14 @@ public class Bot {
         new Thread(() -> {
             try {
                 Thread.sleep(30000);
-            } catch (InterruptedException e) { /* NOOP */ }
+            }
+            catch (InterruptedException e) { /* NOOP */ }
 
             while (!this.getPircBot().getNick().equalsIgnoreCase(this.getBotConfig().nick)) {
                 try {
                     Thread.sleep(30000);
-                } catch (InterruptedException e) { /* NOOP */ }
+                }
+                catch (InterruptedException e) { /* NOOP */ }
                 logger.debug("Trying to get main nick...");
                 this.getPircBot().sendIRC().changeNick(this.getBotConfig().nick);
             }
@@ -174,7 +178,8 @@ public class Bot {
     public void saveBotConfig() {
         try {
             this.configLoader.save();
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             logger.error("Could not save config file! {}", ex);
         }
     }

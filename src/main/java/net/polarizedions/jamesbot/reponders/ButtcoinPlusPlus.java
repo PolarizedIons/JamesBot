@@ -33,18 +33,19 @@ public class ButtcoinPlusPlus implements IResponder {
         }
 
 
-        if (! Bot.instance.getButtcoinAPI().isAccountActive(from)) {
+        if (!Bot.instance.getButtcoinAPI().isAccountActive(from)) {
             Bot.instance.getButtcoinAPI().activateAccount(from);
         }
 
-        if (! Bot.instance.getButtcoinAPI().isAccountActive(to)) {
+        if (!Bot.instance.getButtcoinAPI().isAccountActive(to)) {
             Bot.noticePM(from, "Sorry, but " + to + " does not have an active account");
         }
 
         boolean result = Bot.instance.getButtcoinAPI().transfer(from, to, 1);
         if (!result) {
             Bot.noticePM(msg, "Sorry, I couldn't do that. Do you have enough buttcoins?");
-        } else {
+        }
+        else {
 
             ButtcoinAccount fromAccount = Bot.instance.getButtcoinAPI().getAccount(from);
             ButtcoinAccount toAccount = Bot.instance.getButtcoinAPI().getAccount(to);

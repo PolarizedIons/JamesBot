@@ -22,8 +22,8 @@ import java.util.List;
 
 public class Util {
     public static final String USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64; rv:64.0) Gecko/20100101 Firefox/64.0";
-    private static final Logger logger = LogManager.getLogger("WebHelper");
     static final JsonParser parser = new JsonParser();
+    private static final Logger logger = LogManager.getLogger("WebHelper");
 
     public static JsonObject post(String uri, JsonObject data) {
         InputStream is = request(uri, true, Collections.emptyList(), data == null ? "" : data.toString());
@@ -36,15 +36,17 @@ public class Util {
         URL url;
         try {
             url = new URL(uri);
-        } catch (MalformedURLException e) {
+        }
+        catch (MalformedURLException e) {
             logger.error("Error fetching url: Malformed url!", e);
             return null;
         }
 
         HttpURLConnection httpConn;
         try {
-            httpConn = (HttpURLConnection) url.openConnection();
-        } catch (IOException e) {
+            httpConn = (HttpURLConnection)url.openConnection();
+        }
+        catch (IOException e) {
             logger.error("Error fetching url: IOException while opening connection!", e);
             return null;
         }
@@ -61,13 +63,14 @@ public class Util {
         if (isPost) {
             try {
                 httpConn.setRequestMethod("POST");
-            } catch (ProtocolException e) {
+            }
+            catch (ProtocolException e) {
                 logger.error("Error post'ing url: ProtocolException while setting request method!", e);
                 return null;
             }
 
             if (!body.isEmpty()) {
-                if (! contentTypeSet) {
+                if (!contentTypeSet) {
                     httpConn.setRequestProperty("Content-Type", "application/json");
                 }
 
@@ -79,7 +82,8 @@ public class Util {
                     dataOutputStream.writeBytes(body);
                     dataOutputStream.flush();
                     dataOutputStream.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     logger.error("Error post'ing url: IOException while sending body!", e);
                     return null;
                 }
@@ -88,7 +92,8 @@ public class Util {
 
         try {
             return httpConn.getInputStream();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             logger.error("Error fetching url: Can't open stream!", e);
             return null;
         }
@@ -104,10 +109,11 @@ public class Util {
         StringBuilder response = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while (( line = reader.readLine() ) != null) {
                 response.append(line).append("\n");
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             logger.error("Error reading post response into string! {}", e);
         }
 
@@ -129,23 +135,26 @@ public class Util {
         URL url;
         try {
             url = new URL(uri);
-        } catch (MalformedURLException e) {
+        }
+        catch (MalformedURLException e) {
             logger.error("Error fetching url part: Malformed url!", e);
             return null;
         }
 
         HttpURLConnection httpConn;
         try {
-            httpConn = (HttpURLConnection) url.openConnection();
-        } catch (IOException e) {
+            httpConn = (HttpURLConnection)url.openConnection();
+        }
+        catch (IOException e) {
             logger.error("Error fetching url part: IOException while opening connection!", e);
             return null;
         }
         httpConn.addRequestProperty("User-Agent", USER_AGENT);
         InputStream is;
         try {
-            is =  httpConn.getInputStream();
-        } catch (IOException e) {
+            is = httpConn.getInputStream();
+        }
+        catch (IOException e) {
             logger.error("Error fetching url part: Can't open stream!", e);
             return null;
         }
@@ -165,7 +174,7 @@ public class Util {
                 output.append(buffer);
             }
         }
-        catch(IOException e) {
+        catch (IOException e) {
             logger.error("Error fetching url part: Stream Reader not ready!", e);
             return null;
         }
@@ -179,13 +188,14 @@ public class Util {
 
         try {
             result = URLEncoder.encode(s, "UTF-8")
-                               .replaceAll("\\+", "%20")
-                               .replaceAll("\\%21", "!")
-                               .replaceAll("\\%27", "'")
-                               .replaceAll("\\%28", "(")
-                               .replaceAll("\\%29", ")")
-                               .replaceAll("\\%7E", "~");
-        } catch (UnsupportedEncodingException e) {
+                    .replaceAll("\\+", "%20")
+                    .replaceAll("\\%21", "!")
+                    .replaceAll("\\%27", "'")
+                    .replaceAll("\\%28", "(")
+                    .replaceAll("\\%29", ")")
+                    .replaceAll("\\%7E", "~");
+        }
+        catch (UnsupportedEncodingException e) {
             result = s;
         }
 

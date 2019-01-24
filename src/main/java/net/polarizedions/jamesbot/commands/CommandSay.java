@@ -76,7 +76,7 @@ public class CommandSay implements ICommand {
         String channel = splitMessage[0];
         message = String.join(" ", Arrays.copyOfRange(splitMessage, 1, splitMessage.length));
 
-        return new String[]{channel, message};
+        return new String[] { channel, message };
     }
 
     @Override

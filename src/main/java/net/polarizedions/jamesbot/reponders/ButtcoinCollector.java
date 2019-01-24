@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.regex.Pattern;
 
 public class ButtcoinCollector implements IResponder {
-    private static final Pattern[] BUTTCOIN_SECRIT_WORDS = new Pattern[]{
+    private static final Pattern[] BUTTCOIN_SECRIT_WORDS = new Pattern[] {
             Pattern.compile("\\bthe\\b"),
             Pattern.compile("\\bthat\\b"),
             Pattern.compile("\\ba\\b"),

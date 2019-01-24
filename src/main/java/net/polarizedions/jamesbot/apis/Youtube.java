@@ -62,14 +62,16 @@ public class Youtube {
             for (Map.Entry<String, JsonElement> entry : json.getAsJsonObject("contentDetails").getAsJsonObject("regionRestriction").getAsJsonObject("allowed").entrySet()) {
                 video.allowedRegions.add(entry.getValue().getAsString());
             }
-        } catch (NullPointerException e) { /* NOOP */}
+        }
+        catch (NullPointerException e) { /* NOOP */}
 
         video.restrictedRegions = new ArrayList<>();
         try {
             for (Map.Entry<String, JsonElement> entry : json.getAsJsonObject("contentDetails").getAsJsonObject("regionRestriction").getAsJsonObject("allowed").entrySet()) {
                 video.restrictedRegions.add(entry.getValue().getAsString());
             }
-        } catch (NullPointerException e) { /* NOOP */}
+        }
+        catch (NullPointerException e) { /* NOOP */}
 
         video.isRegionRestricted = video.restrictedRegions.size() > 0;
 

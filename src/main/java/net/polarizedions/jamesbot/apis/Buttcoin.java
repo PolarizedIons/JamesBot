@@ -16,7 +16,7 @@ public class Buttcoin {
 
         Document newMined = new Document("balance", mined.balance + 1)
                 .append("mined", mined.mined + 1)
-                .append("bruteforced", mined.bruteforced + (bruteforced ? 1 : 0));
+                .append("bruteforced", mined.bruteforced + ( bruteforced ? 1 : 0 ));
 
         coll.updateOne(regex("name", "^" + nick + "$", "i"), new Document("$set", newMined));
     }

@@ -94,7 +94,8 @@ public class CommandQuote implements ICommand {
         try {
             Quote quote = this.saveQuote(found);
             source.respond("Remembered: " + this.formatQuote(quote));
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         return ReturnConstants.SUCCESS;
@@ -117,11 +118,14 @@ public class CommandQuote implements ICommand {
         Bson filter = null;
         if (person.equals("*") && !thing.isEmpty()) {
             filter = regex("message", ".*\\b" + thing + "\\b.*", "i");
-        } else if (!person.isEmpty() && !thing.isEmpty()) {
+        }
+        else if (!person.isEmpty() && !thing.isEmpty()) {
             filter = and(regex("nick", person, "i"), regex("message", ".*\\b" + thing + "\\b.*", "i"));
-        } else if (!person.isEmpty()) {
+        }
+        else if (!person.isEmpty()) {
             filter = regex("nick", person, "i");
-        } else if (!thing.isEmpty()) {
+        }
+        else if (!thing.isEmpty()) {
             filter = regex("message", ".*\\b" + thing + "\\b.*", "i");
         }
 
@@ -180,7 +184,8 @@ public class CommandQuote implements ICommand {
             }
             return formatted;
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return "";
         }

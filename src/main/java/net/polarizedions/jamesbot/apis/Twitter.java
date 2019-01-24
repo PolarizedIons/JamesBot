@@ -38,12 +38,12 @@ public class Twitter {
             return;
         }
 
-        String encoded = new String(Base64.getEncoder().encode(((Util.encodeURIComponent(consumerKey) + ":" + Util.encodeURIComponent(consumerSecret)).getBytes())));
+        String encoded = new String(Base64.getEncoder().encode(( ( Util.encodeURIComponent(consumerKey) + ":" + Util.encodeURIComponent(consumerSecret) ).getBytes() )));
 
         List<String[]> headers = new ArrayList<>();
-        headers.add(new String[] {"Authorization", "Basic " + encoded});
-        headers.add(new String[] {"Content-Type", "application/x-www-form-urlencoded;charset=UTF-8"});
-        headers.add(new String[] {"User-Agent", "Jamesbot v" + BuildInfo.version});
+        headers.add(new String[] { "Authorization", "Basic " + encoded });
+        headers.add(new String[] { "Content-Type", "application/x-www-form-urlencoded;charset=UTF-8" });
+        headers.add(new String[] { "User-Agent", "Jamesbot v" + BuildInfo.version });
 
         InputStream is = Util.request(AUTHENTICATION_URL, true, headers, "grant_type=client_credentials");
         if (is == null) {
@@ -52,21 +52,21 @@ public class Twitter {
         }
         JsonObject response = Util.parser.parse(new InputStreamReader(is)).getAsJsonObject();
 
-        if (! response.get("token_type").getAsString().equalsIgnoreCase("bearer")) {
+        if (!response.get("token_type").getAsString().equalsIgnoreCase("bearer")) {
             logger.error("Twitter gave me " + response.get("token_type").getAsString() + " but I expected a bearer token!");
             throw new IllegalStateException("Didn't get a bearer token!");
         }
 
         this.bearerCode = response.get("access_token").getAsString();
         this.bearerHeader = new ArrayList<>();
-        this.bearerHeader.add(new String[] {"Authorization", "Bearer " + this.bearerCode});
+        this.bearerHeader.add(new String[] { "Authorization", "Bearer " + this.bearerCode });
 
         logger.debug("Successfully authenticated!");
     }
 
     @Nullable
     public Tweet getTweet(long id) {
-        if (! this.isAuthed()) {
+        if (!this.isAuthed()) {
             return null;
         }
 
@@ -80,7 +80,8 @@ public class Twitter {
 
         try {
             tweet.createdAt = TWITTER_DATE_FORMAT.parse(tweetJson.get("created_at").getAsString());
-        } catch (ParseException e) {
+        }
+        catch (ParseException e) {
             tweet.createdAt = Date.from(Instant.ofEpochSecond(1));
         }
         tweet.id = tweetJson.get("id").getAsLong();
@@ -116,7 +117,7 @@ public class Twitter {
     }
 
     public boolean isAuthed() {
-        return ! this.bearerCode.isEmpty();
+        return !this.bearerCode.isEmpty();
     }
 
     public static class Tweet {
