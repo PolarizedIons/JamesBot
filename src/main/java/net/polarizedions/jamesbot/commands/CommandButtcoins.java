@@ -69,7 +69,8 @@ public class CommandButtcoins implements ICommand {
         }
 
         String queryNick = nick.equalsIgnoreCase(source.getNick()) ? "You have " : nick + " has ";
-        source.respond(queryNick + "an " + (account.active ? "active" : "inactive") + " account, with " + account.balance + " buttcoins (" + account.mined + " mined, and " + account.bruteforced + " of which was bruteforced.) They've gifted " + account.gifted + " and received " + account.given + " buttcoins");
+        String queryNick2 = nick.equalsIgnoreCase(source.getNick()) ? "You've" : "They've";
+        source.respond(queryNick + "an " + (account.active ? "active" : "inactive") + " account, with " + account.balance + " buttcoins (" + account.mined + " mined, and " + account.bruteforced + " of which was bruteforced.) " + queryNick2 + " gifted " + account.gifted + " and received " + account.given + " buttcoins");
         return ReturnConstants.SUCCESS;
     }
 
