@@ -32,6 +32,11 @@ public class ButtcoinPlusPlus implements IResponder {
             return true;
         }
 
+
+        if (! Bot.instance.getButtcoinAPI().isAccountActive(from)) {
+            Bot.instance.getButtcoinAPI().activateAccount(from);
+        }
+
         if (! Bot.instance.getButtcoinAPI().isAccountActive(to)) {
             Bot.noticePM(from, "Sorry, but " + to + " does not have an active account");
         }

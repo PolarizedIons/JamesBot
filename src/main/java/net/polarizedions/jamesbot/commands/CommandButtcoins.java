@@ -64,12 +64,21 @@ public class CommandButtcoins implements ICommand {
     private int getStats(CommandMessage source, String nick) {
         ButtcoinAccount account = Bot.instance.getButtcoinAPI().getAccount(nick);
 
+        if (! account.isActive()) {
+            Bot.instance.getButtcoinAPI().activateAccount(nick);
+        }
+
         String queryNick = nick.equalsIgnoreCase(source.getNick()) ? "You have " : nick + " has ";
         source.respond(queryNick + "an " + (account.active ? "active" : "inactive") + " account, with " + account.balance + " buttcoins (" + account.mined + " mined, and " + account.bruteforced + " of which was bruteforced.) They've gifted " + account.gifted + " and received " + account.given + " buttcoins");
         return ReturnConstants.SUCCESS;
     }
 
     private int transfer(CommandMessage source, int amount, String toNick, String reason) {
+        String fromNick = source.getNick();
+        if (! Bot.instance.getButtcoinAPI().isAccountActive(fromNick)) {
+            Bot.instance.getButtcoinAPI().activateAccount(fromNick);
+        }
+
         if (source.getNick().equalsIgnoreCase(toNick)) {
             source.noticePM("You are " + toNick + "!");
             return ReturnConstants.FAIL_SILENT;
