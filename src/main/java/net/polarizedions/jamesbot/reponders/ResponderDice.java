@@ -8,8 +8,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ResponderDice implements IResponder {
-    private static final Pattern DICE_PATTERN = Pattern.compile("^([0-9]{1,4})?d([0-9]+)$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern DICE_PATTERN = Pattern.compile("^([0-9]+)?d([0-9]+)$", Pattern.CASE_INSENSITIVE);
     private static final Random RANDOM = new Random();
+    private static final int MAX_NUMBER_SMALL_ROLL = 50;
 
     @Override
     public boolean run(MessageEvent msg) {
@@ -33,7 +34,7 @@ public class ResponderDice implements IResponder {
             }
             int size = Integer.parseInt(matcher.group(2));
 
-            if (size <= 0 || number <= 0) {
+            if (size <= 0 || number <= 0 || isHugeRoll(size, number)) {
                 msg.respondWith("And what do you expect to happen???");
             }
             else {
@@ -46,13 +47,42 @@ public class ResponderDice implements IResponder {
         return false;
     }
 
-    private int roll(int size, int number) {
-        int total = 0;
+    private long roll(int size, int number) {
+        if (number > MAX_NUMBER_SMALL_ROLL) {
+            return big_roll(size, number);
+        }
+        
+        long total = 0;
 
         for (int i = 0; i < number; i++) {
             total += RANDOM.nextInt(size) + 1;
         }
 
         return total;
+    }
+    
+    private long big_roll(long size, long number) {
+        long roll = (long) (RANDOM.nextGaussian() * standardDeviation(size, number) + mean(size, number));
+        
+        if (roll < number) {
+            return number;
+        }
+        else if (roll > size * number) {
+            return size * number;
+        }
+        
+        return roll;
+    }
+    
+    private double mean(long size, long number) {
+        return (size + 1) * number / 2d;
+    }
+    
+    private double standardDeviation(long size, long number) {
+        return Math.sqrt((sides * size - 1) * number / 12d);
+    }
+    
+    private boolean isHugeRoll(int size, int number) {
+        return Integer.MAX_LONG / number < size;
     }
 }
