@@ -79,10 +79,10 @@ public class ResponderDice implements IResponder {
     }
     
     private double standardDeviation(long size, long number) {
-        return Math.sqrt((sides * size - 1) * number / 12d);
+        return Math.sqrt((size * size - 1) * number / 12d);
     }
     
     private boolean isHugeRoll(int size, int number) {
-        return Integer.MAX_LONG / number < size;
+        return Long.MAX_VALUE / number < size;
     }
 }
