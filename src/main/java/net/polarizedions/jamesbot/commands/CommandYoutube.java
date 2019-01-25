@@ -51,7 +51,7 @@ public class CommandYoutube implements ICommand {
             restrictionStr = ORANGE + "unavailable in some regions" + RESET;
         }
 
-        source.respondWith(BOLD + video.title + MAGENTA + " [" + video.duration + "]" + RESET + " (by " + GREEN + video.channel + RESET + ") " + CYAN + video.viewCount + RESET + " views, " + GREEN + video.likeCount + RESET + " likes, " + RED + video.dislikeCount + RESET + " dislikes. https://youtu.be/" + video.id + "(" + restrictionStr + ")");
+        source.respond(BOLD + video.title + MAGENTA + " [" + video.duration + "]" + RESET + " (by " + GREEN + video.channel + RESET + ") " + CYAN + video.viewCount + RESET + " views, " + GREEN + video.likeCount + RESET + " likes, " + RED + video.dislikeCount + RESET + " dislikes. https://youtu.be/" + video.id + "(" + restrictionStr + ")");
 
         return ReturnConstants.SUCCESS;
     }
