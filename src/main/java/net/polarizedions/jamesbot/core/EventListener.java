@@ -15,6 +15,7 @@ public class EventListener extends ListenerAdapter {
     @Override
     public void onConnect(ConnectEvent event) throws Exception {
         logger.info("Connected!");
+        Bot.instance.getMainNick();
     }
 
     @Override

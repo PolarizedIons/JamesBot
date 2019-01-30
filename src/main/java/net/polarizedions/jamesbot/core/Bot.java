@@ -112,7 +112,6 @@ public class Bot {
 
     public void run() {
         try {
-            this.getMainNick();
             this.bot.startBot();
         }
         catch (IOException | IrcException e) {
@@ -120,7 +119,7 @@ public class Bot {
         }
     }
 
-    private void getMainNick() {
+    void getMainNick() {
         new Thread(() -> {
             try {
                 Thread.sleep(30000);
