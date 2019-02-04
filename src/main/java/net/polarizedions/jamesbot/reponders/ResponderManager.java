@@ -20,7 +20,7 @@ public class ResponderManager {
         this.responders.add(new FetchTitle());
 
         // Make sure this runs last
-        this.responders.add(new QmarkAPI());
+        this.responders.add(new Qmark());
     }
 
     public boolean dispatch(MessageEvent msg) {

@@ -40,34 +40,34 @@ public class CommandMemes implements ICommand {
         );
     }
 
-    private int ausmerica(CommandMessage source) {
+    private int ausmerica(@NotNull CommandMessage source) {
         source.respondWith("Lemon lemon lemon lemon lemon lemon lemon lemon. http://i.imgur.com/5C4Gi.png");
         return ReturnConstants.SUCCESS;
     }
 
-    private int nikon(CommandMessage source) {
+    private int nikon(@NotNull CommandMessage source) {
         source.respondWith("http://i.imgur.com/nikon.png");
         return ReturnConstants.SUCCESS;
     }
 
-    private int bep(CommandMessage source) {
+    private int bep(@NotNull CommandMessage source) {
         source.respondWith("ADD &BEP COMMAND NAO it go here http://i.imgur.com/BEPSY.png");
         return ReturnConstants.SUCCESS;
     }
 
-    private int yuno(CommandMessage source, String msg) {
+    private int yuno(@NotNull CommandMessage source, String msg) {
         msg = msg.replace("\\bme\\b", source.getNick());
 
         source.respondWith("ლ(ಠ益ಠლ) Y U NO " + msg + "?");
         return ReturnConstants.SUCCESS;
     }
 
-    private int dolan(CommandMessage source, String target) {
+    private int dolan(@NotNull CommandMessage source, String target) {
         source.respondWith("fak u " + this.memify(target));
         return ReturnConstants.SUCCESS;
     }
 
-    private int gooby(CommandMessage source, String target) {
+    private int gooby(@NotNull CommandMessage source, String target) {
         source.respondWith(this.memify(target) + " pls");
         return ReturnConstants.SUCCESS;
     }

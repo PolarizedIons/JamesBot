@@ -4,7 +4,7 @@ import net.polarizedions.jamesbot.apis.QMarkAPI;
 import net.polarizedions.jamesbot.core.Bot;
 import org.pircbotx.hooks.events.MessageEvent;
 
-public class QmarkAPI implements IResponder {
+public class Qmark implements IResponder {
     @Override
     public boolean run(MessageEvent msg) {
         String myNick = Bot.instance.getPircBot().getNick();
@@ -21,8 +21,10 @@ public class QmarkAPI implements IResponder {
             return false;
         }
 
-
-        msg.respond(QMarkAPI.ask(message));
+        String response = QMarkAPI.ask(message);
+        if (!response.isEmpty()) {
+            msg.respond(response);
+        }
         return true;
     }
 }

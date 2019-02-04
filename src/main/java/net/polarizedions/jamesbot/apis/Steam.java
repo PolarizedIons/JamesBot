@@ -46,9 +46,9 @@ public class Steam {
             app.finalPriceFormatted = "$ unknown";
         }
 
-        app.avaliableWindows = json.getAsJsonObject("platforms").get("windows").getAsBoolean();
-        app.avaliableMac = json.getAsJsonObject("platforms").get("mac").getAsBoolean();
-        app.avaliableLinux = json.getAsJsonObject("platforms").get("linux").getAsBoolean();
+        app.availableWindows = json.getAsJsonObject("platforms").get("windows").getAsBoolean();
+        app.availableMac = json.getAsJsonObject("platforms").get("mac").getAsBoolean();
+        app.availableLinux = json.getAsJsonObject("platforms").get("linux").getAsBoolean();
 
         app.genres = new ArrayList<>();
         for (JsonElement jsonEntry : json.getAsJsonArray("genres")) {
@@ -67,9 +67,9 @@ public class Steam {
         public boolean isDiscount;
         public double discountPercent;
         public String finalPriceFormatted;
-        public boolean avaliableWindows;
-        public boolean avaliableMac;
-        public boolean avaliableLinux;
+        public boolean availableWindows;
+        public boolean availableMac;
+        public boolean availableLinux;
         public List<String> genres;
     }
 }

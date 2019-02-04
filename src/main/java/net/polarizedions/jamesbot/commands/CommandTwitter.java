@@ -46,17 +46,10 @@ public class CommandTwitter implements ICommand {
 
         if (tweet == null) {
             source.respond("Sorry, I can't find that tweet!");
-            return ReturnConstants.FAIL_SILENT;
+            return ReturnConstants.FAIL_REPLIED;
         }
 
         String text = tweet.text;
-
-//        $text =~ s/(#[a-z][a-z0-9_]*)/\x0312$1\x0F/ig; # Color hashtags
-//        $text =~ s/^RT (@\w{1,15}): /(\x0314RT $1\x0F) /; # Color retweets
-//        $text =~ s/[\r\n]+/ /ig; # Remove newlines
-//
-//        $core->{'output'}->parse("MESSAGE>${chan}>${target}: \x02Tweet\x02 (by \x0303\@${author}\x0F) ${text} [ https://twitter.com/${author}/status/${id} ]");
-//    }
 
         text = text.replaceAll("(#[a-zA-Z][a-zA-Z0-9_]*)", LIGHT_BLUE + "$1" + RESET); // Colour hashtags
         text = text.replaceAll("^RT (@\\w{1,15})", GREY + "RT $1" + RESET); // Colour RTs
@@ -64,7 +57,7 @@ public class CommandTwitter implements ICommand {
         text = text.replaceAll("(@[a-zA-Z0-9_]*)", BLUE + "$1" + RESET); // Colour mentions
 
 
-        source.respond(BOLD + "Tweet: " + CYAN + tweet.userDisplayName + RESET + " (" + BOLD + GREEN + "@" + tweet.userUsername + RESET + ") " + text + " [ https://twitter.com/" + tweet.userUsername + "/status/" + tweet.id + " ]");
+        source.respond(String.format("%sTweet: %s%s%s (%s%s@%s%s) %s [ https://twitter.com/%s/status/%d ]", BOLD, CYAN, tweet.userDisplayName, RESET, BOLD, GREEN, tweet.userUsername, RESET, text, tweet.userUsername, tweet.id));
         return ReturnConstants.SUCCESS;
     }
 

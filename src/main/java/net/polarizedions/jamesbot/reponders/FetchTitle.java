@@ -44,6 +44,6 @@ public class FetchTitle implements IResponder {
         }
 
         msg.respond(title);
-        return false;
+        return true;
     }
 }

@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.utils.CommandMessage;
+import org.jetbrains.annotations.NotNull;
 
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
@@ -11,12 +12,11 @@ public class CommandPing implements ICommand {
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(
-                literal("ping")
-                        .executes(this::ping)
+                literal("ping").executes(this::ping)
         );
     }
 
-    private int ping(CommandContext<CommandMessage> context) {
+    private int ping(@NotNull CommandContext<CommandMessage> context) {
         CommandMessage msg = context.getSource();
         msg.respond("pong!");
         return ReturnConstants.SUCCESS;

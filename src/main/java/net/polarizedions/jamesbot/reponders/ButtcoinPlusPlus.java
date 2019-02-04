@@ -50,7 +50,7 @@ public class ButtcoinPlusPlus implements IResponder {
             ButtcoinAccount fromAccount = Bot.instance.getButtcoinAPI().getAccount(from);
             ButtcoinAccount toAccount = Bot.instance.getButtcoinAPI().getAccount(to);
 
-            Bot.noticePM(from, String.format("You (%d) have sent %d buttcoin to %s (%d)", fromAccount.balance, 1, to, toAccount.balance));
+            Bot.noticePM(from, String.format("You (%d) have sent %d buttcoin to %s (%d) with the message: Plus Plus.", fromAccount.balance, 1, to, toAccount.balance));
             Bot.noticePM(to, String.format("You (%d) have received %d buttcoin from %s (%d) [Plus Plus]", toAccount.balance, 1, from, fromAccount.balance));
         }
 

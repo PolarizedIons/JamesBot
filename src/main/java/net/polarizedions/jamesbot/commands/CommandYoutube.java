@@ -36,14 +36,14 @@ public class CommandYoutube implements ICommand {
         Youtube api = Bot.instance.getYoutubeAPI();
         if (api == null) {
             source.respond("Youtube API is unavailable :(");
-            return ReturnConstants.FAIL_SILENT;
+            return ReturnConstants.FAIL_REPLIED;
         }
 
         Youtube.YoutubeVideo video = api.getVideo(link);
 
         if (video == null) {
             source.respond("Can't get that video, sorry :(");
-            return ReturnConstants.FAIL_SILENT;
+            return ReturnConstants.FAIL_REPLIED;
         }
 
         String restrictionStr = GREY + "no region restrictions" + RESET;
@@ -51,7 +51,7 @@ public class CommandYoutube implements ICommand {
             restrictionStr = ORANGE + "unavailable in some regions" + RESET;
         }
 
-        source.respond(BOLD + video.title + MAGENTA + " [" + video.duration + "]" + RESET + " (by " + GREEN + video.channel + RESET + ") " + CYAN + video.viewCount + RESET + " views, " + GREEN + video.likeCount + RESET + " likes, " + RED + video.dislikeCount + RESET + " dislikes. https://youtu.be/" + video.id + " (" + restrictionStr + ")");
+        source.respond(String.format("%s%s%s [%s]%s (by %s%s%s) %s%d%s views, %s%d%s likes, %s%d%s dislikes. https://youtu.be/%s (%s)", BOLD, video.title, MAGENTA, video.duration, RESET, GREEN, video.channel, RESET, CYAN, video.viewCount, RESET, GREEN, video.likeCount, RESET, RED, video.dislikeCount, RESET, video.id, restrictionStr));
 
         return ReturnConstants.SUCCESS;
     }

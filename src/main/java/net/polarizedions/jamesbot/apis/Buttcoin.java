@@ -4,27 +4,32 @@ import com.mongodb.client.MongoCollection;
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.database.ButtcoinAccount;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import static com.mongodb.client.model.Filters.regex;
 
 public class Buttcoin {
 
+    private Bson getNameRegex(String nick) {
+        return regex("name", "^" + nick + "$", "i");
+    }
+
     public void mine(String nick, boolean bruteforced) {
         MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
 
-        ButtcoinAccount mined = this.getAccount(nick);
+        ButtcoinAccount account = this.getAccount(nick);
 
-        Document newMined = new Document("balance", mined.balance + 1)
-                .append("mined", mined.mined + 1)
-                .append("bruteforced", mined.bruteforced + ( bruteforced ? 1 : 0 ));
+        Document updatedAccount = new Document("balance", account.balance + 1)
+                .append("mined", account.mined + 1)
+                .append("bruteforced", account.bruteforced + ( bruteforced ? 1 : 0 ));
 
-        coll.updateOne(regex("name", "^" + nick + "$", "i"), new Document("$set", newMined));
+        coll.updateOne(this.getNameRegex(nick), new Document("$set", updatedAccount));
     }
 
     public ButtcoinAccount getAccount(String nick) {
         MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
 
-        ButtcoinAccount account = coll.find(regex("name", "^" + nick + "$", "i")).first();
+        ButtcoinAccount account = coll.find(this.getNameRegex(nick)).first();
         if (account == null) {
             account = this.createAccount(nick);
         }
@@ -47,7 +52,7 @@ public class Buttcoin {
 
     public void activateAccount(String nick) {
         MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
-        coll.updateOne(regex("name", "^" + nick + "$", "i"), new Document("$set", new Document("active", true)));
+        coll.updateOne(this.getNameRegex(nick), new Document("$set", new Document("active", true)));
     }
 
     public boolean transfer(String from, String to, int amount) {
@@ -66,8 +71,8 @@ public class Buttcoin {
         Document updateTo = new Document("balance", toAccount.balance + amount)
                 .append("given", toAccount.given + amount);
 
-        coll.updateOne(regex("name", "^" + from + "$", "i"), new Document("$set", updateFrom));
-        coll.updateOne(regex("name", "^" + to + "$", "i"), new Document("$set", updateTo));
+        coll.updateOne(this.getNameRegex(from), new Document("$set", updateFrom));
+        coll.updateOne(this.getNameRegex(to), new Document("$set", updateTo));
 
         return true;
     }

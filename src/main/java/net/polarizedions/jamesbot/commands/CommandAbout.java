@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.BuildInfo;
 import net.polarizedions.jamesbot.utils.CommandMessage;
+import org.jetbrains.annotations.NotNull;
 
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
@@ -22,23 +23,23 @@ public class CommandAbout implements ICommand {
         );
     }
 
-    private int about(CommandMessage source) {
-        source.respond("I am Jamesbot. Built by PolarizedIons in loving memory of Janebot by Gambit. < " + WEBSITE_URL + " >");
+    private int about(@NotNull CommandMessage source) {
+        source.respond(String.format("I am Jamesbot. Built by PolarizedIons, in loving memory of Janebot by Gambit. < %s >", WEBSITE_URL));
         return ReturnConstants.SUCCESS;
     }
 
-    private int version(CommandMessage source) {
-        source.respond("I am Jamesbot v" + BuildInfo.version + ", built " + BuildInfo.buildtime + " running on java " + System.getProperty("java.version") + ". < " + REPO_URL + " >");
+    private int version(@NotNull CommandMessage source) {
+        source.respond(String.format("I am Jamesbot v%s, built %s running on java %s. < %s >", BuildInfo.version, BuildInfo.buildtime, System.getProperty("java.version"), REPO_URL));
         return ReturnConstants.SUCCESS;
     }
 
     @Override
     public String getHelp() {
-        return null;
+        return "Shows information about the bot";
     }
 
     @Override
     public String getUsage() {
-        return null;
+        return "about, version";
     }
 }

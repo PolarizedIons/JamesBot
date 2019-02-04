@@ -29,7 +29,6 @@ import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.regex;
 import static com.mongodb.client.model.Sorts.descending;
-import static net.polarizedions.jamesbot.commands.brigadier.ReturnConstants.FAIL_SILENT;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
@@ -40,6 +39,7 @@ public class CommandQuote implements ICommand {
 
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
+        // remember (person) (search term)
         dispatcher.register(
                 literal("remember")
                         .then(
@@ -79,17 +79,17 @@ public class CommandQuote implements ICommand {
         );
     }
 
-    private int remember(CommandMessage source, String nick, String search) {
+    private int remember(@NotNull CommandMessage source, String nick, String search) {
         if (source.getNick().equalsIgnoreCase(nick)) {
             source.respond("You're not that memorable to me.");
-            return ReturnConstants.FAIL_SILENT;
+            return ReturnConstants.FAIL_REPLIED;
         }
 
         MessageEvent found = this.searchMemory(source.getChannel(), nick, search);
 
         if (found == null) {
-            source.respondWith("Can't find what " + nick + " said about " + search);
-            return FAIL_SILENT;
+            source.respondWith(String.format("Can't find what %s said about %s", nick, search));
+            return ReturnConstants.FAIL_REPLIED;
         }
         try {
             Quote quote = this.saveQuote(found);
@@ -106,25 +106,33 @@ public class CommandQuote implements ICommand {
 
         Quote quote = coll.find(and(regex("nick", person, "i"), eq("quoteNum", number))).first();
         if (quote == null) {
-            source.respond("Can't find that quote :(");
-            return ReturnConstants.FAIL_SILENT;
+            source.respond("Sorry! I can't find that quote :(");
+            return ReturnConstants.FAIL_REPLIED;
         }
 
         source.respond(this.formatQuote(quote));
         return ReturnConstants.SUCCESS;
     }
 
-    private int getRandomQuote(CommandMessage source, String person, String thing) {
+    private int getRandomQuote(CommandMessage source, @NotNull String person, String thing) {
         Bson filter = null;
+
+        // Get quote from random person including "thing" in the message
         if (person.equals("*") && !thing.isEmpty()) {
             filter = regex("message", ".*\\b" + thing + "\\b.*", "i");
         }
+
+        // Get quote from "person" saying something about "thing"
         else if (!person.isEmpty() && !thing.isEmpty()) {
             filter = and(regex("nick", person, "i"), regex("message", ".*\\b" + thing + "\\b.*", "i"));
         }
+
+        // Get a random quote from "person"
         else if (!person.isEmpty()) {
             filter = regex("nick", person, "i");
         }
+
+        // Get a random quote about "thing"
         else if (!thing.isEmpty()) {
             filter = regex("message", ".*\\b" + thing + "\\b.*", "i");
         }
@@ -138,7 +146,7 @@ public class CommandQuote implements ICommand {
 
         if (docs.size() == 0) {
             source.respond("Sorry, I couldn't find a quote matching that :(");
-            return ReturnConstants.FAIL_SILENT;
+            return ReturnConstants.FAIL_REPLIED;
         }
 
         Quote quote = docs.get(RANDOM.nextInt(docs.size()));

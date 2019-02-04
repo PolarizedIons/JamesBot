@@ -32,7 +32,7 @@ public class Youtube {
             Matcher matcher1 = youtubeFullLinkPattern.matcher(link);
             Matcher matcher2 = youtubeShortinkPattern.matcher(link);
 
-            // Calling .find() twice changes outcome >.> :REEEEEEEEE;
+            // Calling .find() twice changes outcome >.> :REEEEEEEEE:
             boolean found1 = matcher1.find();
             boolean found2 = matcher2.find();
 
@@ -44,7 +44,12 @@ public class Youtube {
         }
         logger.info("Fetching video {} ({})", link, id);
 
-        JsonObject json = Util.getJson(String.format(VIDEO_INFO_URL, Util.encodeURIComponent(id), Util.encodeURIComponent(API_KEY))).getAsJsonArray("items").get(0).getAsJsonObject();
+        JsonObject jsonResponse = Util.getJson(String.format(VIDEO_INFO_URL, Util.encodeURIComponent(id), Util.encodeURIComponent(API_KEY)));
+        if (jsonResponse == null) {
+            return null;
+        }
+        
+        JsonObject json = jsonResponse.getAsJsonArray("items").get(0).getAsJsonObject();
 
         YoutubeVideo video = new YoutubeVideo();
         video.kind = Kind.getFor(json.get("kind").getAsString());

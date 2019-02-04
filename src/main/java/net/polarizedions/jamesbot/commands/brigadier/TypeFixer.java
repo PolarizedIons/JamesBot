@@ -12,7 +12,7 @@ public class TypeFixer {
 
     /**
      * Creates a new argument. Intended to be imported statically. The benefit of this over the brigadier {@link
-     * LiteralArgumentBuilder#literal} method is that it is typed to {@link CommandMessage}.
+     * LiteralArgumentBuilder#literal(String)}  method is that it is typed to {@link CommandMessage}.
      */
     @NotNull
     @Contract(pure = true)
@@ -22,7 +22,7 @@ public class TypeFixer {
 
     /**
      * Creates a new argument. Intended to be imported statically. The benefit of this over the brigadier {@link
-     * RequiredArgumentBuilder#argument} method is that it is typed to {@link CommandMessage}.
+     * RequiredArgumentBuilder#argument(String, ArgumentType)} method is that it is typed to {@link CommandMessage}.
      */
     @NotNull
     @Contract(pure = true)

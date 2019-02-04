@@ -44,7 +44,7 @@ public class CommandJoin implements ICommand {
         channel = channel.split("\\s")[0];
 
         // There's no part method?!
-        Bot.instance.getPircBot().sendRaw().rawLine("PART " + channel);
+        Bot.instance.getPircBot().sendRaw().rawLine("PART " + channel + " :Bai");
         Bot.instance.getBotConfig().channels.remove(channel);
         Bot.instance.saveBotConfig();
 

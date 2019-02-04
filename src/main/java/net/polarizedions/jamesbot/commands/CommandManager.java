@@ -45,10 +45,10 @@ public class CommandManager {
             int result = dispatcher.execute(source.getMessage(), source);
 
             if (result == ReturnConstants.FAIL_LOG) {
-                Bot.instance.debug("[Command Failed] " + source.getChannel() + "/" + source.getNick() + ": " + source.getMessage());
+                Bot.instance.debug(String.format("[Command Failed] %s/%s: %s", source.getChannel(), source.getNick(), source.getMessage()));
             }
 
-            return result == ReturnConstants.SUCCESS;
+            return result == ReturnConstants.SUCCESS || result == ReturnConstants.FAIL_REPLIED;
         }
         catch (CommandSyntaxException e) {
             if (e.getCursor() != 0) {

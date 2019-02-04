@@ -5,6 +5,8 @@ import net.polarizedions.jamesbot.apis.Steam;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,35 +43,37 @@ public class CommandSteam implements ICommand {
 
         if (app == null) {
             source.respond("Sorry, I can't find that app.");
-            return ReturnConstants.FAIL_SILENT;
-        }
-
-        String platformStr = GREEN + "all platforms!" + RESET;
-        if (app.avaliableWindows && !app.avaliableMac && !app.avaliableLinux) {
-            platformStr = ORANGE + "Windows only :(" + RESET;
-        }
-        else if (!app.avaliableWindows && app.avaliableMac && !app.avaliableLinux) {
-            platformStr = ORANGE + "Mac only :(" + RESET;
-        }
-        else if (!app.avaliableWindows && !app.avaliableMac && app.avaliableLinux) {
-            platformStr = ORANGE + "Linux only :(" + RESET;
-        }
-        else if (app.avaliableWindows && app.avaliableMac && !app.avaliableLinux) {
-            platformStr = "Windows and Mac";
-        }
-        else if (app.avaliableWindows && !app.avaliableMac && app.avaliableLinux) {
-            platformStr = "Windows and Linux";
-        }
-        else if (!app.avaliableWindows && app.avaliableMac && app.avaliableLinux) {
-            platformStr = "Mac and Linux";
+            return ReturnConstants.FAIL_REPLIED;
         }
 
 
-//        $core->{'output'}->parse("MESSAGE>${chan}>${target}: \x02${title}\x02 \x0303\$${price}\x0F ${discount}, available for ${platforms} http://store.steampowered.com/app/${app} ${genres}");
+        // Thanks to superaxander on discord <3
+        String platformStr;
+        List<String> availablePlatforms = new ArrayList<>();
+        if (app.availableWindows) {
+            availablePlatforms.add("Windows");
+        }
+        if (app.availableMac) {
+            availablePlatforms.add("Mac");
+        }
+        if (app.availableLinux) {
+            availablePlatforms.add("Linux");
+        }
+
+        if (availablePlatforms.size() == 1) {
+            platformStr = ORANGE + availablePlatforms.get(0) + " only :(" + RESET;
+        }
+        else if (availablePlatforms.size() == 2) {
+            platformStr = availablePlatforms.get(0) + " and " + availablePlatforms.get(1);
+        }
+        else {
+            platformStr = GREEN + "all platforms" + RESET;
+        }
+
 
         String discountStr = app.discountPercent == 0 ? "no discount" : app.discountPercent + "% discount";
 
-        source.respond(BOLD + app.name + RESET + ": " + GREEN + app.finalPriceFormatted + RESET + " (" + discountStr + "), available for " + platformStr + " http://store.steampowered.com/app/" + app.appId + LIGHT_GREY + " [" + RESET + String.join(LIGHT_GREY + "] [" + RESET, app.genres) + LIGHT_GREY + "]" + RESET);
+        source.respond(String.format("%s%s%s: %s%s%s (%s), available for %s http://store.steampowered.com/app/%d%s [%s%s%s]%s", BOLD, app.name, RESET, GREEN, app.finalPriceFormatted, RESET, discountStr, platformStr, app.appId, LIGHT_GREY, RESET, String.join(LIGHT_GREY + "] [" + RESET, app.genres), LIGHT_GREY, RESET));
 
         return ReturnConstants.SUCCESS;
     }

@@ -3,6 +3,7 @@ package net.polarizedions.jamesbot.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.utils.CommandMessage;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -28,7 +29,7 @@ public class CommandEightball implements ICommand {
             "Better not tell you now.",
             "Cannot predict now.",
             "Concentrate and ask again.",
-            "Don\"t count on it.",
+            "Don't count on it.",
             "My reply is no.",
             "My sources say no.",
             "Outlook not so good.",
@@ -41,18 +42,18 @@ public class CommandEightball implements ICommand {
         dispatcher.register(literal("eightball").then(argument("q", greedyString()).executes(c -> this.eightball(c.getSource()))));
     }
 
-    private int eightball(CommandMessage source) {
+    private int eightball(@NotNull CommandMessage source) {
         source.respondWith(RESPONSES[RAND.nextInt(RESPONSES.length)]);
         return ReturnConstants.SUCCESS;
     }
 
     @Override
     public String getHelp() {
-        return null;
+        return "Predict your future... or something";
     }
 
     @Override
     public String getUsage() {
-        return null;
+        return "[8ball/eightball] <question>";
     }
 }

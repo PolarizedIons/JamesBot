@@ -1,10 +1,12 @@
 package net.polarizedions.jamesbot.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.polarizedions.jamesbot.apis.Buttcoin;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.database.ButtcoinAccount;
 import net.polarizedions.jamesbot.utils.CommandMessage;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -56,53 +58,55 @@ public class CommandButtcoins implements ICommand {
         );
     }
 
-    private int activate(CommandMessage source) {
+    private int activate(@NotNull CommandMessage source) {
         Bot.instance.getButtcoinAPI().activateAccount(source.getNick());
         return 0;
     }
 
-    private int getStats(CommandMessage source, String nick) {
+    private int getStats(@NotNull CommandMessage source, String nick) {
         ButtcoinAccount account = Bot.instance.getButtcoinAPI().getAccount(nick);
 
-        if (!account.isActive()) {
+        if (source.getNick().equalsIgnoreCase(nick) && !account.isActive()) {
             Bot.instance.getButtcoinAPI().activateAccount(nick);
         }
 
-        String queryNick = nick.equalsIgnoreCase(source.getNick()) ? "You have " : nick + " has ";
+        String queryNick = nick.equalsIgnoreCase(source.getNick()) ? "You have" : nick + " has";
         String queryNick2 = nick.equalsIgnoreCase(source.getNick()) ? "You've" : "They've";
-        source.respond(queryNick + "an " + ( account.active ? "active" : "inactive" ) + " account, with " + account.balance + " buttcoins (" + account.mined + " mined, and " + account.bruteforced + " of which was bruteforced.) " + queryNick2 + " gifted " + account.gifted + " and received " + account.given + " buttcoins");
+        source.respond(String.format("%s an %s account, with %d buttcoins: %d mined, %d of which was bruteforced. %s gifted %d, and received %d buttcoins.", queryNick, account.active ? "active" : "inactive", account.balance, account.mined, account.bruteforced, queryNick2, account.gifted, account.given));
         return ReturnConstants.SUCCESS;
     }
 
-    private int transfer(CommandMessage source, int amount, String toNick, String reason) {
+    private int transfer(@NotNull CommandMessage source, int amount, String toNick, String reason) {
         String fromNick = source.getNick();
-        if (!Bot.instance.getButtcoinAPI().isAccountActive(fromNick)) {
-            Bot.instance.getButtcoinAPI().activateAccount(fromNick);
+        Buttcoin buttcoinApi = Bot.instance.getButtcoinAPI();
+        ButtcoinAccount fromAccount = buttcoinApi.getAccount(fromNick);
+        ButtcoinAccount toAccount = buttcoinApi.getAccount(toNick);
+
+        if (!fromAccount.isActive()) {
+            buttcoinApi.activateAccount(fromNick);
         }
 
         if (source.getNick().equalsIgnoreCase(toNick)) {
             source.noticePM("You are " + toNick + "!");
-            return ReturnConstants.FAIL_SILENT;
+            return ReturnConstants.FAIL_REPLIED;
         }
 
         if (amount <= 0) {
             source.noticePM("You must send at least 1 buttcoin!");
-            return ReturnConstants.FAIL_SILENT;
+            return ReturnConstants.FAIL_REPLIED;
         }
 
-        if (!Bot.instance.getButtcoinAPI().isAccountActive(toNick)) {
+        if (!toAccount.isActive()) {
             source.noticePM("Sorry, " + toNick + " does not have an active account");
-            return ReturnConstants.FAIL_SILENT;
+            return ReturnConstants.FAIL_REPLIED;
         }
 
-        if (!Bot.instance.getButtcoinAPI().transfer(source.getNick(), toNick, amount)) {
+        if (!buttcoinApi.transfer(fromNick, toNick, amount)) {
             source.noticePM("I couldn't do that. Do you have enough buttcoins?");
-            return ReturnConstants.FAIL_SILENT;
+            return ReturnConstants.FAIL_REPLIED;
         }
 
-        ButtcoinAccount fromAccount = Bot.instance.getButtcoinAPI().getAccount(source.getNick());
-        ButtcoinAccount toAccount = Bot.instance.getButtcoinAPI().getAccount(toNick);
-        source.noticePM(String.format("[TRANSFER] You (%d) have sent %d buttcoins to %s (%d)", fromAccount.balance, amount, toNick, toAccount.balance));
+        source.noticePM(String.format("[TRANSFER] You (%d) have sent %d buttcoins to %s (%d) with the message: %s", fromAccount.balance, amount, toNick, toAccount.balance, reason));
         Bot.noticePM(toNick, String.format("You (%d) have received %d buttcoins from %s (%d) [%s]", toAccount.balance, amount, source.getNick(), fromAccount.balance, reason));
 
         return ReturnConstants.SUCCESS;
