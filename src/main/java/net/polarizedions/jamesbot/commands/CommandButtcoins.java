@@ -102,7 +102,7 @@ public class CommandButtcoins implements ICommand {
 
         ButtcoinAccount fromAccount = Bot.instance.getButtcoinAPI().getAccount(source.getNick());
         ButtcoinAccount toAccount = Bot.instance.getButtcoinAPI().getAccount(toNick);
-        source.noticePM(String.format("[TRANSFER] You (%d) have sent %d buttcoins to %s (%d )", fromAccount.balance, amount, toNick, toAccount.balance));
+        source.noticePM(String.format("[TRANSFER] You (%d) have sent %d buttcoins to %s (%d)", fromAccount.balance, amount, toNick, toAccount.balance));
         Bot.noticePM(toNick, String.format("You (%d) have received %d buttcoins from %s (%d) [%s]", toAccount.balance, amount, source.getNick(), fromAccount.balance, reason));
 
         return ReturnConstants.SUCCESS;
