@@ -8,7 +8,7 @@ import net.polarizedions.jamesbot.config.BotConfig;
 import net.polarizedions.jamesbot.config.ConfigurationLoader;
 import net.polarizedions.jamesbot.config.StaffEntry;
 import net.polarizedions.jamesbot.database.Database;
-import net.polarizedions.jamesbot.reponders.ResponderManager;
+import net.polarizedions.jamesbot.responders.ResponderManager;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import net.polarizedions.jamesbot.utils.FixedSizeQueue;
 import org.apache.logging.log4j.LogManager;

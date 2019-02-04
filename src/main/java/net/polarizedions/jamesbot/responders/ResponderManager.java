@@ -1,4 +1,4 @@
-package net.polarizedions.jamesbot.reponders;
+package net.polarizedions.jamesbot.responders;
 
 import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.MessageEvent;

@@ -1,4 +1,4 @@
-package net.polarizedions.jamesbot.reponders;
+package net.polarizedions.jamesbot.responders;
 
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.database.ButtcoinAccount;
