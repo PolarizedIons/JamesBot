@@ -61,7 +61,7 @@ public class Buttcoin {
         ButtcoinAccount fromAccount = this.getAccount(from);
         ButtcoinAccount toAccount = this.getAccount(to);
 
-        if (fromAccount.mined < amount) {
+        if (fromAccount.balance < amount) {
             return false;
         }
 
