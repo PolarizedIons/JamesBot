@@ -106,8 +106,8 @@ public class CommandButtcoins implements ICommand {
             return ReturnConstants.FAIL_REPLIED;
         }
 
-        source.noticePM(String.format("[TRANSFER] You (%d) have sent %d buttcoins to %s (%d) with the message: %s", fromAccount.balance, amount, toNick, toAccount.balance, reason));
-        Bot.noticePM(toNick, String.format("You (%d) have received %d buttcoins from %s (%d) [%s]", toAccount.balance, amount, source.getNick(), fromAccount.balance, reason));
+        source.noticePM(String.format("[TRANSFER] You (%d) have sent %d buttcoins to %s (%d) with the message: %s", (fromAccount.balance - amount), amount, toNick, (toAccount.balance + amount), reason));
+        Bot.noticePM(toNick, String.format("You (%d) have received %d buttcoins from %s (%d) [%s]", (toAccount.balance + amount), amount, source.getNick(), (fromAccount.balance - amount), reason));
 
         return ReturnConstants.SUCCESS;
     }
