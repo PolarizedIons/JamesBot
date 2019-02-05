@@ -41,19 +41,24 @@ public class ButtcoinPlusPlus implements IResponder {
             Bot.noticePM(from, "Sorry, but " + to + " does not have an active account");
         }
 
-        boolean result = Bot.instance.getButtcoinAPI().transfer(from, to, 1);
-        if (!result) {
+        int currBalance = Bot.instance.getButtcoinAPI().getAccount(from).balance;
+        if (currBalance < 1) {
+            Bot.noticePM(msg, "Sorry, you (" + currBalance + ") do not have enough funds to transfer 1 buttcoin.");
+            return true;
+        }
+
+        if (Bot.instance.getButtcoinAPI().transfer(from, to, 1) != null) {
             Bot.noticePM(msg, "Sorry, I couldn't do that. Do you have enough buttcoins?");
-        }
-        else {
-
-            ButtcoinAccount fromAccount = Bot.instance.getButtcoinAPI().getAccount(from);
-            ButtcoinAccount toAccount = Bot.instance.getButtcoinAPI().getAccount(to);
-
-            Bot.noticePM(from, String.format("You (%d) have sent %d buttcoin to %s (%d) with the message: Plus Plus.", fromAccount.balance, 1, to, toAccount.balance));
-            Bot.noticePM(to, String.format("You (%d) have received %d buttcoin from %s (%d) [Plus Plus]", toAccount.balance, 1, from, fromAccount.balance));
+            return true;
         }
 
-        return result;
+
+        ButtcoinAccount fromAccount = Bot.instance.getButtcoinAPI().getAccount(from);
+        ButtcoinAccount toAccount = Bot.instance.getButtcoinAPI().getAccount(to);
+
+        Bot.noticePM(from, String.format("You (%d) have sent %d buttcoin to %s (%d) with the message: Plus Plus.", fromAccount.balance, 1, to, toAccount.balance));
+        Bot.noticePM(to, String.format("You (%d) have received %d buttcoin from %s (%d) [Plus Plus]", toAccount.balance, 1, from, fromAccount.balance));
+
+        return true;
     }
 }

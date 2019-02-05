@@ -6,6 +6,7 @@ import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.database.ButtcoinAccount;
 import net.polarizedions.jamesbot.utils.CommandMessage;
+import net.polarizedions.jamesbot.utils.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
@@ -101,13 +102,22 @@ public class CommandButtcoins implements ICommand {
             return ReturnConstants.FAIL_REPLIED;
         }
 
-        if (!buttcoinApi.transfer(fromNick, toNick, amount)) {
+        if (fromAccount.balance < amount) {
+            source.noticePM(String.format("Sorry, you (%s) do not have enough funds to transfer %s buttcoins", fromAccount.balance, amount));
+            return ReturnConstants.FAIL_REPLIED;
+        }
+
+        Pair<ButtcoinAccount, ButtcoinAccount> result = buttcoinApi.transfer(fromNick, toNick, amount);
+        if (result == null) {
             source.noticePM("I couldn't do that. Do you have enough buttcoins?");
             return ReturnConstants.FAIL_REPLIED;
         }
 
-        source.noticePM(String.format("[TRANSFER] You (%d) have sent %d buttcoins to %s (%d) with the message: %s", (fromAccount.balance - amount), amount, toNick, (toAccount.balance + amount), reason));
-        Bot.noticePM(toNick, String.format("You (%d) have received %d buttcoins from %s (%d) [%s]", (toAccount.balance + amount), amount, source.getNick(), (fromAccount.balance - amount), reason));
+        fromAccount = result.getOne();
+        toAccount = result.getTwo();
+
+        source.noticePM(String.format("[TRANSFER] You (%d) have sent %d buttcoins to %s (%d) with the message: %s", fromAccount.balance, amount, toNick, toAccount.balance , reason));
+        Bot.noticePM(toNick, String.format("You (%d) have received %d buttcoins from %s (%d) [%s]", toAccount.balance, amount, source.getNick(), fromAccount.balance, reason));
 
         return ReturnConstants.SUCCESS;
     }

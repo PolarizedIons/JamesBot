@@ -7,6 +7,9 @@ import java.util.Random;
 import java.util.regex.Pattern;
 
 public class ButtcoinCollector implements IResponder {
+    private static final int DOUBLE_CHANCE = 10_000;
+    private static final Pattern DOUBLE_PATTERN = Pattern.compile("\\bbutts?\\b");
+
     private static final Pattern[] BUTTCOIN_SECRIT_WORDS = new Pattern[] {
             Pattern.compile("\\bthe\\b"),
             Pattern.compile("\\bthat\\b"),
@@ -16,7 +19,7 @@ public class ButtcoinCollector implements IResponder {
     };
     private static final Random RANDOM = new Random();
 
-    private Pattern nextWord = BUTTCOIN_SECRIT_WORDS[RANDOM.nextInt(BUTTCOIN_SECRIT_WORDS.length)];
+    private Pattern nextWord = this.chooseNewWord();
 
     @Override
     public boolean run(MessageEvent msg) {
@@ -34,14 +37,21 @@ public class ButtcoinCollector implements IResponder {
 
         Bot.instance.debug(String.format("[BUTTCOIN] %s\u200B%s mined 1 buttcoin from %s (bruteforced? %s)", msg.getUser().getNick().substring(0, 1), msg.getUser().getNick().substring(1), this.nextWord, bruteforced));
         Bot.instance.getButtcoinAPI().mine(msg.getUser().getNick(), bruteforced);
-        this.chooseNewWord();
+
+        // Secret double mining
+        if (RANDOM.nextInt(DOUBLE_CHANCE) == 1 && DOUBLE_PATTERN.matcher(msg.getMessage()).find()) {
+            Bot.instance.debug("[BUTTCOIN] %s\u200B%s mined 1 extra buttcoin from their butt usage." + msg.getUser().getNick().substring(0, 1), msg.getUser().getNick().substring(1));
+            Bot.instance.getButtcoinAPI().mine(msg.getUser().getNick(), false);
+        }
+
+        this.nextWord = this.chooseNewWord();
         Bot.instance.debug("[BUTTCOIN] New Word: " + this.nextWord);
 
         // Make sure other things can run too - we only observe
         return false;
     }
 
-    private void chooseNewWord() {
-        this.nextWord = BUTTCOIN_SECRIT_WORDS[RANDOM.nextInt(BUTTCOIN_SECRIT_WORDS.length)];
+    private Pattern chooseNewWord() {
+        return BUTTCOIN_SECRIT_WORDS[RANDOM.nextInt(BUTTCOIN_SECRIT_WORDS.length)];
     }
 }
