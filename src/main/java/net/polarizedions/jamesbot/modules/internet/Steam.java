@@ -1,8 +1,10 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.internet;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.polarizedions.jamesbot.apis.Steam;
+import net.polarizedions.jamesbot.apis.SteamAPI;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import static net.polarizedions.jamesbot.utils.IRCColors.LIGHT_GREY;
 import static net.polarizedions.jamesbot.utils.IRCColors.ORANGE;
 import static net.polarizedions.jamesbot.utils.IRCColors.RESET;
 
-public class CommandSteam implements ICommand {
+public class Steam extends Module implements ICommand {
     private static final Pattern URL_PATTERN = Pattern.compile(".*store.steampowered.com/app/([0-9-_]+).*$");
 
     @Override
@@ -39,7 +41,7 @@ public class CommandSteam implements ICommand {
     }
 
     private int steam(CommandMessage source, int id) {
-        Steam.SteamApp app = Steam.getApp(id);
+        SteamAPI.SteamApp app = SteamAPI.getApp(id);
 
         if (app == null) {
             source.respond("Sorry, I can't find that app.");
@@ -95,5 +97,10 @@ public class CommandSteam implements ICommand {
     @Override
     public String getUsage() {
         return "steam <appid / url>";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "steam";
     }
 }

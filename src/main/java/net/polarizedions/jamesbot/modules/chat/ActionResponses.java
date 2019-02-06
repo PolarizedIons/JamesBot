@@ -1,9 +1,11 @@
-package net.polarizedions.jamesbot.responders;
+package net.polarizedions.jamesbot.modules.chat;
 
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.modules.Module;
+import net.polarizedions.jamesbot.responders.IResponder;
 import org.pircbotx.hooks.events.ActionEvent;
 
-public class ResponderActions implements IResponder {
+public class ActionResponses extends Module implements IResponder {
     @Override
     public boolean run(ActionEvent msg) {
         String action = msg.getAction().toLowerCase().trim();
@@ -57,5 +59,10 @@ public class ResponderActions implements IResponder {
 
     private void actPolice(ActionEvent msg) {
         Bot.action(msg, "calls the police.");
+    }
+
+    @Override
+    public String getModuleName() {
+        return "actions";
     }
 }

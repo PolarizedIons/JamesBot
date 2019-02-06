@@ -1,11 +1,13 @@
 package net.polarizedions.jamesbot.config;
 
 import com.google.gson.InstanceCreator;
+import net.polarizedions.jamesbot.core.Bot;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class BotConfig {
@@ -20,6 +22,7 @@ public class BotConfig {
     public List<StaffEntry> staff;
 
     public int memorySize;
+    public Map<String, Boolean> enabledModules;
 
     public ConfigAPIKeys apiKeys;
     public DatabaseConfig databaseConfig;
@@ -45,6 +48,7 @@ public class BotConfig {
             config.staff.add(new StaffEntry("", "", "unaffiliated/polarizedions"));
 
             config.memorySize = 250;
+            config.enabledModules = Bot.instance.getModuleManager().getState();
 
             config.apiKeys = new ConfigAPIKeys.Default();
             config.databaseConfig = new DatabaseConfig.Default();

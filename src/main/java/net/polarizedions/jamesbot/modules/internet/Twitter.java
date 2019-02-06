@@ -1,9 +1,11 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.internet;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.polarizedions.jamesbot.apis.Twitter;
+import net.polarizedions.jamesbot.apis.TwitterAPI;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 
 import java.util.regex.Matcher;
@@ -21,7 +23,7 @@ import static net.polarizedions.jamesbot.utils.IRCColors.GREY;
 import static net.polarizedions.jamesbot.utils.IRCColors.LIGHT_BLUE;
 import static net.polarizedions.jamesbot.utils.IRCColors.RESET;
 
-public class CommandTwitter implements ICommand {
+public class Twitter extends Module implements ICommand {
     private static final Pattern TWEET_URL_PATTERN = Pattern.compile(".*twitter\\.com/[a-zA-Z0-9-_]+/status/([0-9]+).*$");
 
     @Override
@@ -42,7 +44,7 @@ public class CommandTwitter implements ICommand {
         }
 
         long tweetId = Long.parseLong(matcher.group(1));
-        Twitter.Tweet tweet = Bot.instance.getTwitterAPI().getTweet(tweetId);
+        TwitterAPI.Tweet tweet = Bot.instance.getTwitterAPI().getTweet(tweetId);
 
         if (tweet == null) {
             source.respond("Sorry, I can't find that tweet!");
@@ -69,5 +71,10 @@ public class CommandTwitter implements ICommand {
     @Override
     public String getUsage() {
         return "tweet (url)";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "twitter";
     }
 }

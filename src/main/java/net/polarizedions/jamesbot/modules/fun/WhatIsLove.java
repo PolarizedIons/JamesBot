@@ -1,11 +1,13 @@
-package net.polarizedions.jamesbot.responders;
+package net.polarizedions.jamesbot.modules.fun;
 
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.modules.Module;
+import net.polarizedions.jamesbot.responders.IResponder;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.regex.Pattern;
 
-public class ResponderWhatIsLove implements IResponder {
+public class WhatIsLove extends Module implements IResponder {
     @Override
     public boolean run(MessageEvent msg) {
         String nick = Bot.instance.getPircBot().getNick();
@@ -17,5 +19,10 @@ public class ResponderWhatIsLove implements IResponder {
         }
 
         return false;
+    }
+
+    @Override
+    public String getModuleName() {
+        return "haddaway";
     }
 }

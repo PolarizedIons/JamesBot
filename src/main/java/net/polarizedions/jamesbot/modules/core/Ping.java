@@ -1,14 +1,16 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.core;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.jetbrains.annotations.NotNull;
 
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
-public class CommandPing implements ICommand {
+public class Ping extends Module implements ICommand {
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(
@@ -29,6 +31,11 @@ public class CommandPing implements ICommand {
 
     @Override
     public String getUsage() {
+        return "ping";
+    }
+
+    @Override
+    public String getModuleName() {
         return "ping";
     }
 }

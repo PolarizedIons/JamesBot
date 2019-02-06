@@ -1,9 +1,11 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.internet;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.polarizedions.jamesbot.apis.Youtube;
+import net.polarizedions.jamesbot.apis.YoutubeAPI;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
@@ -19,7 +21,7 @@ import static net.polarizedions.jamesbot.utils.IRCColors.ORANGE;
 import static net.polarizedions.jamesbot.utils.IRCColors.RED;
 import static net.polarizedions.jamesbot.utils.IRCColors.RESET;
 
-public class CommandYoutube implements ICommand {
+public class Youtube extends Module implements ICommand {
 
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
@@ -33,13 +35,13 @@ public class CommandYoutube implements ICommand {
     private int youtube(CommandMessage source, String link) {
         link = link.split("\\s")[0];
 
-        Youtube api = Bot.instance.getYoutubeAPI();
+        YoutubeAPI api = Bot.instance.getYoutubeAPI();
         if (api == null) {
             source.respond("Youtube API is unavailable :(");
             return ReturnConstants.FAIL_REPLIED;
         }
 
-        Youtube.YoutubeVideo video = api.getVideo(link);
+        YoutubeAPI.YoutubeVideo video = api.getVideo(link);
 
         if (video == null) {
             source.respond("Can't get that video, sorry :(");
@@ -64,5 +66,10 @@ public class CommandYoutube implements ICommand {
     @Override
     public String getUsage() {
         return "youtube <link/id>";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "youtube";
     }
 }

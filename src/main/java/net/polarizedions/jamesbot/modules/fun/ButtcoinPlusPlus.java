@@ -1,13 +1,15 @@
-package net.polarizedions.jamesbot.responders;
+package net.polarizedions.jamesbot.modules.fun;
 
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.database.ButtcoinAccount;
+import net.polarizedions.jamesbot.modules.Module;
+import net.polarizedions.jamesbot.responders.IResponder;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ButtcoinPlusPlus implements IResponder {
+public class ButtcoinPlusPlus extends Module implements IResponder {
     private static final Pattern PLUS_PLUS_PATTERN = Pattern.compile("^([A-Za-z0-9\\\\`_^{}|.~-]+)\\+\\+$");
 
     @Override
@@ -60,5 +62,10 @@ public class ButtcoinPlusPlus implements IResponder {
         Bot.noticePM(to, String.format("You (%d) have received %d buttcoin from %s (%d) [Plus Plus]", toAccount.balance, 1, from, fromAccount.balance));
 
         return true;
+    }
+
+    @Override
+    public String getModuleName() {
+        return "buttcoin";
     }
 }

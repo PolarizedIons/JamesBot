@@ -1,13 +1,15 @@
-package net.polarizedions.jamesbot.responders;
+package net.polarizedions.jamesbot.modules.chat;
 
-import net.polarizedions.jamesbot.apis.Util;
+import net.polarizedions.jamesbot.apis.APIUtil;
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.modules.Module;
+import net.polarizedions.jamesbot.responders.IResponder;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FetchTitle implements IResponder {
+public class FetchTitle extends Module implements IResponder {
     private static final Pattern TITLE_PATTERN = Pattern.compile(".*<title>((\\n|\\s|\\r|\\t|.)+)</title>.*");
 
     @Override
@@ -23,7 +25,7 @@ public class FetchTitle implements IResponder {
             return false;
         }
 
-        String html = Util.fetchPart(message, 4096);
+        String html = APIUtil.fetchPart(message, 4096);
         if (html == null) {
             msg.respond("Sorry, I couldn't fetch that page!");
             return true;
@@ -45,5 +47,10 @@ public class FetchTitle implements IResponder {
 
         msg.respond(title);
         return true;
+    }
+
+    @Override
+    public String getModuleName() {
+        return "title";
     }
 }

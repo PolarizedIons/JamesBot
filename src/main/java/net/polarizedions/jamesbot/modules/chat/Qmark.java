@@ -1,10 +1,12 @@
-package net.polarizedions.jamesbot.responders;
+package net.polarizedions.jamesbot.modules.chat;
 
 import net.polarizedions.jamesbot.apis.QMarkAPI;
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.modules.Module;
+import net.polarizedions.jamesbot.responders.IResponder;
 import org.pircbotx.hooks.events.MessageEvent;
 
-public class Qmark implements IResponder {
+public class Qmark extends Module implements IResponder {
     @Override
     public boolean run(MessageEvent msg) {
         String myNick = Bot.instance.getPircBot().getNick();
@@ -26,5 +28,10 @@ public class Qmark implements IResponder {
             msg.respond(response);
         }
         return true;
+    }
+
+    @Override
+    public String getModuleName() {
+        return "qmark";
     }
 }

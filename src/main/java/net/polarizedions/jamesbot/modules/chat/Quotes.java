@@ -1,11 +1,13 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.chat;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.database.Quote;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import net.polarizedions.jamesbot.utils.FixedSizeQueue;
 import org.bson.conversions.Bson;
@@ -33,7 +35,7 @@ import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
 
-public class CommandQuote implements ICommand {
+public class Quotes extends Module implements ICommand {
     private static final Random RANDOM = new Random();
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy").withZone(ZoneId.systemDefault());
 
@@ -207,5 +209,10 @@ public class CommandQuote implements ICommand {
     @Override
     public String getUsage() {
         return "quote (num) <person> OR quote * <words...> OR remember <person> <words>";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "quote";
     }
 }

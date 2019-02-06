@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Youtube {
+public class YoutubeAPI {
     //    private static final String VIDEO_INFO_URL = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=%s&fields=items(ageGating%%2CcontentDetails(countryRestriction%%2Cduration)%%2Cid%%2Ckind%%2CliveStreamingDetails%%2FconcurrentViewers%%2CmonetizationDetails%%2Csnippet(channelTitle%%2Cdescription%%2Ctitle)%%2Cstatistics%%2Cstatus(privacyStatus%%2CpublishAt))&key=%s";
     private static final String VIDEO_INFO_URL = "https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=%s&key=%s";
     private static final Pattern youtubeFullLinkPattern = Pattern.compile("youtube\\.com\\/watch?.*&?v=(.+)&?.*?", Pattern.CASE_INSENSITIVE);
@@ -22,7 +22,7 @@ public class Youtube {
     private final String API_KEY;
 
 
-    public Youtube(String apiKey) {
+    public YoutubeAPI(String apiKey) {
         this.API_KEY = apiKey;
     }
 
@@ -44,7 +44,7 @@ public class Youtube {
         }
         logger.info("Fetching video {} ({})", link, id);
 
-        JsonObject jsonResponse = Util.getJson(String.format(VIDEO_INFO_URL, Util.encodeURIComponent(id), Util.encodeURIComponent(API_KEY)));
+        JsonObject jsonResponse = APIUtil.getJson(String.format(VIDEO_INFO_URL, APIUtil.encodeURIComponent(id), APIUtil.encodeURIComponent(API_KEY)));
         if (jsonResponse == null) {
             return null;
         }

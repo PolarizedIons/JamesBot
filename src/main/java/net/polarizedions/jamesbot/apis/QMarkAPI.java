@@ -7,7 +7,7 @@ public class QMarkAPI {
 
     @NotNull
     public static String ask(String question) {
-        String response = Util.postString(String.format(URL, Util.encodeURIComponent(question)), null);
+        String response = APIUtil.postString(String.format(URL, APIUtil.encodeURIComponent(question)), null);
         if (response == null) {
             return "";
         }

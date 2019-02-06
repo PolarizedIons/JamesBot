@@ -1,10 +1,12 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.fun;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.polarizedions.jamesbot.apis.Buttcoin;
+import net.polarizedions.jamesbot.apis.ButtcoinAPI;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.database.ButtcoinAccount;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import net.polarizedions.jamesbot.utils.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +20,7 @@ import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
 
-public class CommandButtcoins implements ICommand {
+public class ButtcoinCommand extends Module implements ICommand {
     private static final int TIP_AMOUNT = 10;
 
     @Override
@@ -79,7 +81,7 @@ public class CommandButtcoins implements ICommand {
 
     private int transfer(@NotNull CommandMessage source, int amount, String toNick, String reason) {
         String fromNick = source.getNick();
-        Buttcoin buttcoinApi = Bot.instance.getButtcoinAPI();
+        ButtcoinAPI buttcoinApi = Bot.instance.getButtcoinAPI();
         ButtcoinAccount fromAccount = buttcoinApi.getAccount(fromNick);
         ButtcoinAccount toAccount = buttcoinApi.getAccount(toNick);
 
@@ -130,5 +132,10 @@ public class CommandButtcoins implements ICommand {
     @Override
     public String getUsage() {
         return "buttcoin activate, buttcoin stats [user], buttcoin transfer (amount) [reason], buttcoin tip (user), (nickname)++";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "buttcoin";
     }
 }

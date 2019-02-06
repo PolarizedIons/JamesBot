@@ -1,7 +1,9 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.chat;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 
 import java.text.DecimalFormat;
@@ -15,7 +17,7 @@ import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
-public class CommandTime implements ICommand {
+public class Time extends Module implements ICommand {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
 
@@ -63,5 +65,10 @@ public class CommandTime implements ICommand {
     @Override
     public String getUsage() {
         return "time [utc, unix, +7.5 (etc...)], timestamp";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "time";
     }
 }

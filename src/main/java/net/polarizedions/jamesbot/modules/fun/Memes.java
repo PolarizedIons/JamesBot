@@ -1,7 +1,9 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.fun;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +16,7 @@ import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
-public class CommandMemes implements ICommand {
+public class Memes extends Module implements ICommand {
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(literal("ausmerica").executes(c -> this.ausmerica(c.getSource())));
@@ -108,5 +110,10 @@ public class CommandMemes implements ICommand {
     @Override
     public String getUsage() {
         return "(todo)";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "memes";
     }
 }

@@ -1,8 +1,10 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.chat;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +16,7 @@ import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
-public class CommandSay implements ICommand {
+public class Say extends Module implements ICommand {
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(
@@ -87,5 +89,10 @@ public class CommandSay implements ICommand {
     @Override
     public String getUsage() {
         return "[say,notice,act] [channel] (message)";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "say";
     }
 }

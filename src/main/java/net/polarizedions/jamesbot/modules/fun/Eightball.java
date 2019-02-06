@@ -1,7 +1,9 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.fun;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +13,7 @@ import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
-public class CommandEightball implements ICommand {
+public class Eightball extends Module implements ICommand {
     private static final Random RAND = new Random();
     private static final String[] RESPONSES = new String[] {
             "As I see it, yes.",
@@ -55,5 +57,10 @@ public class CommandEightball implements ICommand {
     @Override
     public String getUsage() {
         return "[8ball/eightball] <question>";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "eightball";
     }
 }

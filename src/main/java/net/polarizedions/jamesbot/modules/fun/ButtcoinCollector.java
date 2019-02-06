@@ -1,12 +1,14 @@
-package net.polarizedions.jamesbot.responders;
+package net.polarizedions.jamesbot.modules.fun;
 
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.modules.Module;
+import net.polarizedions.jamesbot.responders.IResponder;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.Random;
 import java.util.regex.Pattern;
 
-public class ButtcoinCollector implements IResponder {
+public class ButtcoinCollector extends Module implements IResponder {
     private static final int DOUBLE_CHANCE = 10_000;
     private static final Pattern DOUBLE_PATTERN = Pattern.compile("\\bbutts?\\b");
 
@@ -53,5 +55,10 @@ public class ButtcoinCollector implements IResponder {
 
     private Pattern chooseNewWord() {
         return BUTTCOIN_SECRIT_WORDS[RANDOM.nextInt(BUTTCOIN_SECRIT_WORDS.length)];
+    }
+
+    @Override
+    public String getModuleName() {
+        return "buttcoin";
     }
 }

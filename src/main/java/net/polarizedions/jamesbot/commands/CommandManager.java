@@ -4,39 +4,24 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CommandManager {
     private static final Logger logger = LogManager.getLogger("CommandManager");
     private CommandDispatcher<CommandMessage> dispatcher;
 
-    private List<ICommand> commands;
 
     public CommandManager() {
         this.dispatcher = new CommandDispatcher<>();
-        this.commands = new ArrayList<>();
 
-        this.commands.add(new CommandPing());
-        this.commands.add(new CommandTemp());
-        this.commands.add(new CommandMemes());
-        this.commands.add(new CommandEightball());
-        this.commands.add(new CommandYoutube());
-        this.commands.add(new CommandQuote());
-        this.commands.add(new CommandButtcoins());
-        this.commands.add(new CommandJoin());
-        this.commands.add(new CommandSay());
-        this.commands.add(new CommandTime());
-        this.commands.add(new CommandAbout());
-        this.commands.add(new CommandTwitter());
-        this.commands.add(new CommandSteam());
-
-        for (ICommand cmd : this.commands) {
-            cmd.register(this.dispatcher);
+        for (Module cmd : Bot.instance.getModuleManager().getModules(ICommand.class)) {
+            System.out.println("COMMAND " + cmd + " = " + cmd.isActive());
+            if (cmd.isActive()) {
+                ((ICommand)cmd).register(this.dispatcher);
+            }
         }
     }
 

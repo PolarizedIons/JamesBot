@@ -1,7 +1,9 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.chat;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 
 import java.text.DecimalFormat;
@@ -11,7 +13,7 @@ import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
-public class CommandTemp implements ICommand {
+public class Temperature extends Module implements ICommand {
     private static final DecimalFormat NUMBER_FORMATTER = new DecimalFormat("#.##");
 
     @Override
@@ -50,5 +52,10 @@ public class CommandTemp implements ICommand {
     @Override
     public String getUsage() {
         return "<ctf|ftc> <temp>";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "temperature";
     }
 }

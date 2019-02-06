@@ -20,7 +20,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
-public class Twitter {
+public class TwitterAPI {
     private static final Logger logger = LogManager.getLogger("TwitterAPI");
     private static final String AUTHENTICATION_URL = "https://api.twitter.com/oauth2/token";
     private static final String SHOW_TWEET_URL = "https://api.twitter.com/1.1/statuses/show.json?id=";
@@ -29,28 +29,30 @@ public class Twitter {
     private String bearerCode;
     private List<String[]> bearerHeader;
 
-    public Twitter(@NotNull BotConfig config) {
-        this.auth(config.apiKeys.twitterApiKey, config.apiKeys.twitterApiSecret);
+    public TwitterAPI() {
     }
 
-    private void auth(@NotNull String consumerKey, @NotNull String consumerSecret) {
+    public  void auth(@NotNull BotConfig config) {
+        String consumerKey = config.apiKeys.twitterApiKey;
+        String consumerSecret = config.apiKeys.twitterApiSecret;
+
         if (consumerKey.isEmpty() || consumerSecret.isEmpty()) {
             return;
         }
 
-        String encoded = new String(Base64.getEncoder().encode(( ( Util.encodeURIComponent(consumerKey) + ":" + Util.encodeURIComponent(consumerSecret) ).getBytes() )));
+        String encoded = new String(Base64.getEncoder().encode(( ( APIUtil.encodeURIComponent(consumerKey) + ":" + APIUtil.encodeURIComponent(consumerSecret) ).getBytes() )));
 
         List<String[]> headers = new ArrayList<>();
         headers.add(new String[] { "Authorization", "Basic " + encoded });
         headers.add(new String[] { "Content-Type", "application/x-www-form-urlencoded;charset=UTF-8" });
         headers.add(new String[] { "User-Agent", "Jamesbot v" + BuildInfo.version });
 
-        InputStream is = Util.request(AUTHENTICATION_URL, true, headers, "grant_type=client_credentials");
+        InputStream is = APIUtil.request(AUTHENTICATION_URL, true, headers, "grant_type=client_credentials");
         if (is == null) {
             logger.error("Error getting twitter bearer token! Please check your consumer key & secret!");
             throw new IllegalStateException("Unable to get bearer token.");
         }
-        JsonObject response = Util.parser.parse(new InputStreamReader(is)).getAsJsonObject();
+        JsonObject response = APIUtil.parser.parse(new InputStreamReader(is)).getAsJsonObject();
 
         if (!response.get("token_type").getAsString().equalsIgnoreCase("bearer")) {
             logger.error("Twitter gave me " + response.get("token_type").getAsString() + " but I expected a bearer token!");
@@ -112,8 +114,8 @@ public class Twitter {
 
     @Nullable
     private JsonObject getJson(String uri) {
-        InputStream is = Util.request(uri, false, this.bearerHeader, null);
-        return is == null ? null : Util.parser.parse(new InputStreamReader(is)).getAsJsonObject();
+        InputStream is = APIUtil.request(uri, false, this.bearerHeader, null);
+        return is == null ? null : APIUtil.parser.parse(new InputStreamReader(is)).getAsJsonObject();
     }
 
     public boolean isAuthed() {

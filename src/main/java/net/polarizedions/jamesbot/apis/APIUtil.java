@@ -20,7 +20,7 @@ import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
 
-public class Util {
+public class APIUtil {
     public static final String USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64; rv:64.0) Gecko/20100101 Firefox/64.0";
     static final JsonParser parser = new JsonParser();
     private static final Logger logger = LogManager.getLogger("WebHelper");

@@ -7,12 +7,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Steam {
+public class SteamAPI {
     private static final String APP_INFO_URL = "https://store.steampowered.com/api/appdetails/?appids=%s&cc=US";
 
     @Nullable
     public static SteamApp getApp(int id) {
-        JsonObject json = Util.getJson(String.format(APP_INFO_URL, id));
+        JsonObject json = APIUtil.getJson(String.format(APP_INFO_URL, id));
 
         if (json == null) {
             return null;

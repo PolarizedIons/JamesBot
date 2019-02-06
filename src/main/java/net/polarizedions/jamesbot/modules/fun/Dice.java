@@ -1,13 +1,15 @@
-package net.polarizedions.jamesbot.responders;
+package net.polarizedions.jamesbot.modules.fun;
 
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.modules.Module;
+import net.polarizedions.jamesbot.responders.IResponder;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ResponderDice implements IResponder {
+public class Dice extends Module implements IResponder {
     private static final Pattern DICE_PATTERN = Pattern.compile("^([0-9]+)?d([0-9]+)$", Pattern.CASE_INSENSITIVE);
     private static final Random RANDOM = new Random();
     private static final int MAX_NUMBER_SMALL_ROLL = 50;
@@ -84,5 +86,10 @@ public class ResponderDice implements IResponder {
     
     private boolean isHugeRoll(int size, int number) {
         return Long.MAX_VALUE / number < size;
+    }
+
+    @Override
+    public String getModuleName() {
+        return "dice";
     }
 }

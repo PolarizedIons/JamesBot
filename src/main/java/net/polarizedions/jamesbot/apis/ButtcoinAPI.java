@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.mongodb.client.model.Filters.regex;
 
-public class Buttcoin {
+public class ButtcoinAPI {
 
     @NotNull
     private Bson getNameRegex(String nick) {

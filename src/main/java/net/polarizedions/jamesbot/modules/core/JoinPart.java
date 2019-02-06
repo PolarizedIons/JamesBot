@@ -1,8 +1,10 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.core;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
@@ -10,7 +12,7 @@ import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
-public class CommandJoin implements ICommand {
+public class JoinPart extends Module implements ICommand {
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(
@@ -59,5 +61,10 @@ public class CommandJoin implements ICommand {
     @Override
     public String getUsage() {
         return "join <channel>, part <channel>";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "joinpart";
     }
 }

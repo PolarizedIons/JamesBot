@@ -1,14 +1,16 @@
-package net.polarizedions.jamesbot.commands;
+package net.polarizedions.jamesbot.modules.core;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.BuildInfo;
+import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.jetbrains.annotations.NotNull;
 
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
-public class CommandAbout implements ICommand {
+public class About extends Module implements ICommand {
     private static final String WEBSITE_URL = "https://polarizedions.net/";
     private static final String REPO_URL = "https://github.com/PolarizedIons/JamesBot";
 
@@ -41,5 +43,10 @@ public class CommandAbout implements ICommand {
     @Override
     public String getUsage() {
         return "about, version";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "about";
     }
 }

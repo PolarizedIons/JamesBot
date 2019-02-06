@@ -1,13 +1,14 @@
 package net.polarizedions.jamesbot.core;
 
-import net.polarizedions.jamesbot.apis.Buttcoin;
-import net.polarizedions.jamesbot.apis.Twitter;
-import net.polarizedions.jamesbot.apis.Youtube;
+import net.polarizedions.jamesbot.apis.ButtcoinAPI;
+import net.polarizedions.jamesbot.apis.TwitterAPI;
+import net.polarizedions.jamesbot.apis.YoutubeAPI;
 import net.polarizedions.jamesbot.commands.CommandManager;
 import net.polarizedions.jamesbot.config.BotConfig;
 import net.polarizedions.jamesbot.config.ConfigurationLoader;
 import net.polarizedions.jamesbot.config.StaffEntry;
 import net.polarizedions.jamesbot.database.Database;
+import net.polarizedions.jamesbot.modules.ModuleManager;
 import net.polarizedions.jamesbot.responders.ResponderManager;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import net.polarizedions.jamesbot.utils.FixedSizeQueue;
@@ -22,6 +23,7 @@ import org.pircbotx.hooks.types.GenericChannelUserEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Bot {
     public static Bot instance;
@@ -32,16 +34,19 @@ public class Bot {
     private ResponderManager responderManager;
     private ConfigurationLoader configLoader;
     private Database database;
+    private ModuleManager moduleManager;
 
-    private Youtube youtubeAPI;
-    private Twitter twitterAPI;
-    private Buttcoin buttcoinAPI;
+    private YoutubeAPI youtubeAPI;
+    private TwitterAPI twitterAPI;
+    private ButtcoinAPI buttcoinAPI;
 
     private HashMap<String, FixedSizeQueue<MessageEvent>> messageMemory;
 
     public Bot() {
         logger.info("Starting Jamesbot v" + BuildInfo.version + " built: " + BuildInfo.buildtime);
         instance = this;
+
+        this.moduleManager = new ModuleManager();
 
         try {
             this.configLoader = new ConfigurationLoader();
@@ -52,6 +57,8 @@ public class Bot {
             System.exit(1);
         }
 
+        this.moduleManager.initConfig(this.getBotConfig());
+
         this.commandManager = new CommandManager();
         this.responderManager = new ResponderManager();
 
@@ -59,10 +66,18 @@ public class Bot {
         this.database = new Database(this.getBotConfig().databaseConfig);
 
         if (!this.getBotConfig().apiKeys.youtube.isEmpty()) {
-            this.youtubeAPI = new Youtube(this.getBotConfig().apiKeys.youtube);
+            this.youtubeAPI = new YoutubeAPI(this.getBotConfig().apiKeys.youtube);
         }
-        this.twitterAPI = new Twitter(this.getBotConfig());
-        this.buttcoinAPI = new Buttcoin();
+        this.twitterAPI = new TwitterAPI();
+        if (this.moduleManager.isEnabled("twitter")) {
+            this.twitterAPI.auth(this.getBotConfig());
+        }
+        this.buttcoinAPI = new ButtcoinAPI();
+
+        logger.info("Loaded {} modules!", moduleManager.getModuleCount());
+        for (Map.Entry<String, Boolean> entry : moduleManager.getState().entrySet()) {
+            logger.debug("  - {}:\t{}", entry.getKey(), entry.getValue());
+        }
 
         this.bot = new PircBotX(configLoader.build());
     }
@@ -142,6 +157,10 @@ public class Bot {
         return this.bot;
     }
 
+    public ModuleManager getModuleManager() {
+        return moduleManager;
+    }
+
     public CommandManager getCommandManager() {
         return commandManager;
     }
@@ -150,15 +169,15 @@ public class Bot {
         return responderManager;
     }
 
-    public Youtube getYoutubeAPI() {
+    public YoutubeAPI getYoutubeAPI() {
         return youtubeAPI;
     }
 
-    public Buttcoin getButtcoinAPI() {
+    public ButtcoinAPI getButtcoinAPI() {
         return buttcoinAPI;
     }
 
-    public Twitter getTwitterAPI() {
+    public TwitterAPI getTwitterAPI() {
         return twitterAPI;
     }
 
