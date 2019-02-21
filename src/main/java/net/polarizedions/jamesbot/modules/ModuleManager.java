@@ -4,6 +4,7 @@ import net.polarizedions.jamesbot.config.BotConfig;
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.modules.chat.ActionResponses;
 import net.polarizedions.jamesbot.modules.chat.FetchTitle;
+import net.polarizedions.jamesbot.modules.chat.MinecraftWiki;
 import net.polarizedions.jamesbot.modules.chat.Qmark;
 import net.polarizedions.jamesbot.modules.chat.Quotes;
 import net.polarizedions.jamesbot.modules.chat.Say;
@@ -38,6 +39,7 @@ public class ModuleManager {
         // Chat
         this.add(new ActionResponses());
         this.add(new FetchTitle());
+        this.add(new MinecraftWiki());
         this.add(new Qmark());
         this.add(new Quotes());
         this.add(new Say());
