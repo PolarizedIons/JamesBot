@@ -37,17 +37,17 @@ public class ButtcoinCollector extends Module implements IResponder {
             }
         }
 
-        Bot.instance.debug(String.format("[BUTTCOIN] %s\u200B%s mined 1 buttcoin from %s (bruteforced? %s)", msg.getUser().getNick().substring(0, 1), msg.getUser().getNick().substring(1), this.nextWord, bruteforced));
+//        Bot.instance.debug(String.format("[BUTTCOIN] %s\u200B%s mined 1 buttcoin from %s (bruteforced? %s)", msg.getUser().getNick().substring(0, 1), msg.getUser().getNick().substring(1), this.nextWord, bruteforced));
         Bot.instance.getButtcoinAPI().mine(msg.getUser().getNick(), bruteforced);
 
         // Secret double mining
         if (RANDOM.nextInt(DOUBLE_CHANCE) == 1 && DOUBLE_PATTERN.matcher(msg.getMessage()).find()) {
-            Bot.instance.debug("[BUTTCOIN] %s\u200B%s mined 1 extra buttcoin from their butt usage." + msg.getUser().getNick().substring(0, 1), msg.getUser().getNick().substring(1));
+//            Bot.instance.debug("[BUTTCOIN] %s\u200B%s mined 1 extra buttcoin from their butt usage." + msg.getUser().getNick().substring(0, 1), msg.getUser().getNick().substring(1));
             Bot.instance.getButtcoinAPI().mine(msg.getUser().getNick(), false);
         }
 
         this.nextWord = this.chooseNewWord();
-        Bot.instance.debug("[BUTTCOIN] New Word: " + this.nextWord);
+//        Bot.instance.debug("[BUTTCOIN] New Word: " + this.nextWord);
 
         // Make sure other things can run too - we only observe
         return false;
