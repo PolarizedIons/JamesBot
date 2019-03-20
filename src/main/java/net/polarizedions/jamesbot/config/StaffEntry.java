@@ -16,9 +16,9 @@ public class StaffEntry {
     }
 
     public boolean matches(User user) {
-        String nick = this.nick.isEmpty() ? ".*" : this.nick;
-        String ident = this.ident.isEmpty() ? ".*" : this.ident;
-        String host = this.host.isEmpty() ? ".*" : this.host;
+        String nick = this.nick.isEmpty() || this.nick.equals("*") ? ".*" : this.nick;
+        String ident = this.ident.isEmpty() || this.ident.equals("*") ? ".*" : this.ident;
+        String host = this.host.isEmpty() || this.host.equals("*") ? ".*" : this.host;
 
         Pattern thisEntry = Pattern.compile("^" + nick + "!" + ident + "@" + host + "$", Pattern.CASE_INSENSITIVE);
         String matchEntry = user.getNick() + "!" + user.getIdent() + "@" + user.getHostname();
