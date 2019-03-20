@@ -106,7 +106,7 @@ public class Quotes extends Module implements ICommand {
     private int getSpecificQuote(CommandMessage source, int number, String person) {
         MongoCollection<Quote> coll = Bot.instance.getDatabase().getQuoteCollection();
 
-        Quote quote = coll.find(and(regex("nick", person, "i"), eq("quoteNum", number))).first();
+        Quote quote = coll.find(and(regex("nick", "^" + person + "$", "i"), eq("quoteNum", number))).first();
         if (quote == null) {
             source.respond("Sorry! I can't find that quote :(");
             return ReturnConstants.FAIL_REPLIED;
@@ -126,12 +126,12 @@ public class Quotes extends Module implements ICommand {
 
         // Get quote from "person" saying something about "thing"
         else if (!person.isEmpty() && !thing.isEmpty()) {
-            filter = and(regex("nick", person, "i"), regex("message", ".*\\b" + thing + "\\b.*", "i"));
+            filter = and(regex("nick", "^" + person + "$", "i"), regex("message", ".*\\b" + thing + "\\b.*", "i"));
         }
 
         // Get a random quote from "person"
         else if (!person.isEmpty()) {
-            filter = regex("nick", person, "i");
+            filter = regex("nick", "^" + person + "$", "i");
         }
 
         // Get a random quote about "thing"
@@ -176,7 +176,7 @@ public class Quotes extends Module implements ICommand {
     private Quote saveQuote(@NotNull MessageEvent message) {
         MongoCollection<Quote> col = Bot.instance.getDatabase().getQuoteCollection();
 
-        Quote lastQuote = col.find(regex("nick", message.getUser().getNick(), "i")).sort(descending("quoteNum")).first();
+        Quote lastQuote = col.find(regex("nick", "^" + message.getUser().getNick() + "$", "i")).sort(descending("quoteNum")).first();
         int nextQuote = lastQuote == null ? 1 : lastQuote.quoteNum + 1;
 
         Quote quote = new Quote(message.getUser().getNick(), nextQuote, message.getMessage(), Date.from(Instant.now()));
