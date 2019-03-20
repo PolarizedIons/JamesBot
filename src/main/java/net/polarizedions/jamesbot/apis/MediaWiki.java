@@ -20,6 +20,6 @@ public class MediaWiki {
 
         JsonObject result = json.getAsJsonArray("search").get(0).getAsJsonObject();
 
-        return domain + "/" + result.get("title").getAsString();
+        return domain + "/" + APIUtil.encodeURIComponent(result.get("title").getAsString());
     }
 }
