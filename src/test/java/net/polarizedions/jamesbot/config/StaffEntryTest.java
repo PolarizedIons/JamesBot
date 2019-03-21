@@ -1,6 +1,6 @@
 package net.polarizedions.jamesbot.config;
 
-import net.polarizedions.jamesbot.TestUtils;
+import mocks.MockUser;
 import org.junit.jupiter.api.Test;
 import org.pircbotx.User;
 
@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StaffEntryTest {
-    private static User polarUser = TestUtils.createUser("PolarizedIons", "polar", "irc.polarizedions.net");
+    private static User polarUser = new MockUser("PolarizedIons", "polar", "irc.polarizedions.net");
 
     @Test
     void matchesNick() {
