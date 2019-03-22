@@ -39,6 +39,10 @@ public class Quotes extends Module implements ICommand {
     private static final Random RANDOM = new Random();
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy").withZone(ZoneId.systemDefault());
 
+    public Quotes(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         // remember (person) (search term)

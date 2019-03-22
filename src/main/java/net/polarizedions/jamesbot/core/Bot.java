@@ -47,7 +47,7 @@ public class Bot {
         logger.info("Starting Jamesbot v" + BuildInfo.version + " built: " + BuildInfo.buildtime);
         instance = this;
 
-        this.moduleManager = new ModuleManager();
+        this.moduleManager = new ModuleManager(this);
 
         try {
             this.configLoader = new ConfigurationLoader();

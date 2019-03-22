@@ -23,6 +23,10 @@ import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 public class ButtcoinCommand extends Module implements ICommand {
     private static final int TIP_AMOUNT = 10;
 
+    public ButtcoinCommand(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(

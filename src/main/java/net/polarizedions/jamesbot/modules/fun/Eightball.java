@@ -3,6 +3,7 @@ package net.polarizedions.jamesbot.modules.fun;
 import com.mojang.brigadier.CommandDispatcher;
 import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +38,10 @@ public class Eightball extends Module implements ICommand {
             "Outlook not so good.",
             "Very doubtful.",
     };
+
+    public Eightball(Bot bot) {
+        super(bot);
+    }
 
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {

@@ -11,13 +11,17 @@ import java.util.regex.Pattern;
 
 public class Dice extends Module implements IResponder {
     private static final Pattern DICE_PATTERN = Pattern.compile("^([0-9]+)?d([0-9]+)$", Pattern.CASE_INSENSITIVE);
-    private static final Random RANDOM = new Random();
     private static final int MAX_NUMBER_SMALL_ROLL = 50;
+    static final Random RANDOM = new Random();
+
+    public Dice(Bot bot) {
+        super(bot);
+    }
 
     @Override
     public boolean run(MessageEvent msg) {
         String message = msg.getMessage();
-        String prefix = Bot.instance.getBotConfig().commandPrefix;
+        String prefix = this.bot.getBotConfig().commandPrefix;
 
         if (!message.startsWith(prefix)) {
             return false;
@@ -32,7 +36,7 @@ public class Dice extends Module implements IResponder {
                 number = Integer.parseInt(matcher.group(1));
             }
             catch (Exception e) {
-                e.printStackTrace();/* NOOP */
+                /* NOOP */
             }
             int size = Integer.parseInt(matcher.group(2));
 

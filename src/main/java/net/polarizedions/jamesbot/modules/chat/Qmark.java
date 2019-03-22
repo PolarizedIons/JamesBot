@@ -7,6 +7,10 @@ import net.polarizedions.jamesbot.responders.IResponder;
 import org.pircbotx.hooks.events.MessageEvent;
 
 public class Qmark extends Module implements IResponder {
+    public Qmark(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public boolean run(MessageEvent msg) {
         String myNick = Bot.instance.getPircBot().getNick();

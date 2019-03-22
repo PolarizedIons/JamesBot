@@ -26,6 +26,10 @@ import static net.polarizedions.jamesbot.utils.IRCColors.RESET;
 public class Twitter extends Module implements ICommand {
     private static final Pattern TWEET_URL_PATTERN = Pattern.compile(".*twitter\\.com/[a-zA-Z0-9-_]+/status/([0-9]+).*$");
 
+    public Twitter(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(

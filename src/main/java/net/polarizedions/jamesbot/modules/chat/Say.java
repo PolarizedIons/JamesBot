@@ -17,6 +17,10 @@ import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
 public class Say extends Module implements ICommand {
+    public Say(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(

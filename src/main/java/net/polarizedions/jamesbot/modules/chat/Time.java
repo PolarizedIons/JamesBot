@@ -3,6 +3,7 @@ package net.polarizedions.jamesbot.modules.chat;
 import com.mojang.brigadier.CommandDispatcher;
 import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 
@@ -20,6 +21,10 @@ import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 public class Time extends Module implements ICommand {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
+
+    public Time(Bot bot) {
+        super(bot);
+    }
 
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {

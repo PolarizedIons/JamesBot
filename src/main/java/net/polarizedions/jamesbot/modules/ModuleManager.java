@@ -33,38 +33,39 @@ import java.util.Map;
 public class ModuleManager {
     List<Pair<String, Module>> modules; // Can't be a map because multiple entries could have the same name
 
-    public ModuleManager() {
+    public ModuleManager(Bot bot) {
+
         this.modules = new ArrayList<>();
 
         // Chat
-        this.add(new ActionResponses());
-        this.add(new FetchTitle());
-        this.add(new MinecraftWiki());
-        this.add(new Qmark());
-        this.add(new Quotes());
-        this.add(new Say());
-        this.add(new Temperature());
-        this.add(new Time());
+        this.add(new ActionResponses(bot));
+        this.add(new FetchTitle(bot));
+        this.add(new MinecraftWiki(bot));
+        this.add(new Qmark(bot));
+        this.add(new Quotes(bot));
+        this.add(new Say(bot));
+        this.add(new Temperature(bot));
+        this.add(new Time(bot));
 
         // Core
-        this.add(new About());
-        this.add(new JoinPart());
-        this.add(new Ping());
+        this.add(new About(bot));
+        this.add(new JoinPart(bot));
+        this.add(new Ping(bot));
 
         // Fun
-        this.add(new ButtcoinCollector());
-        this.add(new ButtcoinCommand());
-        this.add(new ButtcoinPlusPlus());
-        this.add(new Dice());
-        this.add(new Eightball());
-        this.add(new Memes());
-        this.add(new WhatIsLove());
+        this.add(new ButtcoinCollector(bot));
+        this.add(new ButtcoinCommand(bot));
+        this.add(new ButtcoinPlusPlus(bot));
+        this.add(new Dice(bot));
+        this.add(new Eightball(bot));
+        this.add(new Memes(bot));
+        this.add(new WhatIsLove(bot));
 
 
         // Internet
-        this.add(new Steam());
-        this.add(new Twitter());
-        this.add(new Youtube());
+        this.add(new Steam(bot));
+        this.add(new Twitter(bot));
+        this.add(new Youtube(bot));
     }
 
     private void add(Module module) {

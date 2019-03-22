@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 import org.jetbrains.annotations.NotNull;
@@ -11,6 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
 
 public class Ping extends Module implements ICommand {
+    public Ping(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(

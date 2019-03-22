@@ -8,6 +8,10 @@ import org.pircbotx.hooks.events.MessageEvent;
 import java.util.regex.Pattern;
 
 public class WhatIsLove extends Module implements IResponder {
+    public WhatIsLove(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public boolean run(MessageEvent msg) {
         String nick = Bot.instance.getPircBot().getNick();

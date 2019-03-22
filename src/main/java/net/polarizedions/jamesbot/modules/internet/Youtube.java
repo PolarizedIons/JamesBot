@@ -23,6 +23,10 @@ import static net.polarizedions.jamesbot.utils.IRCColors.RESET;
 
 public class Youtube extends Module implements ICommand {
 
+    public Youtube(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {
         dispatcher.register(

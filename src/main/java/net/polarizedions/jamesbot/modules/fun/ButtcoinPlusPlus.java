@@ -12,6 +12,10 @@ import java.util.regex.Pattern;
 public class ButtcoinPlusPlus extends Module implements IResponder {
     private static final Pattern PLUS_PLUS_PATTERN = Pattern.compile("^([A-Za-z0-9\\\\`_^{}|.~-]+)\\+\\+$");
 
+    public ButtcoinPlusPlus(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public boolean run(MessageEvent msg) {
         String message = msg.getMessage();

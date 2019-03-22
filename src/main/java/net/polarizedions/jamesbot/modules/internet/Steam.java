@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.polarizedions.jamesbot.apis.SteamAPI;
 import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
+import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.utils.CommandMessage;
 
@@ -26,6 +27,10 @@ import static net.polarizedions.jamesbot.utils.IRCColors.RESET;
 
 public class Steam extends Module implements ICommand {
     private static final Pattern URL_PATTERN = Pattern.compile(".*store.steampowered.com/app/([0-9-_]+).*$");
+
+    public Steam(Bot bot) {
+        super(bot);
+    }
 
     @Override
     public void register(CommandDispatcher<CommandMessage> dispatcher) {

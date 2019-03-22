@@ -12,6 +12,10 @@ import java.util.regex.Pattern;
 public class FetchTitle extends Module implements IResponder {
     private static final Pattern TITLE_PATTERN = Pattern.compile(".*<title>((\\n|\\s|\\r|\\t|.)+)</title>.*");
 
+    public FetchTitle(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public boolean run(MessageEvent msg) {
         String prefix = Bot.instance.getBotConfig().commandPrefix;

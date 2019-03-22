@@ -23,6 +23,10 @@ public class ButtcoinCollector extends Module implements IResponder {
 
     private Pattern nextWord = this.chooseNewWord();
 
+    public ButtcoinCollector(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public boolean run(MessageEvent msg) {
         if (!nextWord.matcher(msg.getMessage()).find()) {

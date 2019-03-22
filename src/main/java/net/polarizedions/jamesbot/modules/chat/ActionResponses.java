@@ -6,6 +6,10 @@ import net.polarizedions.jamesbot.responders.IResponder;
 import org.pircbotx.hooks.events.ActionEvent;
 
 public class ActionResponses extends Module implements IResponder {
+    public ActionResponses(Bot bot) {
+        super(bot);
+    }
+
     @Override
     public boolean run(ActionEvent msg) {
         String action = msg.getAction().toLowerCase().trim();
