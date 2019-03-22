@@ -61,6 +61,9 @@ public class ConfigurationLoader {
                 .setAutoNickChange(true)
                 .addListener(new EventListener())
                 .setVersion("Jamesbot v" + BuildInfo.version)
+                .setAutoReconnect(true)
+                .setAutoReconnectAttempts(20)
+                .setAutoReconnectDelay(2000)
                 .buildConfiguration();
     }
 

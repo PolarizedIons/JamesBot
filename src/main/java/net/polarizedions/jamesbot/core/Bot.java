@@ -28,6 +28,7 @@ import java.util.Map;
 public class Bot {
     public static Bot instance;
     public static Logger logger = LogManager.getLogger("Jamesbot Core");
+    public boolean requestedQuit = false;
 
     private PircBotX bot;
     private CommandManager commandManager;
@@ -132,6 +133,11 @@ public class Bot {
         catch (IOException | IrcException e) {
             logger.error("Exception running bot: {}", e);
         }
+    }
+
+    public void stop() {
+        this.requestedQuit = true;
+        this.bot.close();
     }
 
     void getMainNick() {

@@ -7,6 +7,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.ConnectAttemptFailedEvent;
 import org.pircbotx.hooks.events.ConnectEvent;
+import org.pircbotx.hooks.events.DisconnectEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 
 public class EventListener extends ListenerAdapter {
@@ -21,6 +22,14 @@ public class EventListener extends ListenerAdapter {
     @Override
     public void onConnectAttemptFailed(ConnectAttemptFailedEvent event) throws Exception {
         logger.error("Failed to connect! Remaining attempts: {}, Exception: {}", event.getRemainingAttempts(), event.getConnectExceptions());
+    }
+
+    @Override
+    public void onDisconnect(DisconnectEvent event) throws Exception {
+        if (! Bot.instance.requestedQuit) {
+            Bot.instance.stop();
+            new Thread(() -> new Bot().run()).start();
+        }
     }
 
     @Override
