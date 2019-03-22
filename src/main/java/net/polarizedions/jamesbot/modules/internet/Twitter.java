@@ -48,7 +48,7 @@ public class Twitter extends Module implements ICommand {
         }
 
         long tweetId = Long.parseLong(matcher.group(1));
-        TwitterAPI.Tweet tweet = Bot.instance.getTwitterAPI().getTweet(tweetId);
+        TwitterAPI.Tweet tweet = this.bot.getTwitterAPI().getTweet(tweetId);
 
         if (tweet == null) {
             source.respond("Sorry, I can't find that tweet!");

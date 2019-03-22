@@ -39,9 +39,9 @@ public class JoinPart extends Module implements ICommand {
     private int join(String channel) {
         channel = channel.split("\\s")[0];
 
-        Bot.instance.getPircBot().sendIRC().joinChannel(channel);
-        Bot.instance.getBotConfig().channels.add(channel);
-        Bot.instance.saveBotConfig();
+        this.bot.getPircBot().sendIRC().joinChannel(channel);
+        this.bot.getBotConfig().channels.add(channel);
+        this.bot.saveBotConfig();
 
         return ReturnConstants.SUCCESS;
     }
@@ -50,9 +50,9 @@ public class JoinPart extends Module implements ICommand {
         channel = channel.split("\\s")[0];
 
         // There's no part method?!
-        Bot.instance.getPircBot().sendRaw().rawLine("PART " + channel + " :Bai");
-        Bot.instance.getBotConfig().channels.remove(channel);
-        Bot.instance.saveBotConfig();
+        this.bot.getPircBot().sendRaw().rawLine("PART " + channel + " :Bai");
+        this.bot.getBotConfig().channels.remove(channel);
+        this.bot.saveBotConfig();
 
         return ReturnConstants.SUCCESS;
     }

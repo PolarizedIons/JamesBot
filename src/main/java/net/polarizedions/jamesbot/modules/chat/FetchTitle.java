@@ -18,7 +18,7 @@ public class FetchTitle extends Module implements IResponder {
 
     @Override
     public boolean run(MessageEvent msg) {
-        String prefix = Bot.instance.getBotConfig().commandPrefix;
+        String prefix = this.bot.getBotConfig().commandPrefix;
         String message = msg.getMessage();
         if (!message.startsWith(prefix)) {
             return false;

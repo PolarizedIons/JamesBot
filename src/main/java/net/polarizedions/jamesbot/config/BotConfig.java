@@ -33,6 +33,12 @@ public class BotConfig {
     public String nickServPass;
 
     static class Default implements InstanceCreator<BotConfig> {
+        Bot bot;
+
+        public Default(Bot bot) {
+            this.bot = bot;
+        }
+
         @Override
         public BotConfig createInstance(Type type) {
             BotConfig config = new BotConfig();
@@ -48,7 +54,7 @@ public class BotConfig {
             config.staff.add(new StaffEntry("", "", "unaffiliated/polarizedions"));
 
             config.memorySize = 250;
-            config.enabledModules = Bot.instance.getModuleManager().getState();
+            config.enabledModules = this.bot.getModuleManager().getState();
 
             config.apiKeys = new ConfigAPIKeys.Default();
             config.databaseConfig = new DatabaseConfig.Default();

@@ -11,13 +11,14 @@ import org.apache.logging.log4j.Logger;
 
 public class CommandManager {
     private static final Logger logger = LogManager.getLogger("CommandManager");
+    private Bot bot;
     private CommandDispatcher<CommandMessage> dispatcher;
 
-
-    public CommandManager() {
+    public CommandManager(Bot bot) {
+        this.bot = bot;
         this.dispatcher = new CommandDispatcher<>();
 
-        for (Module cmd : Bot.instance.getModuleManager().getModules(ICommand.class)) {
+        for (Module cmd : this.bot.getModuleManager().getModules(ICommand.class)) {
             System.out.println("COMMAND " + cmd + " = " + cmd.isActive());
             if (cmd.isActive()) {
                 ((ICommand)cmd).register(this.dispatcher);
@@ -30,7 +31,7 @@ public class CommandManager {
             int result = dispatcher.execute(source.getMessage(), source);
 
             if (result == ReturnConstants.FAIL_LOG) {
-                Bot.instance.debug(String.format("[Command Failed] %s/%s: %s", source.getChannel(), source.getNick(), source.getMessage()));
+                this.bot.debug(String.format("[Command Failed] %s/%s: %s", source.getChannel(), source.getNick(), source.getMessage()));
             }
 
             return result == ReturnConstants.SUCCESS || result == ReturnConstants.FAIL_REPLIED;

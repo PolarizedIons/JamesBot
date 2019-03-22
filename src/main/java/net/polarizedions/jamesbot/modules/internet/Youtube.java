@@ -39,7 +39,7 @@ public class Youtube extends Module implements ICommand {
     private int youtube(CommandMessage source, String link) {
         link = link.split("\\s")[0];
 
-        YoutubeAPI api = Bot.instance.getYoutubeAPI();
+        YoutubeAPI api = this.bot.getYoutubeAPI();
         if (api == null) {
             source.respond("Youtube API is unavailable :(");
             return ReturnConstants.FAIL_REPLIED;

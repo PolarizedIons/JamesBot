@@ -32,9 +32,10 @@ import java.util.Map;
 
 public class ModuleManager {
     List<Pair<String, Module>> modules; // Can't be a map because multiple entries could have the same name
+    Bot bot;
 
     public ModuleManager(Bot bot) {
-
+        this.bot = bot;
         this.modules = new ArrayList<>();
 
         // Chat
@@ -89,7 +90,7 @@ public class ModuleManager {
         }
 
         botConfig.enabledModules = this.getState();
-        Bot.instance.saveBotConfig();
+        this.bot.saveBotConfig();
     }
 
     public List<Module> getModules(Class filter) {

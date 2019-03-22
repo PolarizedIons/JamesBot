@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Bot {
-    public static Bot instance;
     public static Logger logger = LogManager.getLogger("Jamesbot Core");
     public boolean requestedQuit = false;
 
@@ -45,12 +44,11 @@ public class Bot {
 
     public Bot() {
         logger.info("Starting Jamesbot v" + BuildInfo.version + " built: " + BuildInfo.buildtime);
-        instance = this;
 
         this.moduleManager = new ModuleManager(this);
 
         try {
-            this.configLoader = new ConfigurationLoader();
+            this.configLoader = new ConfigurationLoader(this);
             this.configLoader.load();
         }
         catch (IOException ex) {
@@ -60,8 +58,8 @@ public class Bot {
 
         this.moduleManager.initConfig(this.getBotConfig());
 
-        this.commandManager = new CommandManager();
-        this.responderManager = new ResponderManager();
+        this.commandManager = new CommandManager(this);
+        this.responderManager = new ResponderManager(this);
 
         this.messageMemory = new HashMap<>();
         this.database = new Database(this.getBotConfig().databaseConfig);
@@ -73,7 +71,7 @@ public class Bot {
         if (this.moduleManager.isEnabled("twitter")) {
             this.twitterAPI.auth(this.getBotConfig());
         }
-        this.buttcoinAPI = new ButtcoinAPI();
+        this.buttcoinAPI = new ButtcoinAPI(this);
 
         logger.info("Loaded {} modules!", moduleManager.getModuleCount());
         for (Map.Entry<String, Boolean> entry : moduleManager.getState().entrySet()) {
@@ -99,16 +97,12 @@ public class Bot {
         msg.getBot().sendIRC().notice(msg.getUser().getNick(), content);
     }
 
-    public static void noticePM(String to, String content) {
-        Bot.instance.getPircBot().sendIRC().notice(to, content);
-    }
-
-    public static void action(GenericChannelUserEvent msg, String content) {
+    public static void action(@NotNull GenericChannelUserEvent msg, String content) {
         msg.getBot().sendIRC().action(msg.getChannel().getName(), content);
     }
 
     public static boolean staffCommandRequirement(CommandMessage commandMessage) {
-        List<StaffEntry> staff = Bot.instance.getBotConfig().staff;
+        List<StaffEntry> staff = commandMessage.getBot().getBotConfig().staff;
         for (StaffEntry staffMember : staff) {
             if (staffMember.matches(commandMessage.getUser())) {
                 return true;

@@ -2,6 +2,7 @@ package net.polarizedions.jamesbot.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.core.BuildInfo;
 import net.polarizedions.jamesbot.core.EventListener;
 import org.apache.logging.log4j.LogManager;
@@ -22,12 +23,19 @@ import java.nio.file.Paths;
 public class ConfigurationLoader {
     private static final Path configDir = Paths.get(".");
     private static final Logger logger = LogManager.getLogger("ConfigurationLoader");
-    private static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(BotConfig.class, new BotConfig.Default())
-            .setPrettyPrinting()
-            .create();
+    private final Gson GSON;
 
     private BotConfig botConfig = null;
+    private Bot bot;
+
+    public ConfigurationLoader(Bot bot) {
+        this.bot = bot;
+        this.GSON = new GsonBuilder()
+                .registerTypeAdapter(BotConfig.class, new BotConfig.Default(bot))
+                .setPrettyPrinting()
+                .create();
+    }
+
 
     public BotConfig getBotConfig() {
         return this.botConfig;
@@ -59,7 +67,7 @@ public class ConfigurationLoader {
         // Our finishing touches
         return config.setSocketFactory(SSLSocketFactory.getDefault())
                 .setAutoNickChange(true)
-                .addListener(new EventListener())
+                .addListener(new EventListener(this.bot))
                 .setVersion("Jamesbot v" + BuildInfo.version)
                 .setAutoReconnect(true)
                 .setAutoReconnectAttempts(20)

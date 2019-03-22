@@ -66,15 +66,15 @@ public class ButtcoinCommand extends Module implements ICommand {
     }
 
     private int activate(@NotNull CommandMessage source) {
-        Bot.instance.getButtcoinAPI().activateAccount(source.getNick());
+        this.bot.getButtcoinAPI().activateAccount(source.getNick());
         return 0;
     }
 
     private int getStats(@NotNull CommandMessage source, String nick) {
-        ButtcoinAccount account = Bot.instance.getButtcoinAPI().getAccount(nick);
+        ButtcoinAccount account = this.bot.getButtcoinAPI().getAccount(nick);
 
         if (source.getNick().equalsIgnoreCase(nick) && !account.isActive()) {
-            Bot.instance.getButtcoinAPI().activateAccount(nick);
+            this.bot.getButtcoinAPI().activateAccount(nick);
         }
 
         String queryNick = nick.equalsIgnoreCase(source.getNick()) ? "You have" : nick + " has";
@@ -85,7 +85,7 @@ public class ButtcoinCommand extends Module implements ICommand {
 
     private int transfer(@NotNull CommandMessage source, int amount, String toNick, String reason) {
         String fromNick = source.getNick();
-        ButtcoinAPI buttcoinApi = Bot.instance.getButtcoinAPI();
+        ButtcoinAPI buttcoinApi = this.bot.getButtcoinAPI();
         ButtcoinAccount fromAccount = buttcoinApi.getAccount(fromNick);
         ButtcoinAccount toAccount = buttcoinApi.getAccount(toNick);
 
@@ -123,7 +123,7 @@ public class ButtcoinCommand extends Module implements ICommand {
         toAccount = result.getTwo();
 
         source.noticePM(String.format("[TRANSFER] You (%d) have sent %d buttcoins to %s (%d) with the message: %s", fromAccount.balance, amount, toNick, toAccount.balance , reason));
-        Bot.noticePM(toNick, String.format("You (%d) have received %d buttcoins from %s (%d) [%s]", toAccount.balance, amount, source.getNick(), fromAccount.balance, reason));
+        this.bot.getPircBot().sendIRC().notice(toNick, String.format("You (%d) have received %d buttcoins from %s (%d) [%s]", toAccount.balance, amount, source.getNick(), fromAccount.balance, reason));
 
         return ReturnConstants.SUCCESS;
     }

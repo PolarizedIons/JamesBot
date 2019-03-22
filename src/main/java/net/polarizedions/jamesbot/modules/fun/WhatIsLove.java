@@ -14,7 +14,7 @@ public class WhatIsLove extends Module implements IResponder {
 
     @Override
     public boolean run(MessageEvent msg) {
-        String nick = Bot.instance.getPircBot().getNick();
+        String nick = this.bot.getPircBot().getNick();
         Pattern pattern = Pattern.compile("^" + nick + "[:,]?\\s?What is love\\??", Pattern.CASE_INSENSITIVE);
 
         if (pattern.matcher(msg.getMessage()).matches()) {

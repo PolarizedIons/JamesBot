@@ -13,7 +13,7 @@ public class ActionResponses extends Module implements IResponder {
     @Override
     public boolean run(ActionEvent msg) {
         String action = msg.getAction().toLowerCase().trim();
-        String nick = Bot.instance.getPircBot().getNick().toLowerCase();
+        String nick = this.bot.getPircBot().getNick().toLowerCase();
 
         if (action.startsWith("hugs " + nick)) {
             this.actHug(msg);

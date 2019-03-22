@@ -12,11 +12,16 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 public class EventListener extends ListenerAdapter {
     private static Logger logger = LogManager.getLogger("EventListener");
+    private Bot bot;
+
+    public EventListener(Bot bot) {
+        this.bot = bot;
+    }
 
     @Override
     public void onConnect(ConnectEvent event) throws Exception {
         logger.info("Connected!");
-        Bot.instance.getMainNick();
+        this.bot.getMainNick();
     }
 
     @Override
@@ -26,21 +31,21 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onDisconnect(DisconnectEvent event) throws Exception {
-        if (! Bot.instance.requestedQuit) {
-            Bot.instance.stop();
+        if (! this.bot.requestedQuit) {
+            this.bot.stop();
             new Thread(() -> new Bot().run()).start();
         }
     }
 
     @Override
     public void onMessage(MessageEvent event) {
-        String prefix = Bot.instance.getBotConfig().commandPrefix;
-        String nick = Bot.instance.getPircBot().getNick();
+        String prefix = this.bot.getBotConfig().commandPrefix;
+        String nick = this.bot.getPircBot().getNick();
 
         // Command Prefix
         if (event.getMessage().startsWith(prefix)) {
             String msg = event.getMessage().substring(prefix.length());
-            if (this.runCommand(new CommandMessage(event, msg))) {
+            if (this.runCommand(new CommandMessage(this.bot, event, msg))) {
                 return;
             }
         }
@@ -53,14 +58,14 @@ public class EventListener extends ListenerAdapter {
                 msg = msg.substring(1).trim();
             }
 
-            if (this.runCommand(new CommandMessage(event, msg))) {
+            if (this.runCommand(new CommandMessage(this.bot, event, msg))) {
                 return;
             }
         }
 
         // PM
         if (event.getChannel().getName().equalsIgnoreCase(nick)) {
-            if (this.runCommand(new CommandMessage(event))) {
+            if (this.runCommand(new CommandMessage(this.bot, event))) {
                 return;
             }
         }
@@ -69,12 +74,12 @@ public class EventListener extends ListenerAdapter {
             return;
         }
 
-        Bot.instance.getMessageMemory(event.getChannel().getName()).add(event);
+        this.bot.getMessageMemory(event.getChannel().getName()).add(event);
     }
 
     public boolean runCommand(CommandMessage msg) {
         try {
-            return Bot.instance.getCommandManager().dispatch(msg);
+            return this.bot.getCommandManager().dispatch(msg);
         }
         catch (Exception e) {
             logger.error("Error dispatching command: {}", e);
@@ -89,7 +94,7 @@ public class EventListener extends ListenerAdapter {
 
     private boolean reactToMessage(MessageEvent event) {
         try {
-            return Bot.instance.getResponderManager().dispatch(event);
+            return this.bot.getResponderManager().dispatch(event);
         }
         catch (Exception e) {
             logger.error("Error reacting to command: {}", e);
@@ -99,7 +104,7 @@ public class EventListener extends ListenerAdapter {
 
     private boolean reactToMessage(ActionEvent event) {
         try {
-            return Bot.instance.getResponderManager().dispatch(event);
+            return this.bot.getResponderManager().dispatch(event);
         }
         catch (Exception e) {
             logger.error("Error reacting to command: {}", e);

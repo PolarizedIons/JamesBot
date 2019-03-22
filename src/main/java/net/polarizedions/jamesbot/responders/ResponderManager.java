@@ -11,10 +11,10 @@ import java.util.List;
 public class ResponderManager {
     private List<IResponder> responders;
 
-    public ResponderManager() {
+    public ResponderManager(Bot bot) {
         this.responders = new ArrayList<>();
 
-        for (Module module : Bot.instance.getModuleManager().getModules(IResponder.class)) {
+        for (Module module : bot.getModuleManager().getModules(IResponder.class)) {
             if (module.isActive()) {
                 responders.add((IResponder)module);
             }

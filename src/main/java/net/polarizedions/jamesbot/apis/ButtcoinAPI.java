@@ -12,6 +12,11 @@ import org.jetbrains.annotations.Nullable;
 import static com.mongodb.client.model.Filters.regex;
 
 public class ButtcoinAPI {
+    Bot bot;
+
+    public ButtcoinAPI(Bot bot) {
+        this.bot = bot;
+    }
 
     @NotNull
     private Bson getNameRegex(String nick) {
@@ -19,7 +24,7 @@ public class ButtcoinAPI {
     }
 
     public ButtcoinAccount mine(String nick, boolean bruteforced) {
-        MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
+        MongoCollection<ButtcoinAccount> coll = this.bot.getDatabase().getButtcoinCollection();
 
         ButtcoinAccount account = this.getAccount(nick);
 
@@ -33,7 +38,7 @@ public class ButtcoinAPI {
     }
 
     public ButtcoinAccount getAccount(String nick) {
-        MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
+        MongoCollection<ButtcoinAccount> coll = this.bot.getDatabase().getButtcoinCollection();
 
         ButtcoinAccount account = coll.find(this.getNameRegex(nick)).first();
         if (account == null) {
@@ -44,7 +49,7 @@ public class ButtcoinAPI {
     }
 
     public ButtcoinAccount createAccount(String nick) {
-        MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
+        MongoCollection<ButtcoinAccount> coll = this.bot.getDatabase().getButtcoinCollection();
 
         ButtcoinAccount account = new ButtcoinAccount(nick);
         coll.insertOne(account);
@@ -57,13 +62,13 @@ public class ButtcoinAPI {
     }
 
     public void activateAccount(String nick) {
-        MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
+        MongoCollection<ButtcoinAccount> coll = this.bot.getDatabase().getButtcoinCollection();
         coll.updateOne(this.getNameRegex(nick), new Document("$set", new Document("active", true)));
     }
 
     @Nullable
     public Pair<ButtcoinAccount, ButtcoinAccount> transfer(String from, String to, int amount) {
-        MongoCollection<ButtcoinAccount> coll = Bot.instance.getDatabase().getButtcoinCollection();
+        MongoCollection<ButtcoinAccount> coll = this.bot.getDatabase().getButtcoinCollection();
 
         ButtcoinAccount fromAccount = this.getAccount(from);
         ButtcoinAccount toAccount = this.getAccount(to);

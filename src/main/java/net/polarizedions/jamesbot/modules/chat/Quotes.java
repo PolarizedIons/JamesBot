@@ -108,7 +108,7 @@ public class Quotes extends Module implements ICommand {
     }
 
     private int getSpecificQuote(CommandMessage source, int number, String person) {
-        MongoCollection<Quote> coll = Bot.instance.getDatabase().getQuoteCollection();
+        MongoCollection<Quote> coll = this.bot.getDatabase().getQuoteCollection();
 
         Quote quote = coll.find(and(regex("nick", "^" + person + "$", "i"), eq("quoteNum", number))).first();
         if (quote == null) {
@@ -143,7 +143,7 @@ public class Quotes extends Module implements ICommand {
             filter = regex("message", ".*\\b" + thing + "\\b.*", "i");
         }
 
-        MongoCollection<Quote> coll = Bot.instance.getDatabase().getQuoteCollection();
+        MongoCollection<Quote> coll = this.bot.getDatabase().getQuoteCollection();
 
         // TODO: find better solution
         List<Quote> docs = new ArrayList<>();
@@ -161,7 +161,7 @@ public class Quotes extends Module implements ICommand {
     }
 
     private MessageEvent searchMemory(String channel, String nick, String search) {
-        FixedSizeQueue<MessageEvent> memory = Bot.instance.getMessageMemory(channel);
+        FixedSizeQueue<MessageEvent> memory = this.bot.getMessageMemory(channel);
         search = search.toLowerCase().replaceAll("\\.", "\\."); // Replace all . with \.
 
         for (int i = memory.size() - 1; i >= 0; i--) {
@@ -178,7 +178,7 @@ public class Quotes extends Module implements ICommand {
     }
 
     private Quote saveQuote(@NotNull MessageEvent message) {
-        MongoCollection<Quote> col = Bot.instance.getDatabase().getQuoteCollection();
+        MongoCollection<Quote> col = this.bot.getDatabase().getQuoteCollection();
 
         Quote lastQuote = col.find(regex("nick", "^" + message.getUser().getNick() + "$", "i")).sort(descending("quoteNum")).first();
         int nextQuote = lastQuote == null ? 1 : lastQuote.quoteNum + 1;

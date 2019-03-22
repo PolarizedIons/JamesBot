@@ -53,7 +53,7 @@ public class Say extends Module implements ICommand {
         String channel = channelMessage[0];
         message = channelMessage[1];
 
-        Bot.instance.getPircBot().sendIRC().message(channel, message);
+        this.bot.getPircBot().sendIRC().message(channel, message);
         return ReturnConstants.SUCCESS;
     }
 
@@ -62,7 +62,7 @@ public class Say extends Module implements ICommand {
         String channel = channelMessage[0];
         message = channelMessage[1];
 
-        Bot.instance.getPircBot().sendIRC().notice(channel, message);
+        this.bot.getPircBot().sendIRC().notice(channel, message);
         return ReturnConstants.SUCCESS;
     }
 
@@ -71,7 +71,7 @@ public class Say extends Module implements ICommand {
         String channel = channelMessage[0];
         message = channelMessage[1];
 
-        Bot.instance.getPircBot().sendIRC().action(channel, message);
+        this.bot.getPircBot().sendIRC().action(channel, message);
         return ReturnConstants.SUCCESS;
     }
 

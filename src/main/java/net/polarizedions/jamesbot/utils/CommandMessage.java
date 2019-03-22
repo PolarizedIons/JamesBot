@@ -10,15 +10,17 @@ import java.util.regex.Pattern;
 public class CommandMessage {
     private static final Pattern TARGETED_PATTERN = Pattern.compile(".*@([,\\sA-Za-z0-9.+!'\"#&[]`_^{}|-]]+)$", Pattern.MULTILINE);
 
+    Bot bot;
     MessageEvent wrapped;
     String target;
     String message;
 
-    public CommandMessage(MessageEvent msg) {
-        this(msg, msg.getMessage().startsWith(Bot.instance.getBotConfig().commandPrefix) ? msg.getMessage().substring(Bot.instance.getBotConfig().commandPrefix.length()) : msg.getMessage());
+    public CommandMessage(Bot bot, MessageEvent msg) {
+        this(bot, msg, msg.getMessage().startsWith(bot.getBotConfig().commandPrefix) ? msg.getMessage().substring(bot.getBotConfig().commandPrefix.length()) : msg.getMessage());
     }
 
-    public CommandMessage(MessageEvent msg, String message) {
+    public CommandMessage(Bot bot, MessageEvent msg, String message) {
+        this.bot = bot;
         this.wrapped = msg;
         this.message = message;
 
@@ -34,6 +36,10 @@ public class CommandMessage {
         if (matches) {
             this.message = this.message.substring(0, this.message.lastIndexOf('@')).trim();
         }
+    }
+
+    public Bot getBot() {
+        return this.bot;
     }
 
     public String getMessage() {

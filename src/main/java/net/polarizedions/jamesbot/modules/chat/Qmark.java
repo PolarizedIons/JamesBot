@@ -13,7 +13,7 @@ public class Qmark extends Module implements IResponder {
 
     @Override
     public boolean run(MessageEvent msg) {
-        String myNick = Bot.instance.getPircBot().getNick();
+        String myNick = this.bot.getPircBot().getNick();
         String message = msg.getMessage();
 
         if (message.startsWith(myNick)) {
