@@ -53,7 +53,7 @@ public class Dice extends Module implements IResponder {
         return false;
     }
 
-    private long roll(int size, int number) {
+    long roll(int size, int number) {
         if (number > MAX_NUMBER_SMALL_ROLL) {
             return big_roll(size, number);
         }
@@ -67,7 +67,7 @@ public class Dice extends Module implements IResponder {
         return total;
     }
     
-    private long big_roll(long size, long number) {
+    long big_roll(long size, long number) {
         long roll = (long) (RANDOM.nextGaussian() * standardDeviation(size, number) + mean(size, number));
         
         if (roll < number) {
