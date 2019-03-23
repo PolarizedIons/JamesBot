@@ -7,8 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -25,7 +29,7 @@ class DiceTest {
         MessageEvent mockEvent = mock(MessageEvent.class);
         when(mockEvent.getMessage()).thenReturn("!1d8");
 
-        new Dice(mockBot).run(mockEvent);
+        assertTrue(new Dice(mockBot).run(mockEvent));
 
         verify(mockEvent).respondWith("Rolled 1 d8 dice and got 6.");
     }
@@ -36,7 +40,7 @@ class DiceTest {
         MessageEvent mockEvent = mock(MessageEvent.class);
         when(mockEvent.getMessage()).thenReturn("!8d8");
 
-        new Dice(mockBot).run(mockEvent);
+        assertTrue(new Dice(mockBot).run(mockEvent));
 
         verify(mockEvent).respondWith(contains("35"));
     }
@@ -47,9 +51,20 @@ class DiceTest {
         MessageEvent mockEvent = mock(MessageEvent.class);
         when(mockEvent.getMessage()).thenReturn("!100d8");
 
-        new Dice(mockBot).run(mockEvent);
+        assertTrue(new Dice(mockBot).run(mockEvent));
 
         verify(mockEvent).respondWith(contains("468"));
+    }
+
+    @Test
+    void nonCommand() {
+        Bot mockBot = mockBot();
+        MessageEvent mockEvent = mock(MessageEvent.class);
+        when(mockEvent.getMessage()).thenReturn("Watch your hands, sneak thief!");
+
+        assertFalse(new Dice(mockBot).run(mockEvent));
+
+        verify(mockEvent, never()).respondWith(anyString());
     }
 
     @Test

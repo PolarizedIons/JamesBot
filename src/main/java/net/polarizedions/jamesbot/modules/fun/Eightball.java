@@ -49,7 +49,7 @@ public class Eightball extends Module implements ICommand {
         dispatcher.register(literal("eightball").then(argument("q", greedyString()).executes(c -> this.eightball(c.getSource()))));
     }
 
-    private int eightball(@NotNull CommandMessage source) {
+    int eightball(@NotNull CommandMessage source) {
         source.respondWith(RESPONSES[RAND.nextInt(RESPONSES.length)]);
         return ReturnConstants.SUCCESS;
     }

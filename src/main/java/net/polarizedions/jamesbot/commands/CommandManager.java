@@ -19,7 +19,6 @@ public class CommandManager {
         this.dispatcher = new CommandDispatcher<>();
 
         for (Module cmd : this.bot.getModuleManager().getModules(ICommand.class)) {
-            System.out.println("COMMAND " + cmd + " = " + cmd.isActive());
             if (cmd.isActive()) {
                 ((ICommand)cmd).register(this.dispatcher);
             }
