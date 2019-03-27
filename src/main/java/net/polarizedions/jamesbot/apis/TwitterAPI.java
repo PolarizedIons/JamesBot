@@ -47,7 +47,7 @@ public class TwitterAPI {
         headers.add(new String[] { "Content-Type", "application/x-www-form-urlencoded;charset=UTF-8" });
         headers.add(new String[] { "User-Agent", "Jamesbot v" + BuildInfo.version });
 
-        InputStream is = APIUtil.request(AUTHENTICATION_URL, true, headers, "grant_type=client_credentials");
+        InputStream is = APIUtil.request(AUTHENTICATION_URL, true, headers, "grant_type=client_credentials").getTwo();
         if (is == null) {
             logger.error("Error getting twitter bearer token! Please check your consumer key & secret!");
             throw new IllegalStateException("Unable to get bearer token.");
@@ -114,7 +114,7 @@ public class TwitterAPI {
 
     @Nullable
     private JsonObject getJson(String uri) {
-        InputStream is = APIUtil.request(uri, false, this.bearerHeader, null);
+        InputStream is = APIUtil.request(uri, false, this.bearerHeader, null).getTwo();
         return is == null ? null : APIUtil.parser.parse(new InputStreamReader(is)).getAsJsonObject();
     }
 

@@ -2,12 +2,14 @@ package net.polarizedions.jamesbot.apis;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.polarizedions.jamesbot.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,12 +28,12 @@ public class APIUtil {
     private static final Logger logger = LogManager.getLogger("WebHelper");
 
     public static JsonObject post(String uri, JsonObject data) {
-        InputStream is = request(uri, true, Collections.emptyList(), data == null ? "" : data.toString());
+        InputStream is = request(uri, true, Collections.emptyList(), data == null ? "" : data.toString()).getTwo();
         return is == null ? null : parser.parse(new InputStreamReader(is)).getAsJsonObject();
     }
 
     @Nullable
-    public static InputStream request(String uri, boolean isPost, List<String[]> headers, String body) {
+    public static Pair<Integer, InputStream> request(String uri, boolean isPost, List<String[]> headers, String body) {
         logger.debug("Fetching url: " + uri);
         URL url;
         try {
@@ -91,7 +93,15 @@ public class APIUtil {
         }
 
         try {
-            return httpConn.getInputStream();
+            return new Pair<>(httpConn.getResponseCode(), httpConn.getInputStream());
+        }
+        catch(FileNotFoundException e) {
+            try {
+                return new Pair<>(404, httpConn.getInputStream());
+            }
+            catch (IOException e1) {
+                return new Pair<>(404, null);
+            }
         }
         catch (IOException e) {
             logger.error("Error fetching url: Can't open stream!", e);
@@ -100,7 +110,7 @@ public class APIUtil {
     }
 
     public static String postString(String uri, JsonObject data) {
-        InputStream is = request(uri, true, Collections.emptyList(), data == null ? "" : data.toString());
+        InputStream is = request(uri, true, Collections.emptyList(), data == null ? "" : data.toString()).getTwo();
 
         if (is == null) {
             return null;
@@ -122,11 +132,11 @@ public class APIUtil {
 
     @Nullable
     public static JsonObject getJson(String uri) {
-        InputStream is = get(uri);
+        InputStream is = get(uri).getTwo();
         return is == null ? null : parser.parse(new InputStreamReader(is)).getAsJsonObject();
     }
 
-    public static InputStream get(String uri) {
+    public static @Nullable Pair<Integer, InputStream> get(String uri) {
         return request(uri, false, Collections.emptyList(), null);
     }
 
