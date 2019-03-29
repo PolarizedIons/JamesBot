@@ -45,6 +45,7 @@ public class MojiraAPI {
         JsonArray issueLinks = json.getAsJsonObject("fields").getAsJsonArray("issuelinks");
 
         MojiraIssue issue = new MojiraIssue();
+        issue.project = json.getAsJsonObject("fields").get("project").getAsJsonObject().get("key").getAsString();
         issue.key = json.get("key").getAsString();
         issue.description = summery.length() > 70 ? summery.substring(0, 69) + '\u2026' : summery;
         issue.state = !(resolution instanceof JsonNull) ? resolution.getAsJsonObject().get("name").getAsString() : "Open";
@@ -62,6 +63,7 @@ public class MojiraAPI {
     }
 
     public static class MojiraIssue {
+        public String project;
         public String key;
         public String description;
         public String state;

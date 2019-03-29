@@ -13,6 +13,9 @@ import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.argument;
 import static net.polarizedions.jamesbot.commands.brigadier.TypeFixer.literal;
+import static net.polarizedions.jamesbot.utils.IRCColors.BOLD;
+import static net.polarizedions.jamesbot.utils.IRCColors.CYAN;
+import static net.polarizedions.jamesbot.utils.IRCColors.RESET;
 
 public class Mojira extends Module implements ICommand {
     public Mojira(Bot bot) {
@@ -34,7 +37,7 @@ public class Mojira extends Module implements ICommand {
         MojiraAPI.MojiraIssue issue = issueResp.getTwo();
 
         if (returnType == MojiraAPI.STATUS.NOT_FOUND) {
-            source.respondWith("Issue not found");
+            source.respond(key + ": Issue not found");
             return ReturnConstants.FAIL_REPLIED;
         }
         else if (returnType == MojiraAPI.STATUS.NO_PERMISSION) {
@@ -42,12 +45,13 @@ public class Mojira extends Module implements ICommand {
             return ReturnConstants.FAIL_REPLIED;
         }
         else if (returnType == MojiraAPI.STATUS.UNKNOWN) {
-            source.respond("Unknown issue occurred");
+            source.respond("Unknown error occurred");
             return ReturnConstants.FAIL_REPLIED;
         }
 
         String extra = issue.fixVersion != null ? ": " + issue.fixVersion : (issue.duplicate != null ? ": " + issue.duplicate : "");
-        String reply = String.format("[%s] %s | %s%s | %s", issue.key, issue.description, issue.state, extra, "URL HERE");
+        String url = String.format("https://bugs.mojang.com/projects/%s/issues/%s", issue.project, issue.key);
+        String reply = String.format("[%s%s%s] %s | %s%s%s%s | %s", CYAN, issue.key, RESET, issue.description, BOLD, issue.state, extra, RESET, url);
 
         source.respond(reply);
 
