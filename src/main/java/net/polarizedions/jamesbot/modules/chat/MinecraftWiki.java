@@ -1,7 +1,7 @@
 package net.polarizedions.jamesbot.modules.chat;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.polarizedions.jamesbot.apis.MediaWiki;
+import net.polarizedions.jamesbot.apis.MediaWikiAPI;
 import net.polarizedions.jamesbot.commands.ICommand;
 import net.polarizedions.jamesbot.commands.brigadier.ReturnConstants;
 import net.polarizedions.jamesbot.core.Bot;
@@ -29,7 +29,7 @@ public class MinecraftWiki extends Module implements ICommand {
     }
 
     private int search(CommandMessage source, String query) {
-        String url = MediaWiki.searchPage("https://minecraft.gamepedia.com", query);
+        String url = MediaWikiAPI.searchPage("https://minecraft.gamepedia.com", query);
         if (url == null) {
             source.respond("Sorry, I couldn't find that page :(");
 

@@ -5,7 +5,7 @@ import net.polarizedions.jamesbot.apis.apiutil.HTTPRequest;
 import net.polarizedions.jamesbot.apis.apiutil.WebHelper;
 import org.jetbrains.annotations.Nullable;
 
-public class MediaWiki {
+public class MediaWikiAPI {
     @Nullable
     public static String searchPage(String domain, String query) {
         String url = domain + "/api.php?action=query&list=search&utf8=&format=json&srsearch=" + WebHelper.encodeURIComponent(query);
