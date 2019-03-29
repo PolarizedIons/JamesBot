@@ -29,19 +29,19 @@ public class Mojira extends Module implements ICommand {
     }
 
     int issue(CommandMessage source, String key) {
-        Pair<MojiraAPI.API_RETURN, MojiraAPI.MojiraIssue> issueResp = MojiraAPI.getIssue(key);
-        MojiraAPI.API_RETURN returnType = issueResp.getOne();
+        Pair<MojiraAPI.STATUS, MojiraAPI.MojiraIssue> issueResp = MojiraAPI.getIssue(key);
+        MojiraAPI.STATUS returnType = issueResp.getOne();
         MojiraAPI.MojiraIssue issue = issueResp.getTwo();
 
-        if (returnType == MojiraAPI.API_RETURN.NOT_FOUND) {
+        if (returnType == MojiraAPI.STATUS.NOT_FOUND) {
             source.respondWith("Issue not found");
             return ReturnConstants.FAIL_REPLIED;
         }
-        else if (returnType == MojiraAPI.API_RETURN.NO_PERMISSION) {
+        else if (returnType == MojiraAPI.STATUS.NO_PERMISSION) {
             source.respond(key + " is a private issue");
             return ReturnConstants.FAIL_REPLIED;
         }
-        else if (returnType == MojiraAPI.API_RETURN.UNKNOWN) {
+        else if (returnType == MojiraAPI.STATUS.UNKNOWN) {
             source.respond("Unknown issue occurred");
             return ReturnConstants.FAIL_REPLIED;
         }

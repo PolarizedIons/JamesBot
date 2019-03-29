@@ -3,6 +3,8 @@ package net.polarizedions.jamesbot.apis;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.polarizedions.jamesbot.apis.apiutil.HTTPRequest;
+import net.polarizedions.jamesbot.apis.apiutil.WebHelper;
 import net.polarizedions.jamesbot.config.BotConfig;
 import net.polarizedions.jamesbot.core.BuildInfo;
 import org.apache.logging.log4j.LogManager;
@@ -10,15 +12,11 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 
 public class TwitterAPI {
     private static final Logger logger = LogManager.getLogger("TwitterAPI");
@@ -27,7 +25,6 @@ public class TwitterAPI {
     private static final SimpleDateFormat TWITTER_DATE_FORMAT = new SimpleDateFormat("E L d HH:mm:ss Z yyyy");  // Mon Jan 21 12:14:14 +0000 2019
 
     private String bearerCode;
-    private List<String[]> bearerHeader;
 
     public TwitterAPI() {
     }
@@ -40,19 +37,19 @@ public class TwitterAPI {
             return;
         }
 
-        String encoded = new String(Base64.getEncoder().encode(( ( APIUtil.encodeURIComponent(consumerKey) + ":" + APIUtil.encodeURIComponent(consumerSecret) ).getBytes() )));
+        String encoded = new String(Base64.getEncoder().encode(( ( WebHelper.encodeURIComponent(consumerKey) + ":" + WebHelper.encodeURIComponent(consumerSecret) ).getBytes() )));
 
-        List<String[]> headers = new ArrayList<>();
-        headers.add(new String[] { "Authorization", "Basic " + encoded });
-        headers.add(new String[] { "Content-Type", "application/x-www-form-urlencoded;charset=UTF-8" });
-        headers.add(new String[] { "User-Agent", "Jamesbot v" + BuildInfo.version });
+        JsonObject response = HTTPRequest.POST(AUTHENTICATION_URL)
+                .setHeader("Authorization", "Basic " + encoded)
+                .setHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8")
+                .setHeader("User-Agent", "Jamesbot v" + BuildInfo.version)
+                .setBody("grant_type=client_credentials")
+                .doRequest()
+                .asJsonObject();
 
-        InputStream is = APIUtil.request(AUTHENTICATION_URL, true, headers, "grant_type=client_credentials").getTwo();
-        if (is == null) {
-            logger.error("Error getting twitter bearer token! Please check your consumer key & secret!");
-            throw new IllegalStateException("Unable to get bearer token.");
+        if (response == null) {
+            throw new IllegalStateException("Couldn't authenticate with twitter!");
         }
-        JsonObject response = APIUtil.parser.parse(new InputStreamReader(is)).getAsJsonObject();
 
         if (!response.get("token_type").getAsString().equalsIgnoreCase("bearer")) {
             logger.error("Twitter gave me " + response.get("token_type").getAsString() + " but I expected a bearer token!");
@@ -60,8 +57,6 @@ public class TwitterAPI {
         }
 
         this.bearerCode = response.get("access_token").getAsString();
-        this.bearerHeader = new ArrayList<>();
-        this.bearerHeader.add(new String[] { "Authorization", "Bearer " + this.bearerCode });
 
         logger.debug("Successfully authenticated!");
     }
@@ -72,7 +67,10 @@ public class TwitterAPI {
             return null;
         }
 
-        JsonObject tweetJson = this.getJson(SHOW_TWEET_URL + id);
+        JsonObject tweetJson = HTTPRequest.GET(SHOW_TWEET_URL + id)
+                .setHeader("Authorization", "Bearer " + this.bearerCode)
+                .doRequest()
+                .asJsonObject();
 
         if (tweetJson == null) {
             return null;
@@ -112,11 +110,6 @@ public class TwitterAPI {
         return tweet;
     }
 
-    @Nullable
-    private JsonObject getJson(String uri) {
-        InputStream is = APIUtil.request(uri, false, this.bearerHeader, null).getTwo();
-        return is == null ? null : APIUtil.parser.parse(new InputStreamReader(is)).getAsJsonObject();
-    }
 
     public boolean isAuthed() {
         return !this.bearerCode.isEmpty();

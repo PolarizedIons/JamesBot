@@ -2,6 +2,8 @@ package net.polarizedions.jamesbot.apis;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.polarizedions.jamesbot.apis.apiutil.HTTPRequest;
+import net.polarizedions.jamesbot.apis.apiutil.WebHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +46,10 @@ public class YoutubeAPI {
         }
         logger.info("Fetching video {} ({})", link, id);
 
-        JsonObject jsonResponse = APIUtil.getJson(String.format(VIDEO_INFO_URL, APIUtil.encodeURIComponent(id), APIUtil.encodeURIComponent(API_KEY)));
+        JsonObject jsonResponse = HTTPRequest.GET(String.format(VIDEO_INFO_URL, WebHelper.encodeURIComponent(id), WebHelper.encodeURIComponent(API_KEY)))
+                .doRequest()
+                .asJsonObject();
+
         if (jsonResponse == null) {
             return null;
         }

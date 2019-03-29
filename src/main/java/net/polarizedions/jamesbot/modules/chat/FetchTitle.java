@@ -1,6 +1,6 @@
 package net.polarizedions.jamesbot.modules.chat;
 
-import net.polarizedions.jamesbot.apis.APIUtil;
+import net.polarizedions.jamesbot.apis.apiutil.WebHelper;
 import net.polarizedions.jamesbot.core.Bot;
 import net.polarizedions.jamesbot.modules.Module;
 import net.polarizedions.jamesbot.responders.IResponder;
@@ -29,7 +29,7 @@ public class FetchTitle extends Module implements IResponder {
             return false;
         }
 
-        String html = APIUtil.fetchPart(message, 4096);
+        String html = WebHelper.fetchPart(message, 4096);
         if (html == null) {
             msg.respond("Sorry, I couldn't fetch that page!");
             return true;

@@ -2,6 +2,7 @@ package net.polarizedions.jamesbot.apis;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.polarizedions.jamesbot.apis.apiutil.HTTPRequest;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -12,7 +13,9 @@ public class SteamAPI {
 
     @Nullable
     public static SteamApp getApp(int id) {
-        JsonObject json = APIUtil.getJson(String.format(APP_INFO_URL, id));
+        JsonObject json = HTTPRequest.GET(String.format(APP_INFO_URL, id))
+                .doRequest()
+                .asJsonObject();
 
         if (json == null) {
             return null;
