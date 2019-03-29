@@ -9,6 +9,7 @@ import org.pircbotx.hooks.events.ConnectAttemptFailedEvent;
 import org.pircbotx.hooks.events.ConnectEvent;
 import org.pircbotx.hooks.events.DisconnectEvent;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
 
 public class EventListener extends ListenerAdapter {
     private static Logger logger = LogManager.getLogger("EventListener");
@@ -38,6 +39,11 @@ public class EventListener extends ListenerAdapter {
     }
 
     @Override
+    public void onPrivateMessage(PrivateMessageEvent event) {
+        this.runCommand(new CommandMessage(this.bot, event));
+    }
+
+    @Override
     public void onMessage(MessageEvent event) {
         String prefix = this.bot.getBotConfig().commandPrefix;
         String nick = this.bot.getPircBot().getNick();
@@ -59,13 +65,6 @@ public class EventListener extends ListenerAdapter {
             }
 
             if (this.runCommand(new CommandMessage(this.bot, event, msg))) {
-                return;
-            }
-        }
-
-        // PM
-        if (event.getChannel().getName().equalsIgnoreCase(nick)) {
-            if (this.runCommand(new CommandMessage(this.bot, event))) {
                 return;
             }
         }

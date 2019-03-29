@@ -3,6 +3,8 @@ package net.polarizedions.jamesbot.utils;
 import net.polarizedions.jamesbot.core.Bot;
 import org.pircbotx.User;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,15 +13,19 @@ public class CommandMessage {
     private static final Pattern TARGETED_PATTERN = Pattern.compile(".*@([,\\sA-Za-z0-9.+!'\"#&[]`_^{}|-]]+)$", Pattern.MULTILINE);
 
     Bot bot;
-    MessageEvent wrapped;
+    GenericMessageEvent wrapped;
     String target;
     String message;
+
+    public CommandMessage(Bot bot, PrivateMessageEvent msg) {
+        this(bot, msg, msg.getMessage());
+    }
 
     public CommandMessage(Bot bot, MessageEvent msg) {
         this(bot, msg, msg.getMessage().startsWith(bot.getBotConfig().commandPrefix) ? msg.getMessage().substring(bot.getBotConfig().commandPrefix.length()) : msg.getMessage());
     }
 
-    public CommandMessage(Bot bot, MessageEvent msg, String message) {
+    public CommandMessage(Bot bot, GenericMessageEvent msg, String message) {
         this.bot = bot;
         this.wrapped = msg;
         this.message = message;
@@ -55,12 +61,19 @@ public class CommandMessage {
         return this.wrapped.getUser();
     }
 
-    public MessageEvent getWrapped() {
+    public GenericMessageEvent getWrapped() {
         return this.wrapped;
     }
 
     public String getChannel() {
-        return this.wrapped.getChannel().getName();
+        if (this.wrapped instanceof MessageEvent) {
+            return ( (MessageEvent)this.wrapped ).getChannel().getName();
+        }
+        else if (this.wrapped instanceof PrivateMessageEvent) {
+            return this.wrapped.getUser().toString();
+        }
+
+        return "";
     }
 
     public void respond(String response) {
