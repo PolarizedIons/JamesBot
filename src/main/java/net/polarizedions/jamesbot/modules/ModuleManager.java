@@ -44,7 +44,6 @@ public class ModuleManager {
         this.add(new FetchTitle(bot));
         this.add(new MinecraftWiki(bot));
         this.add(new Mojira(bot));
-        this.add(new Qmark(bot));
         this.add(new Quotes(bot));
         this.add(new Say(bot));
         this.add(new Temperature(bot));
@@ -69,6 +68,9 @@ public class ModuleManager {
         this.add(new Steam(bot));
         this.add(new Twitter(bot));
         this.add(new Youtube(bot));
+
+        // Make sure this is last
+        this.add(new Qmark(bot));
     }
 
     private void add(Module module) {
