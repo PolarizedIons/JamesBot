@@ -50,7 +50,7 @@ public class Mojira extends Module implements ICommand {
         }
 
         String extra = issue.fixVersion != null ? ": " + issue.fixVersion : (issue.duplicate != null ? ": " + issue.duplicate : "");
-        String url = String.format("https://bugs.mojang.com/projects/%s/issues/%s", issue.project, issue.key);
+        String url = String.format("https://bugs.mojang.com/browse/%s", issue.key);
         String reply = String.format("[%s%s%s] %s | %s%s%s%s | %s", CYAN, issue.key, RESET, issue.description, BOLD, issue.state, extra, RESET, url);
 
         source.respond(reply);
